@@ -79,7 +79,8 @@
                 <div class="row slider-text align-items-center justify-content-center">
                     <div class="col-md-8 text-center col-sm-12 ">
                         <h1 data-aos="fade-up mb-5">The all-in-one business solution</h1>
-                        <h5 data-aos="fade-up mb-5" style="color: white;">for bed & breakfasts, guesthouses and small hotels</h5>
+                        <h5 data-aos="fade-up mb-5" style="color: white;">for bed & breakfasts, guesthouses and small
+                            hotels</h5>
                         <p data-aos="fade-up" data-aos-delay="200"><a href="#" class="btn btn-white btn-outline-white">Get
                             Started</a></p>
                     </div>
@@ -135,15 +136,15 @@
         </div>
         <div class="row align-items-center">
             <div class="col-lg-4">
-                <img src="img/dishes_1.jpg" alt="Image" class="img-fluid about_img_1" data-aos="fade"
+                <img src="{% static 'img/about_1.png' %}" alt="Image" class="img-fluid about_img_1" data-aos="fade"
                      data-aos-delay="200">
             </div>
             <div class="col-lg-4">
-                <img src="img/about_1.jpg" alt="Image" class="img-fluid about_img_1" data-aos="fade"
+                <img src="{% static 'img/about_2.png' %}" alt="Image" class="img-fluid about_img_1" data-aos="fade"
                      data-aos-delay="200">
             </div>
             <div class="col-lg-4">
-                <img src="img/dishes_3.jpg" alt="Image" class="img-fluid about_img_1" data-aos="fade"
+                <img src="{% static 'img/about_3.png' %}" alt="Image" class="img-fluid about_img_1" data-aos="fade"
                      data-aos-delay="500">
             </div>
         </div>
@@ -160,23 +161,34 @@
                 </div>
             </div>
         </div>
-        <div class="owl-carousel centernonloop">
-            <a href="#" class="item-dishes" data-aos="fade-right" data-aos-delay="100">
+        <div class="row align-items-center">
+            <div class="col-lg-4 col-md-4 col-sm-12">
                 <div class="text">
                     <p class="dishes-price">Direct Booking Technology</p>
-                    <h2 class="dishes-heading">Take online reservations directly from your website, commission-free</h2>
+                    <h2 class="dishes-heading">Take online reservations directly from your website,
+                        commission-free</h2>
                 </div>
                 <img src="img/dishes_1.jpg" alt="" class="img-fluid">
-            </a>
-            <a href="#" class="item-dishes" data-aos="fade-right" data-aos-delay="200">
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
                 <div class="text">
                     <p class="dishes-price">Your Front Desk</p>
                     <h2 class="dishes-heading"> Easily create phone and walk-in bookings. Little Hotelier’s leading
-                        property management system automatically updates your inventory, and gives you one place to view
+                        property management system automatically updates your inventory, and gives you one place to
+                        view
                         and manage all of your online reservations.</h2>
                 </div>
                 <img src="img/dishes_2.jpg" alt="" class="img-fluid">
-            </a>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12">
+                <div class="text">
+                    <p class="dishes-price">Adaptability</p>
+                    <h2 class="dishes-heading">Your site will automatically look good on smartphones, tablets and
+                        computers. We worked through each block so that the creation of an adaptive website was
+                        elementary.</h2>
+                </div>
+                <img src="img/dishes_2.jpg" alt="" class="img-fluid">
+                </div>
         </div>
     </div>
 
