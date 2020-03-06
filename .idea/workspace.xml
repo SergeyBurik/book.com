@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
     <list default="true" id="512861c0-4ad3-4733-a5d5-f108bc64fe0c" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/booking/authapp/templates/authapp/sign_in.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/booking/authapp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/booking/authapp/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/booking/authapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/booking/authapp/views.py" afterDir="false" />
     </list>
+=======
+    <list default="true" id="512861c0-4ad3-4733-a5d5-f108bc64fe0c" name="Default Changelist" comment="" />
+>>>>>>> Stashed changes
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
