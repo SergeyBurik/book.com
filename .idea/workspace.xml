@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="512861c0-4ad3-4733-a5d5-f108bc64fe0c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/booking/static/img/about_1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/booking/static/img/about_2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/booking/static/img/about_3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking/authapp/templates/authapp/sign_up.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking/authapp/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/booking/static/img/simple-codelines.svg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking/mainapp/templates/mainapp/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/booking/mainapp/templates/mainapp/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking/booking/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/booking/booking/urls.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,6 +18,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -30,6 +31,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/booking/static/img" />
+    <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -38,13 +40,14 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Serg\Documents\GitHub\book.com\booking\mainapp\templates\mainapp" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Serg\Documents\GitHub\book.com\booking\static\img" />
       <recent name="C:\Users\Serg\Documents\GitHub\book.com\booking\static\js" />
       <recent name="C:\Users\Serg\Documents\GitHub\book.com\booking\static\css" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Serg\Documents\GitHub\book.com\booking\static\img" />
+      <recent name="C:\Users\Serg\Documents\GitHub\book.com\booking\mainapp\templates\mainapp" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -70,6 +73,7 @@
       <option name="presentableId" value="Default" />
       <updated>1583424284474</updated>
       <workItem from="1583424288621" duration="5278000" />
+      <workItem from="1583465106089" duration="1562000" />
     </task>
     <servers />
   </component>
@@ -81,7 +85,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
