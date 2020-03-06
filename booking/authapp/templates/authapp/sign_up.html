@@ -13,20 +13,24 @@
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800" rel="stylesheet">
 
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-    <link rel="stylesheet" href="{% static 'css/animate.css'%}">
-    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}">
-    <link rel="stylesheet" href="{% static 'css/aos.css'%}">
+    <link rel="stylesheet" href="{% static '/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static '/css/animate.css'%}">
+    <link rel="stylesheet" href="{% static '/css/owl.carousel.min.css'%}">
+    <link rel="stylesheet" href="{% static '/css/aos.css'%}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    <link rel="stylesheet" href="{% static 'css/magnific-popup.css'%}">
+    <link rel="stylesheet" href="{% static '/css/auth.css'%}">
 
 
-    <link rel="stylesheet" href="{% static 'fonts/ionicons/css/ionicons.min.css'%}">
-    <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/font-awesome.min.css'%}">
-    <link rel="stylesheet" href="{% static 'fonts/flaticon/font/flaticon.css'%}">
+    <link rel="stylesheet" href="{% static '/css/magnific-popup.css'%}">
+
+
+    <link rel="stylesheet" href="{% static '/fonts/ionicons/css/ionicons.min.css'%}">
+    <link rel="stylesheet" href="{% static '/fonts/fontawesome/css/font-awesome.min.css'%}">
+    <link rel="stylesheet" href="{% static '/fonts/flaticon/font/flaticon.css'%}">
 
     <!-- Theme Style -->
-    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <link rel="stylesheet" href="{% static '/css/style.css'%}">
 </head>
 <body>
 
@@ -52,7 +56,7 @@
                            aria-haspopup="true" aria-expanded="false">Login</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown04">
                             <a class="dropdown-item" href="services.html">Sign in</a>
-                            <a class="dropdown-item" href="services.html">Sign up</a>
+                            <a class="dropdown-item" href="{% url 'auth:join' %}">Sign up</a>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -67,10 +71,9 @@
     </nav>
 </header>
 <!-- END header -->
-
-<section>
-    <div class="auth" style="background: url(static/img/simple-codelines.svg), #2b3137;background-size: cover">
-        <form action="#" method="post">
+<section  style="background: url(/static/img/simple-codelines.svg), #2b3137;background-size: cover; height: 100vh; overflow: auto">
+    <div class="auth">
+        <form action="#" method="post" style="margin-top:100px">
             <h2>Sign Up</h2>
             <p>
                 <label for="Email" class="floatLabel">Email</label>
@@ -87,7 +90,7 @@
                 <span>Your passwords do not match</span>
             </p>
             <p>
-                <input type="submit" value="Create My Account" id="submit">
+                <input type="submit" value="Sign up for Book.com" id="submit">
             </p>
         </form>
     </div>
@@ -154,5 +157,6 @@
     </div>
 </footer>
 <!-- END footer -->
+<script src="/static/js/sign_up.js"></script>
 </body>
 </html>

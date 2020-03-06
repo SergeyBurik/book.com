@@ -13,20 +13,21 @@
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800" rel="stylesheet">
 
-    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-    <link rel="stylesheet" href="{% static 'css/animate.css'%}">
-    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css'%}">
-    <link rel="stylesheet" href="{% static 'css/aos.css'%}">
+    <link rel="stylesheet" href="{% static '/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static '/css/animate.css'%}">
+    <link rel="stylesheet" href="{% static '/css/owl.carousel.min.css'%}">
+    <link rel="stylesheet" href="{% static '/css/aos.css'%}">
+    <link rel="stylesheet" href="{% static '/css/auth.css'%}">
 
-    <link rel="stylesheet" href="{% static 'css/magnific-popup.css'%}">
+    <link rel="stylesheet" href="{% static '/css/magnific-popup.css'%}">
 
 
-    <link rel="stylesheet" href="{% static 'fonts/ionicons/css/ionicons.min.css'%}">
-    <link rel="stylesheet" href="{% static 'fonts/fontawesome/css/font-awesome.min.css'%}">
-    <link rel="stylesheet" href="{% static 'fonts/flaticon/font/flaticon.css'%}">
+    <link rel="stylesheet" href="{% static '/fonts/ionicons/css/ionicons.min.css'%}">
+    <link rel="stylesheet" href="{% static '/fonts/fontawesome/css/font-awesome.min.css'%}">
+    <link rel="stylesheet" href="{% static '/fonts/flaticon/font/flaticon.css'%}">
 
     <!-- Theme Style -->
-    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+    <link rel="stylesheet" href="{% static '/css/style.css'%}">
 </head>
 <body>
 
@@ -52,7 +53,7 @@
                            aria-haspopup="true" aria-expanded="false">Login</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown04">
                             <a class="dropdown-item" href="services.html">Sign in</a>
-                            <a class="dropdown-item" href="services.html">Sign up</a>
+                            <a class="dropdown-item" href="{% url 'auth:join' %}">Sign up</a>
                         </div>
                     </li>
                     <li class="nav-item">
@@ -110,7 +111,7 @@
         <div class="row align-items-center">
 
             <div class="col-lg-6">
-                <img src="{% static 'img/management_system.jpg' %}" alt="Image" class="img-fluid">
+                <img src="{% static '/img/management_system.jpg' %}" alt="Image" class="img-fluid">
             </div>
             <div class="col-lg-5 ml-auto">
                 <div class="text-left heading-wrap">
@@ -136,15 +137,15 @@
         </div>
         <div class="row align-items-center">
             <div class="col-lg-4">
-                <img src="{% static 'img/about_1.png' %}" alt="Image" class="img-fluid about_img_1" data-aos="fade"
+                <img src="{% static '/img/about_1.png' %}" alt="Image" class="img-fluid about_img_1" data-aos="fade"
                      data-aos-delay="200">
             </div>
             <div class="col-lg-4">
-                <img src="{% static 'img/about_2.png' %}" alt="Image" class="img-fluid about_img_1" data-aos="fade"
+                <img src="{% static '/img/about_2.png' %}" alt="Image" class="img-fluid about_img_1" data-aos="fade"
                      data-aos-delay="200">
             </div>
             <div class="col-lg-4">
-                <img src="{% static 'img/about_3.png' %}" alt="Image" class="img-fluid about_img_1" data-aos="fade"
+                <img src="{% static '/img/about_3.png' %}" alt="Image" class="img-fluid about_img_1" data-aos="fade"
                      data-aos-delay="500">
             </div>
         </div>
@@ -278,18 +279,18 @@
     </svg>
 </div>
 
-<script src="{% static 'js/jquery-3.2.1.min.js'%}"></script>
-<script src="{% static 'js/popper.min.js'%}"></script>
-<script src="{% static 'js/bootstrap.min.js'%}"></script>
-<script src="{% static 'js/owl.carousel.min.js'%}"></script>
-<script src="{% static 'js/jquery.waypoints.min.js'%}"></script>
-<script src="{% static 'js/aos.js'%}"></script>
+<script src="{% static '/js/jquery-3.2.1.min.js'%}"></script>
+<script src="{% static '/js/popper.min.js'%}"></script>
+<script src="{% static '/js/bootstrap.min.js'%}"></script>
+<script src="{% static '/js/owl.carousel.min.js'%}"></script>
+<script src="{% static '/js/jquery.waypoints.min.js'%}"></script>
+<script src="{% static '/js/aos.js'%}"></script>
 
-<script src="{% static 'js/jquery.magnific-popup.min.js'%}"></script>
-<script src="{% static 'js/magnific-popup-options.js'%}"></script>
+<script src="{% static '/js/jquery.magnific-popup.min.js'%}"></script>
+<script src="{% static '/js/magnific-popup-options.js'%}"></script>
 
 
-<script src="{% static 'js/main.js'%}"></script>
+<script src="{% static '/js/main.js'%}"></script>
 
 </body>
 </html>
