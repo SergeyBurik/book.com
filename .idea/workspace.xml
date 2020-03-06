@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="512861c0-4ad3-4733-a5d5-f108bc64fe0c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/booking/authapp/templates/authapp/sign_in.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking/authapp/templates/authapp/sign_up.html" beforeDir="false" afterPath="$PROJECT_DIR$/booking/authapp/templates/authapp/sign_up.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/booking/static/css/auth.css" beforeDir="false" afterPath="$PROJECT_DIR$/booking/static/css/auth.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking/authapp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/booking/authapp/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/booking/authapp/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/booking/authapp/views.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,10 +16,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
         <option value="CSS File" />
         <option value="JavaScript File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -73,7 +74,8 @@
       <option name="presentableId" value="Default" />
       <updated>1583424284474</updated>
       <workItem from="1583424288621" duration="5278000" />
-      <workItem from="1583465106089" duration="4447000" />
+      <workItem from="1583465106089" duration="5036000" />
+      <workItem from="1583514618056" duration="705000" />
     </task>
     <servers />
   </component>
