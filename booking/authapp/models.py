@@ -94,7 +94,7 @@ class User(AbstractBaseUser):
     # admin user; non super-user
     staff = models.BooleanField(default=False, verbose_name='Сотрудник')
     # superuser
-    admin = models.BooleanField(default=False, verbose_name='Администратор')
+    admin = models.BooleanField(default=True, verbose_name='Администратор')
     is_sending = models.BooleanField(default=False,
                                      verbose_name='Подписка на рассылку')
 
