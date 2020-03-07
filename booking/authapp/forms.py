@@ -78,20 +78,56 @@ class UserRegisterForm(forms.ModelForm):
 
         self.fields['email'].widget.attrs.update(
             {
-                'type': 'text',
-                'placeholder': 'Email'
+                'type': 'email',
+                'placeholder': 'Enter email'
             }
         )
         self.fields['password1'].widget.attrs.update(
             {
                 'type': 'password',
-                'placeholder': 'Придумайте пароль'
+                'placeholder': 'Your password'
             }
         )
+
+        self.fields['name'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'Your first name'
+            }
+        )
+
+        self.fields['country'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'Enter your country'
+            }
+        )
+
+        self.fields['company_name'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'Create an organization name'
+            }
+        )
+
+        self.fields['surname'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'Your last name'
+            }
+        )
+
+        self.fields['phone_number'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'Your phone number'
+            }
+        )
+
         self.fields['password2'].widget.attrs.update(
             {
                 'type': 'password',
-                'placeholder': 'Повторите пароль'
+                'placeholder': 'Repeat password'
             }
         )
         self.fields['is_sending'].widget.attrs.update(
