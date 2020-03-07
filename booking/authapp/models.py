@@ -82,15 +82,15 @@ class User(AbstractBaseUser):
 
     active = models.BooleanField(default=True, verbose_name='Активный')
     # user's first name
-    name = models.CharField(default='', verbose_name='Имя')
+    name = models.CharField(default='', max_length=30, verbose_name='Имя')
     # user's surname
-    surname = models.CharField(default='', verbose_name='Фамилия')
+    surname = models.CharField(default='', max_length=30, verbose_name='Фамилия')
     # user's phone number
-    phone_number = models.CharField(default='', verbose_name='Номер телефона')
+    phone_number = models.CharField(default='', max_length=30, verbose_name='Номер телефона')
     # user's country
-    country = models.CharField(default='', verbose_name='Страна')
+    country = models.CharField(default='', max_length=30, verbose_name='Страна')
     # user's company name
-    company_name = models.CharField(default='', )
+    company_name = models.CharField(default='', max_length=30,)
     # admin user; non super-user
     staff = models.BooleanField(default=False, verbose_name='Сотрудник')
     # superuser
