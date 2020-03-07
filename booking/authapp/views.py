@@ -1,18 +1,18 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from authapp.forms import UserAdminCreationForm
+from authapp.forms import UserRegisterForm
 
 
 def join(request):
     if request.method == 'POST':
-        register_form = UserAdminCreationForm(request.POST, request.FILES)
+        register_form = UserRegisterForm(request.POST, request.FILES)
 
         if register_form.is_valid():
             register_form.save()
             return HttpResponseRedirect(reverse('main'))
     else:
-        register_form = UserAdminCreationForm()
+        register_form = UserRegisterForm()
 
     content = {'register_form': register_form}
 
