@@ -33,7 +33,26 @@ def join(request):
 
 
 def login(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+        user = auth.authenticate(email=email, password=password)
+
+        print(user)
+        print(email)
+        print(password)
+
+        if user:
+            auth.login(request, user)
+            print(user)
+            return HttpResponseRedirect(reverse('main'))
+
     return render(request, 'authapp/sign_in.html', {})
+
+
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect(reverse('main'))
 
 
 def send_verify_mail(user):
