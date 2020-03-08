@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from mainapp.models import Hotel, Room
-from authapp.models import User
+# from authapp.models import User
 
 import json
 import os
