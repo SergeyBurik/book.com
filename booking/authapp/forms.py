@@ -154,6 +154,9 @@ class UserRegisterForm(forms.ModelForm):
 
         user_activation.save()
         print(user_activation)
+        print(user.active)
+        print(user_activation.user)
+        print(user_activation.user.active)
         return user
 
 
