@@ -8,7 +8,6 @@ from django.template.loader import render_to_string
 from django.urls import reverse
 from authapp.forms import UserRegisterForm
 from authapp.models import UserActivation, User
-from django.contrib.staticfiles.templatetags.staticfiles import static
 
 from django.conf import settings
 
@@ -44,10 +43,12 @@ def send_verify_mail(user):
 
     print(os.path.join(settings.BASE_DIR, 'static', 'assets', 'letter.html'))
 
-    html_m = render_to_string('authapp/letter.html', {'username': user.name, 'link': settings.DOMAIN_NAME+verify_link})
+    html_m = render_to_string('authapp/letter.html',
+                              {'username': user.name, 'link': settings.DOMAIN_NAME + verify_link})
 
-    return send_mail(f'Account Confirmation', '', settings.EMAIL_HOST_USER, [user.email], html_message=html_m,
+    return send_mail(title, '', settings.EMAIL_HOST_USER, [user.email], html_message=html_m,
                      fail_silently=False)
+
 
 def verify(request, email, activation_key):
     try:
