@@ -44,7 +44,7 @@ class UserAdminChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email','name','surname','phone_number', 'country', 'company_name', 'is_sending')
+        fields = ('email', 'name', 'surname', 'phone_number', 'country', 'company_name', 'is_sending')
 
     def clean_password(self):
         return self.initial["password"]
@@ -58,7 +58,7 @@ class UserRegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email','name','surname','phone_number', 'country', 'company_name', 'is_sending')
+        fields = ('email', 'name', 'surname', 'phone_number', 'country', 'company_name', 'is_sending')
 
     def clean_password2(self):
         # Проверка, что две записи пароля совпадают.
