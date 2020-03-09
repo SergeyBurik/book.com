@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.urls import reverse
-from authapp.forms import UserRegisterForm
+from authapp.forms import UserRegisterForm, UserLoginForm
 from authapp.models import UserActivation, User
 
 from django.conf import settings
@@ -33,21 +33,27 @@ def join(request):
 
 
 def login(request):
-    if request.method == 'POST':
-        email = request.POST['email']
-        password = request.POST['password']
-        user = auth.authenticate(email=email, password=password)
+    login_form = UserLoginForm(data=request.POST)
 
-        print(user)
-        print(email)
+    print(login_form.is_valid())
+    print(login_form)
+
+    if request.method == 'POST' and login_form.is_valid():
+        username = request.POST['username']
+        password = request.POST['password']
+        print(username)
         print(password)
 
-        if user:
-            auth.login(request, user)
-            print(user)
-            return HttpResponseRedirect(reverse('main'))
+        user = auth.authenticate(username=username, password=password)
 
-    return render(request, 'authapp/sign_in.html', {})
+        if user and user.active:
+            auth.login(request, user)
+            return HttpResponseRedirect(reverse('main'))
+    else:
+        login_form = UserLoginForm()
+
+    content = {'login_form': login_form}
+    return render(request, 'authapp/sign_in.html', content)
 
 
 def logout(request):

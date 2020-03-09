@@ -74,13 +74,15 @@
             {% csrf_token %}
 
             <h2>Sign In</h2>
-                <label for="Email" class="floatLabel">Email</label>
-                <input required id="Email" name="email" type="text">
-            </p>
-            <p>
-                <label for="password" class="floatLabel">Password</label>
-                <input required id="password" name="password" type="password">
-            </p>
+            {{ login_form.as_p }}
+<!--            <p>-->
+<!--                <label for="Email" class="floatLabel">Email</label>-->
+<!--                <input required id="Email" name="email" type="text">-->
+<!--            </p>-->
+<!--            <p>-->
+<!--                <label for="password" class="floatLabel">Password</label>-->
+<!--                <input required id="password" name="password" type="password">-->
+<!--            </p>-->
             <p>
                 <input type="submit" value="Sign in for Book.com" id="submit">
             </p>
