@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from authapp.models import User
 
 
 def main_page(request):
