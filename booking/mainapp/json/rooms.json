@@ -1,0 +1,134 @@
+[
+    {
+        "hotel": "New Lounge Hotel",
+        "name": "1001",
+        "price": "550",
+        "description": "nomber 1001",
+        "adult": "True",
+        "kids": "False",
+        "infants": "False",
+        "image": "",
+        "is_active": "True"
+    },
+    {
+        "hotel": "New Lounge Hotel",
+        "name": "1002",
+        "price": "650",
+        "description": "nomber 1002",
+        "adult": "True",
+        "kids": "True",
+        "infants": "False",
+        "image": "",
+        "is_active": "True"
+    },
+    {
+        "hotel": "New Lounge Hotel",
+        "name": "1003",
+        "price": "550",
+        "description": "nomber 1003",
+        "adult": "True",
+        "kids": "False",
+        "infants": "False",
+        "image": "",
+        "is_active": "True"
+    },
+    {
+        "hotel": "New Lounge Hotel",
+        "name": "1005",
+        "price": "750",
+        "description": "nomber 1003",
+        "adult": "True",
+        "kids": "False",
+        "infants": "True",
+        "image": "",
+        "is_active": "True"
+    },
+    {
+        "hotel": "Disco Hotel",
+        "name": "1001",
+        "price": "550",
+        "description": "nomber 1001",
+        "adult": "True",
+        "kids": "False",
+        "infants": "False",
+        "image": "",
+        "is_active": "True"
+    },
+    {
+        "hotel": "Disco Hotel",
+        "name": "1002",
+        "price": "650",
+        "description": "nomber 1002",
+        "adult": "True",
+        "kids": "True",
+        "infants": "False",
+        "image": "",
+        "is_active": "True"
+    },
+    {
+        "hotel": "Disco Hotel",
+        "name": "1003",
+        "price": "550",
+        "description": "nomber 1003",
+        "adult": "True",
+        "kids": "False",
+        "infants": "False",
+        "image": "",
+        "is_active": "True"
+    },
+    {
+        "hotel": "Disco Hotel",
+        "name": "1005",
+        "price": "750",
+        "description": "nomber 1003",
+        "adult": "True",
+        "kids": "False",
+        "infants": "True",
+        "image": "",
+        "is_active": "True"
+    },
+    {
+        "hotel": "Hotel WeAre",
+        "name": "1001",
+        "price": "550",
+        "description": "nomber 1001",
+        "adult": "True",
+        "kids": "False",
+        "infants": "False",
+        "image": "",
+        "is_active": "True"
+    },
+    {
+        "hotel": "Hotel WeAre",
+        "name": "1002",
+        "price": "650",
+        "description": "nomber 1002",
+        "adult": "True",
+        "kids": "True",
+        "infants": "False",
+        "image": "",
+        "is_active": "True"
+    },
+    {
+        "hotel": "Hotel WeAre",
+        "name": "1003",
+        "price": "550",
+        "description": "nomber 1003",
+        "adult": "True",
+        "kids": "False",
+        "infants": "False",
+        "image": "",
+        "is_active": "True"
+    },
+    {
+        "hotel": "Hotel WeAre",
+        "name": "1005",
+        "price": "750",
+        "description": "nomber 1003",
+        "adult": "True",
+        "kids": "False",
+        "infants": "True",
+        "image": "",
+        "is_active": "True"
+    }
+]

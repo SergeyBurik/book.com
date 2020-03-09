@@ -89,11 +89,11 @@ class Room(models.Model):
     name = models.CharField(verbose_name='Имя', max_length=32)
     price = models.DecimalField(verbose_name='Цена', max_digits=12,
                                 decimal_places=2, default=0)
+    description = models.TextField(verbose_name='Описание', blank=True)
     adult = models.BooleanField(verbose_name='Взрослый', default=True)
     kids = models.BooleanField(verbose_name='Детский', default=False)
     infants = models.BooleanField(verbose_name='Детский', default=False)
     image = models.ImageField(upload_to=path_and_rename, blank=True)
-    description = models.TextField(verbose_name='Описание', blank=True)
     is_active = models.BooleanField(verbose_name='Номер активен', default=True)
 
     objects = RoomManager()
