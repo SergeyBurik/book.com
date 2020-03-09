@@ -36,7 +36,7 @@ def login(request):
     login_form = UserLoginForm(data=request.POST)
 
     print(login_form.is_valid())
-    print(login_form)
+    print(login_form.errors)
 
     if request.method == 'POST' and login_form.is_valid():
         username = request.POST['username']
