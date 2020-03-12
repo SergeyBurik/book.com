@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'authapp.apps.AuthappConfig'
 ]
 
+# Changes the built-in user model to ours
+AUTH_USER_MODEL = 'authapp.User'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -48,6 +51,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 ROOT_URLCONF = 'booking.urls'
 
