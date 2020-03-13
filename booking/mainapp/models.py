@@ -136,3 +136,11 @@ class RoomGallery(models.Model):
 
     def __str__(self):
         return f'{self.room.name}'
+
+class Bookings(models.Model):
+    date = models.DateField() # date of booking
+    room = models.ForeignKey(Room,
+                             on_delete=models.CASCADE) # room which we are trying to book
+
+    def __str__(self):
+        return f'Room Booking {self.room.name} - {self.room.hotel.name}'
