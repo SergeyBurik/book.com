@@ -85,6 +85,7 @@ class Room(models.Model):
         verbose_name = 'Номер'
         verbose_name_plural = 'Номера'
         ordering = ['name']
+
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     name = models.CharField(verbose_name='Имя', max_length=32)
     price = models.DecimalField(verbose_name='Цена', max_digits=12,
@@ -137,10 +138,16 @@ class RoomGallery(models.Model):
     def __str__(self):
         return f'{self.room.name}'
 
+
 class Bookings(models.Model):
-    date = models.DateField() # date of booking
+    date = models.DateField()  # date of booking
     room = models.ForeignKey(Room,
-                             on_delete=models.CASCADE) # room which we are trying to book
+                             on_delete=models.CASCADE)  # room which we are trying to book
+    client_name = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=20, verbose_name="Client's phone number")
+    time = models.TimeField()  # approximate time of check in
+    country = models.CharField(max_length=50)  # client's country of living
+    address = models.CharField(max_length=100)  # client's address of living
 
     def __str__(self):
         return f'Room Booking {self.room.name} - {self.room.hotel.name}'
