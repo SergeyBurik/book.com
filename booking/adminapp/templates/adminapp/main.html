@@ -1,4 +1,5 @@
 {% load static %}
+{% load query_booking %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -135,107 +136,39 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <th colspan="16">
-                                        Rome Residence Hostel
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th colspan="2">
-                                        <span>Studio Apartment 1</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">Sold</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">Sold</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">Sold</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">Sold</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
+                                {% if rooms %}
+                                    {% for room in rooms %}
+                                    <tr>
+                                        <th colspan="16">
+                                            {{room.hotel.name}}
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="2">
+                                            <span>{{room.name}}</span>
+                                        </th>
 
-                                </tr>
-                                <tr>
-                                    <th colspan="2">
-                                        <span>Studio Apartment 2</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">Sold</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">Sold</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">Sold</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">Sold</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">Sold</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">Sold</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
-                                    <th>
-                                        <span class="date_item">75</span>
-                                    </th>
+                                        {% for day in days %}
+                                            {% if room|query_booking:day %}
+                                                <th>
+                                                    <span class="date_item">Sold</span>
+                                                </th>
+                                            {% else %}
+                                                <th>
+                                                    <span class="date_item">{{room.price}}</span>
+                                                </th>
+                                            {% endif %}
+                                        {% endfor %}
 
-                                </tr>
+                                    {% endfor %}
+
+                                {% else %}
+                                    <tr>
+                                        <th colspan="16">
+                                            You don't have any rooms yet
+                                        </th>
+                                    </tr>
+                                {% endif %}
                                 </tbody>
                             </table>
                         </div>
@@ -268,70 +201,17 @@
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                <tr>
-                                    <td>Garrett Winters</td>
-                                    <td>Austria</td>
-                                    <td>Vienna, East 23 st.</td>
-                                    <td>+123 123 23 25</td>
-                                    <td>Studio Apartment</td>
-                                    <td>2011/07/25</td>
-                                </tr>
-                                <tr>
-                                    <td>Donald Trump</td>
-                                    <td>USA</td>
-                                    <td>Washigton, Baker st.</td>
-                                    <td>+123 123 23 25</td>
-                                    <td>Studio Apartment 2</td>
-                                    <td>2020/09/25</td>
-                                </tr>
-                                <tr>
-                                    <td>Bill Gates</td>
-                                    <td>USA</td>
-                                    <td>Seattle, East 23 st.</td>
-                                    <td>+123 123 23 25</td>
-                                    <td>Studio Apartment</td>
-                                    <td>2020/01/25</td>
-                                </tr>
-                                <tr>
-                                    <td>Willem Alexandr</td>
-                                    <td>Netherlands</td>
-                                    <td>Utrecht, Rembrantplein</td>
-                                    <td>+123 123 23 25</td>
-                                    <td>Studio Apartment</td>
-                                    <td>2020/07/25</td>
-                                </tr>
-                                <tr>
-                                    <td>Garrett Winters</td>
-                                    <td>Austria</td>
-                                    <td>Vienna, East 23 st.</td>
-                                    <td>+123 123 23 25</td>
-                                    <td>Studio Apartment</td>
-                                    <td>2011/07/25</td>
-                                </tr>
-                                <tr>
-                                    <td>Garrett Winters</td>
-                                    <td>Austria</td>
-                                    <td>Vienna, East 23 st.</td>
-                                    <td>+123 123 23 25</td>
-                                    <td>Studio Apartment</td>
-                                    <td>2011/07/25</td>
-                                </tr>
-                                <tr>
-                                    <td>Garrett Winters</td>
-                                    <td>Austria</td>
-                                    <td>Vienna, East 23 st.</td>
-                                    <td>+123 123 23 25</td>
-                                    <td>Studio Apartment</td>
-                                    <td>2011/07/25</td>
-                                </tr>
-                                <tr>
-                                    <td>Garrett Winters</td>
-                                    <td>Austria</td>
-                                    <td>Vienna, East 23 st.</td>
-                                    <td>+123 123 23 25</td>
-                                    <td>Studio Apartment</td>
-                                    <td>2011/07/25</td>
-                                </tr>
+                                {% for booking in bookings %}
+                                    <tr>
+                                        <td>{{ booking.client_name }}</td>
+                                        <td>{{ booking.country }}</td>
+                                        <td>{{ booking.address }}</td>
+                                        <td>{{ booking.phone_number }}</td>
+                                        <td>{{ booking.room.name }}</td>
+                                        <td>{{ booking.date }} ({{ booking.time }})</td>
+                                    </tr>
+                                {% endfor %}
+
                                 </tbody>
                             </table>
                         </div>

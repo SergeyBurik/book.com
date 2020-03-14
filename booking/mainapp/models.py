@@ -48,7 +48,7 @@ class Hotel(models.Model):
                             unique=True)
     description = models.TextField(verbose_name='Описание отеля', blank=True)
     stars = models.CharField(max_length=2, choices=STARS_CHOICES, default=ONE)
-    banner = models.ImageField(default='') # hotel's image
+    banner = models.ImageField(default='', upload_to='hotels/banners/')  # hotel's image
     is_active = models.BooleanField(verbose_name='Активен', default=True)
 
     def __str__(self):

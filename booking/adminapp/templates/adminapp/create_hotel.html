@@ -69,7 +69,8 @@
         <main>
             <div class="container-fluid">
                 <!-- multistep form -->
-                <form id="msform">
+                <form action="{% url 'management:create_hotel' %}" method="post" id="msform" enctype="multipart/form-data">
+                    {% csrf_token %}
                     <!-- progressbar -->
                     <ul id="progressbar">
                         <li class="active">Account Setup</li>
@@ -114,6 +115,7 @@
                 </form>
             </div>
         </main>
+
         <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid">
                 <div class="d-flex align-items-center justify-content-between small">
@@ -224,7 +226,7 @@
     });
 
     $(".submit").click(function () {
-        return false;
+        // return false;
     })
 
 </script>
