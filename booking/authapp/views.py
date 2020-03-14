@@ -23,7 +23,7 @@ def join(request):
             else:
                 print('Failed to send account verification letter')
 
-            return HttpResponseRedirect(reverse('main'))
+            return HttpResponseRedirect(reverse('main:main'))
     else:
         register_form = UserRegisterForm()
 
@@ -48,7 +48,7 @@ def login(request):
 
         if user and user.active:
             auth.login(request, user)
-            return HttpResponseRedirect(reverse('main'))
+            return HttpResponseRedirect(reverse('main:main'))
     else:
         login_form = UserLoginForm()
 
@@ -58,7 +58,7 @@ def login(request):
 
 def logout(request):
     auth.logout(request)
-    return HttpResponseRedirect(reverse('main'))
+    return HttpResponseRedirect(reverse('main:main'))
 
 
 def send_verify_mail(user):
@@ -89,8 +89,8 @@ def verify(request, email, activation_key):
         else:
             print(f'error activation user: {user}')
 
-        return HttpResponseRedirect(reverse('main'))
+        return HttpResponseRedirect(reverse('main:main'))
 
     except Exception as e:
         print(f'error activation user : {e.args}')
-        return HttpResponseRedirect(reverse('main'))
+        return HttpResponseRedirect(reverse('main:main'))
