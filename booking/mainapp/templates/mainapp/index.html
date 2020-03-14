@@ -57,10 +57,10 @@
                         {% endif %}</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown04">
                             {% if not user.is_authenticated %}
-                                <a class="dropdown-item" href="{% url 'authapp:login'  %}">Sign in</a>
-                                <a class="dropdown-item" href="{% url 'authapp:join'  %}">Sign up</a>
+                                <a class="dropdown-item" href="{% url 'auth:login'  %}">Sign in</a>
+                                <a class="dropdown-item" href="{% url 'auth:join'  %}">Sign up</a>
                             {% else %}
-                                <a class="dropdown-item" href="{% url 'authapp:logout'  %}">Logout</a>
+                                <a class="dropdown-item" href="{% url 'auth:logout'  %}">Logout</a>
                             {% endif %}
                         </div>
                     </li>
