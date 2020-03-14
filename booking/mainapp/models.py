@@ -5,6 +5,8 @@ from django.db import models
 from django.db.models import Q
 from django.utils.deconstruct import deconstructible
 
+from authapp.models import User
+
 
 @deconstructible
 class PathAndRename(object):
@@ -41,10 +43,12 @@ class Hotel(models.Model):
         (FIVE, '5*'),
     ]
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     name = models.CharField(verbose_name='Название отеля', max_length=64,
                             unique=True)
     description = models.TextField(verbose_name='Описание отеля', blank=True)
     stars = models.CharField(max_length=2, choices=STARS_CHOICES, default=ONE)
+    banner = models.ImageField(default='', upload_to='hotels/banners/')  # hotel's image
     is_active = models.BooleanField(verbose_name='Активен', default=True)
 
     def __str__(self):
@@ -86,7 +90,7 @@ class Room(models.Model):
         verbose_name_plural = 'Номера'
         ordering = ['name']
 
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default='')
     name = models.CharField(verbose_name='Имя', max_length=32)
     price = models.DecimalField(verbose_name='Цена', max_digits=12,
                                 decimal_places=2, default=0)
@@ -140,6 +144,7 @@ class RoomGallery(models.Model):
 
 
 class Bookings(models.Model):
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default='')
     date = models.DateField()  # date of booking
     room = models.ForeignKey(Room,
                              on_delete=models.CASCADE)  # room which we are trying to book
