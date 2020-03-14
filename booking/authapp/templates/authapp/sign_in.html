@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Book.com - Home</title>
+    <title>Book.com - Sign in</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -46,21 +46,21 @@
                         <a class="nav-link active" href="{% url 'main' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Booking Engine</a>
+                        <a class="nav-link" href="recipes.html">Booking Engine</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"
+                        <a class="nav-link dropdown-toggle" href="services.html" id="dropdown04" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">Login</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown04">
-                            <a class="dropdown-item" href="{% url 'authapp:login'  %}">Sign in</a>
-                            <a class="dropdown-item" href="{% url 'authapp:join'  %}">Sign up</a>
+                            <a class="dropdown-item" href="{% url 'auth:login' %}">Sign in</a>
+                            <a class="dropdown-item" href="{% url 'auth:join' %}">Sign up</a>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
+                        <a class="nav-link" href="about.html">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
+                        <a class="nav-link" href="contact.html">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -68,45 +68,26 @@
     </nav>
 </header>
 <!-- END header -->
-<section style="background: url(/static/img/simple-codelines.svg), #2b3137;background-size: cover; height: 110vh; overflow: auto">
+<section  style="background: url(/static/img/simple-codelines.svg), #2b3137;background-size: cover; height: 100vh; overflow: auto">
     <div class="auth">
-        <form action="#" method="post" style="margin-top:100px">
-            <h2>Sign Up</h2>
-            <!--            <p>-->
-            <!--                <label for="name" class="floatLabel">First name</label>-->
-            <!--                <input required id="name" name="name" type="text">-->
-            <!--            </p>-->
-            <!--            <p>-->
-            <!--                <label for="surname" class="floatLabel">Last name</label>-->
-            <!--                <input required id="surname" name="surname" type="text">-->
-            <!--            </p>-->
-            <!--            <p>-->
-            <!--                <label for="property_name" class="floatLabel">Property/Company name</label>-->
-            <!--                <input required id="property_name" name="property_name" type="text">-->
-            <!--            </p>-->
-            <!--            <p>-->
-            <!--                <label for="number" class="floatLabel">Phone number</label>-->
-            <!--                <input required id="number" name="number" type="text">-->
-            <!--            </p>-->
-            <!--            <p>-->
-            <!--                <label for="Email" class="floatLabel">Email</label>-->
-            <!--                <input required id="Email" name="email" type="text">-->
-            <!--            </p>-->
-            <!--            <p>-->
-            <!--                <label for="password" class="floatLabel">Password</label>-->
-            <!--                <input required id="password" name="password" type="password">-->
-            <!--                <span>Enter a password longer than 8 characters</span>-->
-            <!--            </p>-->
-            <!--            <p>-->
-            <!--                <label for="confirm_password" class="floatLabel">Confirm Password</label>-->
-            <!--                <input required id="confirm_password" name="confirm_password" type="password">-->
-            <!--                <span>Your passwords do not match</span>-->
-            <!--            </p>-->
-
+        <form action="{% url 'authapp:login' %}" method="post" style="margin-top:100px">
             {% csrf_token %}
-            {{ register_form.as_p }}
+
+            <h2>Sign In</h2>
+            {{ login_form.as_p }}
+            {% if login_form.errors %}
+            {% for error in login_form.errors %}{{error}}{% endfor %}
+            {% endif %}
+<!--            <p>-->
+<!--                <label for="Email" class="floatLabel">Email</label>-->
+<!--                <input required id="Email" name="email" type="text">-->
+<!--            </p>-->
+<!--            <p>-->
+<!--                <label for="password" class="floatLabel">Password</label>-->
+<!--                <input required id="password" name="password" type="password">-->
+<!--            </p>-->
             <p>
-                <input type="submit" value="Sign up for Book.com" id="submit">
+                <input type="submit" value="Sign in for Book.com" id="submit">
             </p>
         </form>
     </div>
@@ -165,13 +146,14 @@
         </div>
         <div class="row">
             <div class="col-12 text-md-center text-left">
-                <p>
+               <!--  <p>
 
-                </p>
+                </p> -->
             </div>
         </div>
     </div>
 </footer>
+<!-- END footer -->
 <!-- END footer -->
 <script src="/static/js/sign_up.js"></script>
 <script src="{% static '/js/jquery-3.2.1.min.js'%}"></script>

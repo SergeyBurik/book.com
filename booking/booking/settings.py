@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainapp.apps.MainappConfig',
-    'authapp.apps.AuthappConfig'
+    'authapp.apps.AuthappConfig',
+    'adminapp.apps.AdminappConfig'
 ]
 
 # Changes the built-in user model to ours

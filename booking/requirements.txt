@@ -1,3 +1,0 @@
-django
-flake8
-uuid
