@@ -46,13 +46,16 @@ def create_room(request):
         rooms = Room.objects.filter(hotel=hotel, name=name)
 
         if rooms:
-            # get the last room's name
-            # and get the count number ex. 'Room 1' (result - '1')
-            existing_room_count_number = int(rooms.reverse()[0].name.split(' ')[-1])
-            # increase it
-            existing_room_count_number += 1
-            # change room name to not duplicate room's name
-            name = f'{name} {existing_room_count_number}'
+            try:
+                # get the last room's name
+                # and get the count number ex. 'Room 1' (result - '1')
+                existing_room_count_number = int(rooms.reverse()[0].name.split(' ')[-1])
+                # increase it
+                existing_room_count_number += 1
+                # change room name to not duplicate room's name
+                name = f'{name} {existing_room_count_number}'
+            except ValueError:
+                name = f'{name} 1'
 
         print(name)
         print(hotel)

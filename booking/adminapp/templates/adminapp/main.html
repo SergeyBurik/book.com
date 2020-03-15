@@ -143,37 +143,39 @@
                                 </thead>
                                 <tbody>
                                 {% if rooms %}
-                                    {% for room in rooms %}
-                                    <tr>
-                                        <th colspan="16">
-                                            {{room.hotel.name}}
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th colspan="2">
-                                            <span>{{room.name}}</span>
-                                        </th>
+                                    {% for hotel in hotels %}
+                                        <tr>
+                                            <th colspan="16">
+                                                {{hotel.name}}
+                                            </th>
+                                        </tr>
+                                        {% for room in rooms %}
 
-                                        {% for day in days %}
-                                            {% if room|query_booking:day %}
-                                                <th>
-                                                    <span class="date_item">Sold</span>
+                                            <tr>
+                                                <th colspan="2">
+                                                    <span>{{room.name}}</span>
                                                 </th>
-                                            {% else %}
-                                                <th>
-                                                    <span class="date_item">{{room.price}}</span>
-                                                </th>
-                                            {% endif %}
-                                        {% endfor %}
 
+                                                {% for day in days %}
+                                                    {% if room|query_booking:day %}
+                                                        <th>
+                                                            <span class="date_item">Sold</span>
+                                                        </th>
+                                                    {% else %}
+                                                        <th>
+                                                            <span class="date_item">{{room.price}}</span>
+                                                        </th>
+                                                    {% endif %}
+                                                {% endfor %}
+
+                                            {% endfor %}
                                     {% endfor %}
-
                                 {% else %}
-                                    <tr>
-                                        <th colspan="16">
-                                            You don't have any rooms yet
-                                        </th>
-                                    </tr>
+                                        <tr>
+                                            <th colspan="16">
+                                                You don't have any rooms yet
+                                            </th>
+                                        </tr>
                                 {% endif %}
                                 </tbody>
                             </table>
