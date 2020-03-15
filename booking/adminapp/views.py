@@ -23,6 +23,60 @@ def main(request):
     return render(request, 'adminapp/main.html', context)
 
 
+# function which creates room in hotel
+@login_required(login_url='/auth/login/')
+def create_room(request):
+    hotels = Hotel.objects.filter(user=request.user)
+
+    if request.method == 'POST':
+        # get data
+        hotel = request.POST['hotel']
+        name = request.POST['name']
+        price = request.POST['price']
+        description = request.POST['description']
+        adults = request.POST['adults']
+        kids = request.POST['kids']
+        infants = request.POST['infants']
+        image = request.FILES['image']
+
+        # try:
+        # get hotel
+        hotel = Hotel.objects.get(name=hotel)
+        # try to find a room with the same name
+        rooms = Room.objects.filter(hotel=hotel, name=name)
+
+        if rooms:
+            try:
+                # get the last room's name
+                # and get the count number ex. 'Room 1' (result - '1')
+                existing_room_count_number = int(rooms.reverse()[0].name.split(' ')[-1])
+                # increase it
+                existing_room_count_number += 1
+                # change room name to not duplicate room's name
+                name = f'{name} {existing_room_count_number}'
+            except ValueError:
+                name = f'{name} 1'
+
+        print(name)
+        print(hotel)
+
+        # create room
+        Room.objects.create(hotel=hotel, name=name,
+                            price=int(price), description=description,
+                            adult=int(adults), kids=int(kids),
+                            infants=int(infants), image=image,
+                            is_active=True)
+
+        return HttpResponseRedirect(reverse('management:main'))
+
+        # except Exception as err:
+        # print(err)
+
+    context = {'hotels': hotels}
+    return render(request, 'adminapp/create_room.html', context)
+
+
+# function which creates hotel
 @login_required(login_url='/auth/login/')
 def create_hotel(request):
     if request.method == 'POST':

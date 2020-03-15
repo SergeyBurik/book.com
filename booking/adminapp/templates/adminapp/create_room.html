@@ -69,7 +69,7 @@
         <main>
             <div class="container-fluid">
                 <!-- multistep form -->
-                <form action="{% url 'management:create_hotel' %}" method="post" id="msform" enctype="multipart/form-data">
+                <form action="{% url 'management:create_room' %}" @submit="checkForm" method="post" id="msform" enctype="multipart/form-data">
                     {% csrf_token %}
                     <!-- progressbar -->
                     <ul id="progressbar">
@@ -79,25 +79,24 @@
                     </ul>
                     <!-- fieldsets -->
                     <fieldset>
-                        <h2 class="fs-title">Create new hotel</h2>
-                        <h3 class="fs-subtitle">Step 1</h3>
-                        <input type="text" name="name" placeholder="Name of Hotel"/>
+                        <h2 class="fs-title">Create new room</h2>
+                        <h3 class="fs-subtitle">In which hotel do you want to create room?</h3>
+
+                        <select name="hotel" id="hotel">
+                            {% for hotel in hotels %}
+                                <option value="{{hotel}}">{{hotel.name}}</option>
+                            {% endfor %}
+                        </select>
                         <input type="button" name="next" class="next action-button" value="Next"/>
                     </fieldset>
                     <fieldset>
-                        <h2 class="fs-title">Create new hotel</h2>
-                        <h3 class="fs-subtitle">Step 2</h3>
+                        <h2 class="fs-title">Create new room</h2>
+                        <h3 class="fs-subtitle">Enter some data</h3>
+
+                        <input type="text" id="name" name="name" placeholder="Enter room's name">
+                        <input type="text" id="price" name="price" placeholder="Enter price per night">
                         <textarea name="description" placeholder="Description"></textarea>
-                        
-                        <label for="stars">Stars:</label>
-                        <select name="stars" id="stars">
-                            <option value="ON">1*</option>
-                            <option value="TW">2*</option>
-                            <option value="TR">3*</option>
-                            <option value="FR">4*</option>
-                            <option value="FV">5*</option>
-                        </select>
-    
+
                         <input type="button" name="previous" class="previous action-button" value="Previous"/>
                         <input type="button" name="next" class="next action-button" value="Next"/>
                     </fieldset>
@@ -105,12 +104,15 @@
                         <h2 class="fs-title">Create new Hotel</h2>
                         <h3 class="fs-subtitle">Step 3</h3>
 
+                        <input type="text" id="adults" name="adults" placeholder="Adults:">
+                        <input type="text" id="kids" name="kids" placeholder="Kids:">
+                        <input type="text" id="infants" name="infants" placeholder="Infants:">
 
-                        <label for="banner">Hotel's Banner:</label>
-                        <input type="file" id="banner" name="banner">
-                        
+                        <label for="image">Room's Image:</label>
+                        <input type="file" id="image" name="image">
+
                         <input type="button" name="previous" class="previous action-button" value="Previous"/>
-                        <input type="submit" name="submit" class="submit action-button" value="Submit"/>
+                        <input type="submit"  name="submit" class="submit action-button" value="Submit"/>
                     </fieldset>
                 </form>
             </div>
@@ -130,6 +132,7 @@
         </footer>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
