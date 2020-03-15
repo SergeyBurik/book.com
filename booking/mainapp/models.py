@@ -21,7 +21,7 @@ class PathAndRename(object):
         return os.path.join(self.path, filename)
 
 
-path_and_rename = PathAndRename("static/img/tmp")
+path_and_rename = PathAndRename("media/rooms/")
 
 
 class Hotel(models.Model):
@@ -91,13 +91,13 @@ class Room(models.Model):
         ordering = ['name']
 
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default='')
-    name = models.CharField(verbose_name='Имя', max_length=32)
+    name = models.CharField(verbose_name='Имя', unique=True, max_length=32)
     price = models.DecimalField(verbose_name='Цена', max_digits=12,
                                 decimal_places=2, default=0)
     description = models.TextField(verbose_name='Описание', blank=True)
-    adult = models.BooleanField(verbose_name='Взрослый', default=True)
-    kids = models.BooleanField(verbose_name='Детский', default=False)
-    infants = models.BooleanField(verbose_name='Детский', default=False)
+    adult = models.PositiveIntegerField(verbose_name='Взрослый', default=0)
+    kids = models.PositiveIntegerField(verbose_name='Детский', default=0)
+    infants = models.PositiveIntegerField(verbose_name='Детский', default=0)
     image = models.ImageField(upload_to=path_and_rename, blank=True)
     is_active = models.BooleanField(verbose_name='Номер активен', default=True)
 
