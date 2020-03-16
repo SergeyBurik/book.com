@@ -8,7 +8,7 @@ from mainapp.models import Bookings, Hotel, Room
 
 @login_required(login_url='/auth/login/')
 def main(request):
-    hotels = Hotel.objects.filter(user=request.user)
+    hotels = Hotel.objects.filter(user=request.user, is_active=True)
     bookings = []
     rooms = []
 
@@ -26,7 +26,7 @@ def main(request):
 # function which creates room in hotel
 @login_required(login_url='/auth/login/')
 def create_room(request):
-    hotels = Hotel.objects.filter(user=request.user)
+    hotels = Hotel.objects.filter(user=request.user, is_active=True)
 
     if request.method == 'POST':
         # get data
@@ -74,6 +74,15 @@ def create_room(request):
 
     context = {'hotels': hotels}
     return render(request, 'adminapp/create_room.html', context)
+
+
+# page of hotel details
+@login_required(login_url='/auth/login/')
+def hotels(request):
+    hotels_ = Hotel.objects.filter(user=request.user, is_active=True)
+
+    content = {'hotels': hotels_}
+    return render(request, 'adminapp/hotels.html', content)
 
 
 # function which creates hotel

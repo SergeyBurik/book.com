@@ -4746,6 +4746,19 @@ input[type=button].btn-block {
     padding: 1.25rem;
 }
 
+@media screen and (max-width: 900px) {
+    .hotel img {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+.hotel img {
+    float: left;
+    width: 250px;
+    margin-right: 10px;
+}
+
 .card-title {
     margin-bottom: 0.75rem;
 }
