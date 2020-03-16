@@ -4746,9 +4746,13 @@ input[type=button].btn-block {
     padding: 1.25rem;
 }
 
+.card-body .hotel:not(:first-child){
+    margin-top: 187px;
+}
+
 @media screen and (max-width: 900px) {
     .hotel img {
-        width: 100%;
+        width: 100%!important;
         margin-bottom: 10px;
     }
 }

@@ -50,16 +50,16 @@
             <main>
                 <div class="container-fluid">
                     <div class="card mb-4">
-                        <div class="card-header"><i class="fas fa-table mr-1"></i>Hotels</div>
+                        <div class="card-header"><i class="fas fa-table mr-1"></i>Rooms</div>
                         <div class="card-body">
-                            {% for hotel in hotels %}
+                            {% for room in rooms %}
                             <div class="hotel">
                                 <p class="h3">
-                                    {{hotel.name}}. {{hotel.stars}} stars
+                                    {{room.name}}. ({{room.hotel.name}} - {{room.hotel.stars}} stars).
                                 </p>
-                                <img src="{{ hotel.banner.url }}" alt="{{hotel.name}}">
+                                <img src="{{ room.image.url }}" alt="{{room.name}}">
                                 <p class="h5">
-                                    {{hotel.description}}
+                                    {{room.description}}
                                 </p>
                             </div>
                             {% endfor %}

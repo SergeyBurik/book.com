@@ -85,6 +85,19 @@ def hotels(request):
     return render(request, 'adminapp/hotels.html', content)
 
 
+# page of room details
+@login_required(login_url='/auth/login/')
+def rooms(request):
+    hotels = Hotel.objects.filter(user=request.user, is_active=True)
+    rooms_ = []
+
+    for hotel in hotels:
+        rooms_ += Room.objects.filter(hotel=hotel)
+
+    content = {'rooms': rooms_}
+    return render(request, 'adminapp/rooms.html', content)
+
+
 # function which creates hotel
 @login_required(login_url='/auth/login/')
 def create_hotel(request):
