@@ -9,6 +9,8 @@ from datetime import timedelta
 # Менеджер модели пользователя
 from django.utils.deconstruct import deconstructible
 
+from authapp.variables import country_dict1
+
 
 def get_activation_key_time():
     return now() + timedelta(hours=48)
@@ -88,7 +90,9 @@ class User(AbstractBaseUser):
     # user's phone number
     phone_number = models.CharField(default='', max_length=30, verbose_name='Номер телефона')
     # user's country
-    country = models.CharField(default='', max_length=30, verbose_name='Страна')
+    # country = models.CharField(default='', max_length=30, verbose_name='Страна')
+    country = models.CharField(max_length=50, choices=country_dict1,
+                               default='Russia')
     # user's company name
     company_name = models.CharField(default='', max_length=30,)
     # admin user; non super-user
