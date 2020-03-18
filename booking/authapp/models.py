@@ -9,7 +9,7 @@ from datetime import timedelta
 # Менеджер модели пользователя
 from django.utils.deconstruct import deconstructible
 
-from authapp.variables import country_dict1
+from authapp.variables import country_dict
 
 
 def get_activation_key_time():
@@ -76,12 +76,8 @@ class User(AbstractBaseUser):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
-    email = models.EmailField(
-        verbose_name='Адрес электронной почты',
-        max_length=255,
-        unique=True,
-    )
-
+    email = models.EmailField(verbose_name='Адрес электронной почты',
+                              max_length=255, unique=True)
     active = models.BooleanField(default=True, verbose_name='Активный')
     # user's first name
     name = models.CharField(default='', max_length=30, verbose_name='Имя')
@@ -91,7 +87,7 @@ class User(AbstractBaseUser):
     phone_number = models.CharField(default='', max_length=30, verbose_name='Номер телефона')
     # user's country
     # country = models.CharField(default='', max_length=30, verbose_name='Страна')
-    country = models.CharField(max_length=50, choices=country_dict1,
+    country = models.CharField(max_length=50, choices=country_dict,
                                default='Russia')
     # user's company name
     company_name = models.CharField(default='', max_length=30,)
@@ -100,7 +96,7 @@ class User(AbstractBaseUser):
     # superuser
     admin = models.BooleanField(default=True, verbose_name='Администратор')
     is_sending = models.BooleanField(default=False,
-                                     verbose_name='Подписка на рассылку')
+                                     verbose_name='Подписаться')
 
     objects = UserManager()
     # Email и пароль обязательны к заполнению по умолчанию
