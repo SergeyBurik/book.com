@@ -1,4 +1,4 @@
-import re
+# import re
 
 COUNTRIES = ['Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola',
              'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia',
@@ -161,5 +161,3 @@ country_dict = [('Afghanistan', 'Afghanistan'), ('Albania', 'Albania'),
                 ('Vatican_City', 'Vatican City'), ('Venezuela', 'Venezuela'),
                 ('Vietnam', 'Vietnam'), ('Yemen', 'Yemen'),
                 ('Zambia', 'Zambia'), ('Zimbabwe', 'Zimbabwe')]
-
-
