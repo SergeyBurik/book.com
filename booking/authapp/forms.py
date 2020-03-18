@@ -15,7 +15,8 @@ class UserAdminCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'name', 'surname', 'phone_number', 'country', 'company_name')
+        fields = ('email', 'name', 'surname', 'phone_number', 'country',
+                  'company_name')
 
     def clean_password2(self):
         # Проверка, что две записи пароля совпадают.
@@ -44,7 +45,8 @@ class UserAdminChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'name', 'surname', 'phone_number', 'country', 'company_name', 'is_sending')
+        fields = ('email', 'name', 'surname', 'phone_number', 'country',
+                  'company_name', 'is_sending')
 
     def clean_password(self):
         return self.initial["password"]
@@ -58,7 +60,8 @@ class UserRegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'name', 'surname', 'phone_number', 'country', 'company_name', 'is_sending')
+        fields = ('email', 'name', 'surname', 'phone_number', 'country',
+                  'company_name', 'is_sending')
 
     def clean_password2(self):
         # Проверка, что две записи пароля совпадают.
@@ -85,21 +88,21 @@ class UserRegisterForm(forms.ModelForm):
         self.fields['password1'].widget.attrs.update(
             {
                 'type': 'password',
-                'placeholder': 'Your password'
+                'placeholder': 'Password'
             }
         )
 
         self.fields['name'].widget.attrs.update(
             {
                 'type': 'text',
-                'placeholder': 'Your first name'
+                'placeholder': 'First name'
             }
         )
 
         self.fields['country'].widget.attrs.update(
             {
                 'type': 'text',
-                'placeholder': 'Enter your country'
+                'placeholder': 'Your country'
             }
         )
 
@@ -113,14 +116,14 @@ class UserRegisterForm(forms.ModelForm):
         self.fields['surname'].widget.attrs.update(
             {
                 'type': 'text',
-                'placeholder': 'Your last name'
+                'placeholder': 'Last name'
             }
         )
 
         self.fields['phone_number'].widget.attrs.update(
             {
                 'type': 'text',
-                'placeholder': 'Your phone number'
+                'placeholder': 'Phone number'
             }
         )
 

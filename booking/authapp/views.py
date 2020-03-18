@@ -11,8 +11,11 @@ from authapp.models import UserActivation, User
 
 from django.conf import settings
 
+from authapp.variables import country_dict
+
 
 def join(request):
+    countries = country_dict
     if request.method == 'POST':
         register_form = UserRegisterForm(request.POST, request.FILES)
 
@@ -27,7 +30,9 @@ def join(request):
     else:
         register_form = UserRegisterForm()
 
-    content = {'register_form': register_form}
+    content = {'register_form': register_form,
+               'countries': countries,
+               }
 
     return render(request, 'authapp/sign_up.html', content)
 

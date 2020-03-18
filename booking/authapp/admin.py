@@ -23,17 +23,20 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('email', 'active', 'staff', 'admin',)
     list_filter = ('staff', 'active', 'admin',)
     fieldsets = (
-        (None, {'fields': ('email', 'password',)}),
+        (None, {'fields': ('email', 'password', 'name', 'surname',
+                           'phone_number', 'country', 'company_name')}),
         ('Доступы', {'fields': ('active', 'staff', 'admin',)}),
     )
+    # user's com
 
     # add_fieldsets не является стандартным атрибутом ModelAdmin. UserAdmin
     # Переопределяет get_fieldsets для создания пользвателя
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2', 'active',
-                       'staff', 'admin',)}
+            'fields': ('email', 'password1', 'password2', 'name',
+                       'phone_number',  'country', 'active', 'staff', 'admin',)
+                }
          ),
     )
 
