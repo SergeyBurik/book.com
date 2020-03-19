@@ -103,7 +103,7 @@ def edit_hotel(request, pk):
         else:
             messages.warning(request, "The form was not updated successfully.")
 
-    context = {'form': form, 'pk':pk}
+    context = {'form': form, 'pk': pk}
     return render(request, 'adminapp/edit_hotel.html', context)
 
 
