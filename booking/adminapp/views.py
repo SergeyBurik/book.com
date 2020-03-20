@@ -1,9 +1,13 @@
 import datetime
+
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from mainapp.models import Bookings, Hotel, Room
+
+from adminapp.forms import HotelForm
 
 
 @login_required(login_url='/auth/login/')
@@ -74,6 +78,33 @@ def create_room(request):
 
     context = {'hotels': hotels}
     return render(request, 'adminapp/create_room.html', context)
+
+
+# page of editing hotel details
+@login_required(login_url='/auth/login/')
+def edit_hotel(request, pk):
+    # if there is such hotel
+    hotel = get_object_or_404(Hotel, pk=pk, user=request.user, is_active=True)
+
+    form = HotelForm(request.POST or None, request.FILES or None, instance=hotel)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            obj = form.save(commit=False)
+
+            obj.save()
+
+            messages.success(request, "You successfully updated the post")
+
+            context = {'form': form}
+
+            return HttpResponseRedirect(reverse('management:hotels'))
+
+        else:
+            messages.warning(request, "The form was not updated successfully.")
+
+    context = {'form': form, 'pk': pk}
+    return render(request, 'adminapp/edit_hotel.html', context)
 
 
 # page of hotel details
