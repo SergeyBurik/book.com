@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Ivanov Ivan",
+        "description": "Lorem",
+        "is_active": "True"
+    },
+    {
+        "name": "Petrov Petr",
+        "description": "Lorem",
+        "is_active": "True"
+    },
+    {
+        "name": "Smirnov Dmitriy",
+        "description": "Lorem",
+        "is_active": "True"
+    }
+]

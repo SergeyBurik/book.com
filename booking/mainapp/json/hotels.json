@@ -1,0 +1,20 @@
+[
+    {
+        "name": "New Lounge Hotel",
+        "description": "Desc of this hotel lorem",
+        "stars": "TR",
+        "is_active": "True"
+    },
+    {
+        "name": "Hotel WeAre",
+        "description": "Desc of this hotel lorem",
+        "stars": "TR",
+        "is_active": "True"
+    },
+    {
+        "name": "Disco Hotel",
+        "description": "Desc of this hotel lorem",
+        "stars": "TR",
+        "is_active": "True"
+    }
+]
