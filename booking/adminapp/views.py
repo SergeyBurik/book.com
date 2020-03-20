@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from mainapp.models import Bookings, Hotel, Room
 
-from adminapp.forms import HotelForm
+from adminapp.forms import HotelForm, RoomForm
 
 
 @login_required(login_url='/auth/login/')
@@ -27,7 +27,7 @@ def main(request):
     return render(request, 'adminapp/main.html', context)
 
 
-# function which creates room in hotel
+# function that creates room in hotel
 @login_required(login_url='/auth/login/')
 def create_room(request):
     hotels = Hotel.objects.filter(user=request.user, is_active=True)
@@ -82,6 +82,33 @@ def create_room(request):
 
 # page of editing hotel details
 @login_required(login_url='/auth/login/')
+def edit_room(request, pk):
+    # if there is such room
+    hotel = get_object_or_404(Hotel, user=request.user)
+    room = get_object_or_404(Room, pk=pk, hotel=hotel, is_active=True)
+
+    form = RoomForm(request.POST or None, request.FILES or None, instance=room)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            obj = form.save(commit=False)
+
+            obj.save()
+
+            messages.success(request, "You successfully updated the post")
+
+            context = {'form': form}
+
+            return HttpResponseRedirect(reverse('management:rooms'))
+
+        else:
+            messages.warning(request, "The form was not updated successfully.")
+
+    context = {'form': form, 'pk': pk}
+    return render(request, 'adminapp/edit_room.html', context)
+
+# page of editing room details
+@login_required(login_url='/auth/login/')
 def edit_hotel(request, pk):
     # if there is such hotel
     hotel = get_object_or_404(Hotel, pk=pk, user=request.user, is_active=True)
@@ -104,6 +131,7 @@ def edit_hotel(request, pk):
             messages.warning(request, "The form was not updated successfully.")
 
     context = {'form': form, 'pk': pk}
+
     return render(request, 'adminapp/edit_hotel.html', context)
 
 
