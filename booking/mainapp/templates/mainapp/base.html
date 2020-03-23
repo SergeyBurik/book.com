@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="{% static '/css/animate.css'%}">
     <link rel="stylesheet" href="{% static '/css/owl.carousel.min.css'%}">
     <link rel="stylesheet" href="{% static '/css/aos.css'%}">
-    <link rel="stylesheet" href="{% static '/css/auth.css'%}">
     <link rel="stylesheet" href="{% static '/css/magnific-popup.css'%}">
     <link rel="stylesheet" href="{% static '/fonts/ionicons/css/ionicons.min.css'%}">
     <link rel="stylesheet" href="{% static '/fonts/fontawesome/css/font-awesome.min.css'%}">
@@ -25,6 +24,8 @@
     <!-- Theme Style -->
     <link rel="stylesheet" href="{% static '/css/style.css'%}">
     {% endblock %}
+    {% block static %}{% endblock %}
+<!--    block with additional staticfiles-->
 </head>
 <body>
 {% block header %}

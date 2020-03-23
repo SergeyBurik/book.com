@@ -44,7 +44,10 @@
                                 </th>
                                 {% else %}
                                 <th>
-                                    <span class="date_item">{{room.price}}</span>
+                                    <a href="{% url 'main:book_room' room.hotel.pk room.pk %}">
+                                        <span class="date_item">{{room.price}}</span>
+
+                                    </a>
                                 </th>
                                 {% endif %}
                             {% endfor %}
