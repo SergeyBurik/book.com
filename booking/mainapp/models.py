@@ -149,8 +149,10 @@ class Bookings(models.Model):
     room = models.ForeignKey(Room,
                              on_delete=models.CASCADE)  # room which we are trying to book
     client_name = models.CharField(max_length=100)
+    client_email = models.CharField(max_length=100) # client's email
     phone_number = models.CharField(max_length=20, verbose_name="Client's phone number")
     time = models.TimeField()  # approximate time of check in
+    comments = models.CharField(max_length=500) # client's requests
     country = models.CharField(max_length=50)  # client's country of living
     address = models.CharField(max_length=100)  # client's address of living
 
