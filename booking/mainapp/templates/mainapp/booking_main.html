@@ -1,0 +1,67 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% load query_booking %}
+
+{% block header %}{% endblock %}
+
+{% block container %}
+    <section class="section pb-0" style="padding-top: 1em; padding-bottom: 115px!important;;">
+        <div class="container">
+            <div class="row mb-5 justify-content-center" data-aos="fade" style="background-image: url('{{hotel.banner.url}}'); background-position: center;">
+                <div class="col-md-7 text-center heading-wrap" style="color: white!important;">
+                    <h2 data-aos="fade-up" style="color: white!important;">{{ hotel.name }}</h2>
+                    <p data-aos="fade-up" data-aos-delay="100" style="color: white!important;">Book rooms here...</p>
+                </div>
+            </div>
+            <div class="table-responsive" style="color: black!important;">
+
+                <table class="table table-bordered" id="dataTableBookings" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th colspan="2">
+
+                            </th>
+                            {% for day in days %}
+                                <th>
+                                    <span class="week_day">{{ day| date:"D" }}</span>
+                                    <span class="month_day">{{ day|date:"d" }}</span>
+                                    <span class="month">{{ day|date:"M" }}</span>
+                                </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% if rooms %}
+                        {% for room in rooms %}
+                        <tr>
+                            <th colspan="2">
+                                <span>{{room.name}}</span>
+                            </th>
+                            {% for day in days %}
+                                {% if room|query_booking:day %}
+                                <th>
+                                    <span class="date_item">Sold</span>
+                                </th>
+                                {% else %}
+                                <th>
+                                    <span class="date_item">{{room.price}}</span>
+                                </th>
+                                {% endif %}
+                            {% endfor %}
+                       {% endfor %}
+                   {% else %}
+                        <tr>
+                            <th colspan="16">
+                                You don't have any rooms yet
+                            </th>
+                    </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+
+{% endblock %}
+

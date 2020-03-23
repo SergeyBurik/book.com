@@ -64,6 +64,9 @@
                                 <p class="h5">
                                     {{hotel.description}}
                                 </p>
+                                <p class="h7">
+                                    <a href="{% url 'main:bookings_main' hotel.pk %}">See Booking Page</a>
+                                </p>
                             </div>
                             {% endfor %}
                         </div>
