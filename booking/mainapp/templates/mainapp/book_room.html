@@ -56,15 +56,15 @@
                         <span>{{room.name}}</span>
                     </th>
                     {% for day in days %}
-                    {% if room|query_booking:day %}
-                    <th>
-                        <span class="date_item">Sold</span>
-                    </th>
-                    {% else %}
-                    <th>
-                        <span class="date_item">{{room.price}}</span>
-                    </th>
-                    {% endif %}
+                        {% if room|query_booking:day %}
+                            <th>
+                                <span class="date_item">Sold</span>
+                            </th>
+                            {% else %}
+                            <th>
+                                <span class="date_item">{{room.price}}</span>
+                            </th>
+                        {% endif %}
                     {% endfor %}
                 </tr>
                 </tbody>
@@ -73,8 +73,18 @@
     </div>
 </section>
 <section class="section bg-light py-5  bottom-slant-gray">
+    {% if messages %}
+        <div class="container">
+            {% for message in messages %}
+                <div class="alert alert-{{message.tags}}" role="alert">
+                    {{message}}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
     <div class="booking_form">
         <form action="{% url 'main:book_room' room.hotel.pk room.pk %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
             <div class="form-row">
                 <div id="range" style="width: 100%; text-align: center">
                     <div class="form-group col-md-5" style="display: inline-block">
@@ -113,16 +123,16 @@
             </div>
             <div class="form-group ">
                 <label for="email">Arrival Time</label>
-                <input type="text" required name="email" id="time" class="form-control" placeholder="Arrival Time">
+                <input type="text" required name="time" id="time" class="form-control" placeholder="Arrival Time">
             </div>
             <div class="form-group">
                 <label for="comments">Comments</label>
-                <textarea name="comments" class="form-control" id="comments" cols="30" rows="10"></textarea>
+                <textarea name="comments" class="form-control" id="comments" cols="30" rows="3"></textarea>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="email">Country</label>
-                    <input type="text" required name="email" id="country" class="form-control" placeholder="Country">
+                    <input type="text" required name="country" id="country" class="form-control" placeholder="Country">
                 </div>
                 <div class="form-group col-md-6">
                     <label for="address">Address</label>
@@ -130,7 +140,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Sign in</button>
+            <button type="submit" class="btn btn-primary">Book!</button>
         </form>
     </div>
 </section>
@@ -139,9 +149,7 @@
     const elem = document.getElementById('range');
 
     const dateRangePicker = new DateRangePicker(elem, {
-        format: 'dd-mm-yyyy',
-
-
+        format: 'yyyy-mm-dd',
     });
 
 </script>
