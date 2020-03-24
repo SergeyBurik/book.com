@@ -19,7 +19,7 @@
                     {% endif %}
                 </div>
 
-                <form action="{% url 'management:edit_room' pk %}" method="post" enctype="multipart/form-data">
+                <form action="{% url 'management:edit_room' hotel_id room_id %}" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     {{ form.as_p }}
                     <input type="submit" value="Edit Room"/>
