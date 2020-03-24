@@ -55,7 +55,10 @@
                             {% for room in rooms %}
                             <div class="hotel">
                                 <p class="h3">
-                                    {{room.name}}. ({{room.hotel.name}} - {{room.hotel.stars}} stars).
+                                    {{room.name}}. ({{room.hotel.name}}).
+                                    <a href="{% url 'management:edit_room' room.pk %}">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
                                 </p>
                                 <img src="{{ room.image.url }}" alt="{{room.name}}">
                                 <p class="h5">

@@ -1,11 +1,13 @@
 {% extends 'mainapp/base.html' %}
 {% load static %}
 
+
+
 {% block container %}
+<div style="z-index: 999">
+
     <div class="slider-wrap">
         <section class="home-slider owl-carousel">
-
-
             <div class="slider-item" style="background-image: url('static/img/main.jpg');">
                 <div class="container">
                     <div class="row slider-text align-items-center justify-content-center">
@@ -35,8 +37,7 @@
         </section>
         <!-- END slider -->
     </div>
-
-
+</div>
     <section class="section bg-light py-5  bottom-slant-gray">
         <div class="container">
             <div class="row align-items-center">

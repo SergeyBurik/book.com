@@ -1,7 +1,7 @@
 from django.urls import path
 from adminapp import views as adminapp
 
-app_name = 'authapp'
+app_name = 'adminapp'
 
 urlpatterns = [
     path('main/', adminapp.main, name='main'),
@@ -9,4 +9,7 @@ urlpatterns = [
     path('create_room/', adminapp.create_room, name='create_room'),
     path('hotels/', adminapp.hotels, name='hotels'),
     path('rooms/', adminapp.rooms, name='rooms'),
+    path('hotel-<int:pk>/edit_hotel/', adminapp.edit_hotel, name="edit_hotel"),
+    path('hotel-<int:pk>/edit_room/', adminapp.edit_room, name="edit_room"),
+
 ]
