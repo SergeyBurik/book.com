@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.utils.deconstruct import deconstructible
 
 from authapp.models import User
+from authapp.variables import country_dict
 
 
 @deconstructible
@@ -146,14 +147,14 @@ class RoomGallery(models.Model):
 class Bookings(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default='')
     date = models.DateField()  # date of booking
-    room = models.ForeignKey(Room,
-                             on_delete=models.CASCADE)  # room which we are trying to book
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)  # room which we are trying to book
     client_name = models.CharField(max_length=100)
-    client_email = models.CharField(max_length=100) # client's email
+    client_email = models.CharField(max_length=100)  # client's email
     phone_number = models.CharField(max_length=20, verbose_name="Client's phone number")
     time = models.TimeField()  # approximate time of check in
-    comments = models.CharField(max_length=500) # client's requests
-    country = models.CharField(max_length=50)  # client's country of living
+    comments = models.CharField(max_length=500)  # client's requests
+    country = models.CharField(max_length=50, choices=country_dict,
+                               default='Russia')
     address = models.CharField(max_length=100)  # client's address of living
 
     def __str__(self):
