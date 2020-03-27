@@ -10761,6 +10761,10 @@ body {
     flex-wrap: nowrap;
 }
 
+.sb-sidenav a {
+    color:#3c4043;
+}
+
 .sb-sidenav .sb-sidenav-menu {
     flex-grow: 1;
 }

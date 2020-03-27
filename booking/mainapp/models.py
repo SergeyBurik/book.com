@@ -47,6 +47,8 @@ class Hotel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     name = models.CharField(verbose_name='Название отеля', max_length=64,
                             unique=True)
+    phone_number = models.CharField(verbose_name='Номер телефона', default='', max_length=20)
+    location = models.CharField(verbose_name='Адрес отеля', default='', max_length=200)
     description = models.TextField(verbose_name='Описание отеля', blank=True)
     stars = models.CharField(max_length=2, choices=STARS_CHOICES, default=ONE)
     banner = models.ImageField(default='', upload_to='hotels/banners/')  # hotel's image
