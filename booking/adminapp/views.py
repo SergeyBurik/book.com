@@ -2,12 +2,13 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from mainapp.models import Bookings, Hotel, Room
-
+from geopy.geocoders import Nominatim
 from adminapp.forms import HotelForm, RoomForm
+from adminapp import utils
 
 
 @login_required(login_url='/auth/login/')
@@ -25,6 +26,29 @@ def main(request):
     context = {'bookings': bookings, 'hotels': hotels, 'days': days, 'rooms': rooms}
 
     return render(request, 'adminapp/main.html', context)
+
+
+# function that checks the hotel's address
+def ajax_check_address(request):
+    # if address is valid and function returned coordinates -> address passed check
+    # else coordinates list is empty
+    address = request.GET.get('address', None)
+
+    geolocator = Nominatim(user_agent="check_address")
+    location = geolocator.geocode(address)
+    if location:
+        coordinates = [location.latitude, location.longitude]
+        message = ''
+    else:
+        coordinates = []
+        message = 'Invalid address'
+
+    print(location)
+    print(address)
+    print()
+
+    return JsonResponse({'coordinates': coordinates, 'address': location.address,
+                         'message': message})
 
 
 # function that creates room in hotel
@@ -166,18 +190,18 @@ def create_hotel(request):
         description = request.POST['description']
         stars = request.POST['stars']
         banner = request.FILES['banner']
+        location = request.POST['location']
+        phone = request.POST['number']
 
-        print(hotel_name)
-        print(description)
-        print(stars)
-        print(banner)
-        print(request.user)
+        location = utils.get_address(location)
 
         Hotel.objects.create(user=request.user,
                              name=hotel_name,
                              description=description,
                              stars=stars,
                              banner=banner,
+                             location=location,
+                             phone_number=phone,
                              is_active=True)
 
         return HttpResponseRedirect(reverse('management:main'))
