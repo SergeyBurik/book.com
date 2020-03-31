@@ -55,6 +55,14 @@
       .description h4{
         line-height:10px;
       }
+      .photo_description {
+        text-align: center;
+      }
+      .photo-item {
+
+        /*display: inline-block;*/
+      }
+
     </style>
   </head>
   <body>
@@ -81,16 +89,27 @@
       </div>
       <div class="description">
         <h3 class="blue">
-          {{booking.hotel}}
+          {{booking.hotel}} - {{booking.room}}
         </h3>
         <h5>{{booking.hotel.location}}</h5>
-        <h4>Your booking: {{nights}}</h4>
+        <h4>Your booking: {{nights}} nights</h4>
         <hr>
         <h4>Check in: {{check_in}}</h4>
         <hr>
         <h4>Check out: {{check_out}}</h4>
         <hr>
         <h4>Total: {{total}}</h4>
+      </div>
+      <div class="photo_description">
+        <div class="photo-item">
+          <a href="{{domain}}{% url 'main:book_room' booking.hotel.pk booking.room.pk %}#map">View map</a>
+        </div>
+        <div class="photo-item">
+          <a href="{{domain}}{% url 'main:book_room' booking.hotel.pk booking.room.pk %}">
+<!--            <img src="{{domain}}{{booking.room.image.url}}" alt="{{booking.room}}">-->
+            <img src="https://via.placeholder.com/300x200" alt="">
+          </a>
+        </div>
       </div>
     </div>
   </body>

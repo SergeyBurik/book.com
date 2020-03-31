@@ -1,11 +1,27 @@
 form:not(.d-md-inline-block) {
   background: #fff;
   padding: 4em 4em 2em;
-  max-width: 400px;
+  /*max-width: 400px;*/
   margin: 50px auto 0;
   box-shadow: 0 0 1em #222;
   border-radius: 2px;
 }
+
+@media (max-width: 480px) {
+  #msform {
+    width: 95%;
+  }
+  #msform fieldset {
+    width: 100%;
+    margin: 0;
+  }
+
+}
+
+@media (min-width: 481px) {
+  #msform {width: 80%}
+}
+
 form h2 {
   margin: 0 0 50px 0;
   padding: 10px;
@@ -69,7 +85,7 @@ form input[type="submit"]:hover {
   text-shadow: 0 1px 3px rgba(70, 93, 41, 0.7);
 }
 form label {
-  position: absolute;
+  /*position: absolute;*/
   left: 8px;
   top: -24px;
   color: #999;

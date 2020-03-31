@@ -25,21 +25,21 @@
 
 {% block container %}
 <section class="section pb-0" style="padding-top: 1em; padding-bottom: 115px!important;;">
-    <div class="container">
-        <div class="row mb-5 justify-content-center" data-aos="fade"
-             style="background-image: url('{{hotel.banner.url}}'); background-position: center;">
-            <div class="col-md-7 text-center heading-wrap" style="color: white!important;">
-                <h2 data-aos="fade-up" style="color: white!important;">{{ hotel.name }}</h2>
-                <p data-aos="fade-up" data-aos-delay="100" style="color: white!important;">Book rooms here...</p>
-            </div>
+    <div class="row mb-5 justify-content-center" data-aos="fade"
+         style="background-image: url('{{hotel.banner.url}}'); background-position: center;">
+        <div class="col-md-7 text-center heading-wrap" style="color: white!important;">
+            <h2 data-aos="fade-up" style="color: white!important;">{{ hotel.name }}</h2>
+            <p data-aos="fade-up" data-aos-delay="100" style="color: white!important;">Book rooms here...</p>
         </div>
+    </div>
+    <div class="container">
+
         <div class="table-responsive" style="color: black!important;">
 
             <table class="table table-bordered" id="dataTableBookings" width="100%" cellspacing="0">
                 <thead>
                 <tr>
                     <th colspan="2">
-
                     </th>
                     {% for day in days %}
                     <th>
@@ -56,31 +56,83 @@
                         <span>{{room.name}}</span>
                     </th>
                     {% for day in days %}
-                        {% if room|query_booking:day %}
-                            <th>
-                                <span class="date_item">Sold</span>
-                            </th>
-                            {% else %}
-                            <th>
-                                <span class="date_item">{{room.price}}</span>
-                            </th>
-                        {% endif %}
+                    {% if room|query_booking:day %}
+                    <th>
+                        <span class="date_item">Sold</span>
+                    </th>
+                    {% else %}
+                    <th>
+                        <span class="date_item">{{room.price}}</span>
+                    </th>
+                    {% endif %}
                     {% endfor %}
                 </tr>
                 </tbody>
             </table>
         </div>
+
     </div>
+
+    <div class="container">
+        <div class="room_description_header">
+            <h1 style="color: black">{{room.name}}</h1>
+            <h5 class="room_description_location">{{room.hotel.location}}</h5>
+        </div>
+        <!-- gallery pic -->
+        <div class="row">
+            <div class="column">
+                <img src="{{room.image.url}}"
+                     style="width:100%" onclick="gfg(this);">
+                <img src="https://via.placeholder.com/1600x900"
+                     style="width:100%" onclick="gfg(this);">
+                <img src="https://via.placeholder.com/1600x900"
+                     style="width:100%" onclick="gfg(this);">
+
+            </div>
+
+            <div class="coloumn" style="width: 70%;">
+                <span onclick="this.parentElement.style.display='none'"></span>
+                <img id="expand" style="width:70%;
+                                    height: 94%;
+                                    object-fit: cover;
+                                    margin-top: 15px;
+                                    border-radius: 0 10px 10px 0;" src="{{room.image.url}}">
+            </div>
+        </div>
+        <h2>Description</h2>
+        <div class="room_description">
+            <h6 style="color:black;">
+                {{room.description}}
+            </h6>
+        </div>
+
+        <div id="map">
+            <iframe width="100%" height="300px" style="border: 0"
+                    src="https://maps.google.com/maps?q={{coordinates}}&hl=es;z=14&amp;output=embed"></iframe>
+        </div>
+    </div>
+
+
 </section>
+
+<script>
+    function gfg(imgs) {
+        var expandImg = document.getElementById("expand");
+        // var imgText = document.getElementById("geeks");
+        expandImg.src = imgs.src;
+        // imgText.innerHTML = imgs.alt;
+        expandImg.parentElement.style.display = "block";
+    }
+</script>
 <section class="section bg-light py-5  bottom-slant-gray">
     {% if messages %}
-        <div class="container">
-            {% for message in messages %}
-                <div class="alert alert-{{message.tags}}" role="alert">
-                    {{message}}
-                </div>
-            {% endfor %}
+    <div class="container">
+        {% for message in messages %}
+        <div class="alert alert-{{message.tags}}" role="alert">
+            {{message}}
         </div>
+        {% endfor %}
+    </div>
     {% endif %}
     <div class="booking_form">
         <form action="{% url 'main:book_room' room.hotel.pk room.pk %}" method="post" enctype="multipart/form-data">

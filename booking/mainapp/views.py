@@ -6,8 +6,7 @@ from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 from mainapp.models import Hotel, Room, Bookings
-
-from mainapp.utils import check_booking, insert_booking
+from mainapp.utils import check_booking, insert_booking, get_coordinates
 
 
 def main_page(request):
@@ -55,10 +54,14 @@ def book_room(request, hotel_id, room_id):
         else:
             messages.error(request, 'This room is not available at this period')
 
+    coordinates = get_coordinates(room.hotel.location)
+    print(room.hotel.location)
+    print(coordinates)
     return render(request, 'mainapp/book_room.html', {'user': user,
                                                       'hotel': hotel,
                                                       'room': room,
                                                       'days': days,
+                                                      'coordinates': coordinates
                                                       })
 
 
@@ -73,7 +76,10 @@ def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
     total = sum([booking.room.price for x in range(len(date_list))])
 
     data = {'booking': booking, 'nights': len(date_list), 'first_name': booking.client_name.split(':')[0],
-            'check_in': check_in, 'check_out': check_out, 'total': total, 'domain':settings.DOMAIN_NAME}
+            'check_in': check_in, 'check_out': check_out, 'total': total, 'domain': settings.DOMAIN_NAME,
+            'coordinates': str(get_coordinates(booking.hotel.location)).replace('(', '').replace(')', '').replace(' ',
+                                                                                                                  '')}
+    print(data)
 
     html_m = render_to_string('mainapp/confirmation_letter.html', data)
 
