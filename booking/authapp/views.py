@@ -11,8 +11,11 @@ from authapp.models import UserActivation, User
 
 from django.conf import settings
 
+from authapp.variables import country_dict
+
 
 def join(request):
+    countries = country_dict
     if request.method == 'POST':
         register_form = UserRegisterForm(request.POST, request.FILES)
 
@@ -27,7 +30,9 @@ def join(request):
     else:
         register_form = UserRegisterForm()
 
-    content = {'register_form': register_form}
+    content = {'register_form': register_form,
+               'countries': countries,
+               }
 
     return render(request, 'authapp/sign_up.html', content)
 
@@ -69,10 +74,13 @@ def send_verify_mail(user):
     print(os.path.join(settings.BASE_DIR, 'static', 'assets', 'letter.html'))
 
     html_m = render_to_string('authapp/letter.html',
-                              {'username': user.name, 'link': settings.DOMAIN_NAME + verify_link})
-
-    return send_mail(title, '', settings.EMAIL_HOST_USER, [user.email], html_message=html_m,
-                     fail_silently=False)
+                              {'username': user.name,
+                               'link': settings.DOMAIN_NAME + verify_link}
+                              )
+    # return HttpResponseRedirect(reverse('auth:verify',
+    #                                     args=[user.email, activation_key]))
+    return send_mail(title, '', settings.EMAIL_HOST_USER,
+                     [user.email], html_message=html_m, fail_silently=False)
 
 
 def verify(request, email, activation_key):

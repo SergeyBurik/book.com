@@ -1,0 +1,38 @@
+<div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav_light" id="sidenavAccordion">
+            <div class="sb-sidenav-menu" style="border-right: 1px solid rgb(218, 220, 224)">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Core</div>
+                    <a class="nav-link" href="{% url 'management:main' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Dashboard
+                    </a>
+
+                    <a class="nav-link" href="{% url 'management:create_room' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Create Room
+                    </a>
+
+                    <a class="nav-link" href="{% url 'management:create_hotel' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Create Hotel
+                    </a>
+
+                    <a class="nav-link" href="{% url 'management:hotels' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Your Hotels
+                    </a>
+
+                    <a class="nav-link" href="{% url 'management:rooms' %}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        Your Rooms
+                    </a>
+
+                </div>
+            </div>
+            <div class="sb-sidenav-footer" style="border-right: 1px solid rgb(218, 220, 224)">
+                <div class="small">Logged in as:</div>
+                {{ user.name }}
+            </div>
+        </nav>
+    </div>

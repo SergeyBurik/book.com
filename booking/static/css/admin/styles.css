@@ -4746,6 +4746,23 @@ input[type=button].btn-block {
     padding: 1.25rem;
 }
 
+.card-body .hotel:not(:first-child){
+    margin-top: 187px;
+}
+
+@media screen and (max-width: 900px) {
+    .hotel img {
+        width: 100%!important;
+        margin-bottom: 10px;
+    }
+}
+
+.hotel img {
+    float: left;
+    width: 250px;
+    margin-right: 10px;
+}
+
 .card-title {
     margin-bottom: 0.75rem;
 }
@@ -10742,6 +10759,10 @@ body {
     flex-direction: column;
     height: 100%;
     flex-wrap: nowrap;
+}
+
+.sb-sidenav a {
+    color:#3c4043;
 }
 
 .sb-sidenav .sb-sidenav-menu {

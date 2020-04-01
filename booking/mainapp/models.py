@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.utils.deconstruct import deconstructible
 
 from authapp.models import User
+from authapp.variables import country_dict
 
 
 @deconstructible
@@ -21,7 +22,7 @@ class PathAndRename(object):
         return os.path.join(self.path, filename)
 
 
-path_and_rename = PathAndRename("static/img/tmp")
+path_and_rename = PathAndRename("media/rooms/")
 
 
 class Hotel(models.Model):
@@ -46,6 +47,8 @@ class Hotel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     name = models.CharField(verbose_name='Название отеля', max_length=64,
                             unique=True)
+    phone_number = models.CharField(verbose_name='Номер телефона', default='', max_length=20)
+    location = models.CharField(verbose_name='Адрес отеля', default='', max_length=200)
     description = models.TextField(verbose_name='Описание отеля', blank=True)
     stars = models.CharField(max_length=2, choices=STARS_CHOICES, default=ONE)
     banner = models.ImageField(default='', upload_to='hotels/banners/')  # hotel's image
@@ -91,13 +94,13 @@ class Room(models.Model):
         ordering = ['name']
 
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default='')
-    name = models.CharField(verbose_name='Имя', max_length=32)
+    name = models.CharField(verbose_name='Имя', unique=True, max_length=32)
     price = models.DecimalField(verbose_name='Цена', max_digits=12,
                                 decimal_places=2, default=0)
     description = models.TextField(verbose_name='Описание', blank=True)
-    adult = models.BooleanField(verbose_name='Взрослый', default=True)
-    kids = models.BooleanField(verbose_name='Детский', default=False)
-    infants = models.BooleanField(verbose_name='Детский', default=False)
+    adult = models.PositiveIntegerField(verbose_name='Взрослый', default=0)
+    kids = models.PositiveIntegerField(verbose_name='Детский', default=0)
+    infants = models.PositiveIntegerField(verbose_name='Детский', default=0)
     image = models.ImageField(upload_to=path_and_rename, blank=True)
     is_active = models.BooleanField(verbose_name='Номер активен', default=True)
 
@@ -146,13 +149,17 @@ class RoomGallery(models.Model):
 class Bookings(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default='')
     date = models.DateField()  # date of booking
-    room = models.ForeignKey(Room,
-                             on_delete=models.CASCADE)  # room which we are trying to book
+    room = models.ForeignKey(Room, on_delete=models.CASCADE)  # room which we are trying to book
+    quantity = models.PositiveIntegerField(verbose_name='quantity of days', default=0)
     client_name = models.CharField(max_length=100)
+    client_email = models.CharField(max_length=100)  # client's email
     phone_number = models.CharField(max_length=20, verbose_name="Client's phone number")
     time = models.TimeField()  # approximate time of check in
-    country = models.CharField(max_length=50)  # client's country of living
+    comments = models.CharField(max_length=500)  # client's requests
+    country = models.CharField(max_length=50, choices=country_dict,
+                               default='Russia')
     address = models.CharField(max_length=100)  # client's address of living
 
     def __str__(self):
         return f'Room Booking {self.room.name} - {self.room.hotel.name}'
+
