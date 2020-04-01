@@ -10,6 +10,6 @@ urlpatterns = [
     path('hotels/', adminapp.hotels, name='hotels'),
     path('rooms/', adminapp.rooms, name='rooms'),
     path('hotel-<int:pk>/edit_hotel/', adminapp.edit_hotel, name="edit_hotel"),
-    path('hotel-<int:pk>/edit_room/', adminapp.edit_room, name="edit_room"),
+    path('hotel-<int:hotel_id>/room-<int:room_id>/edit_room/', adminapp.edit_room, name="edit_room"),
 
 ]

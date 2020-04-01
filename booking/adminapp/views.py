@@ -82,10 +82,10 @@ def create_room(request):
 
 # page of editing hotel details
 @login_required(login_url='/auth/login/')
-def edit_room(request, pk):
+def edit_room(request, hotel_id, room_id):
     # if there is such room
-    hotel = get_object_or_404(Hotel, user=request.user)
-    room = get_object_or_404(Room, pk=pk, hotel=hotel, is_active=True)
+    hotel = get_object_or_404(Hotel, pk=hotel_id, user=request.user)
+    room = get_object_or_404(Room, pk=room_id, hotel=hotel, is_active=True)
 
     form = RoomForm(request.POST or None, request.FILES or None, instance=room)
 
@@ -104,8 +104,9 @@ def edit_room(request, pk):
         else:
             messages.warning(request, "The form was not updated successfully.")
 
-    context = {'form': form, 'pk': pk}
+    context = {'form': form, 'hotel_id': hotel_id, 'room_id': room_id}
     return render(request, 'adminapp/edit_room.html', context)
+
 
 # page of editing room details
 @login_required(login_url='/auth/login/')
