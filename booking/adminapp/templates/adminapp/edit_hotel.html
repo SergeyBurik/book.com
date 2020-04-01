@@ -1,0 +1,29 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% load query_booking %}
+
+
+{% block content %}
+    <main>
+            <div class="container-fluid">
+                <div class="container">
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>
+                            {{ message }}
+                            {{message.tags}}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+
+                <form action="{% url 'management:edit_hotel' pk %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Edit Hotel"/>
+                </form>
+            </div>
+        </main>
+{% endblock %}

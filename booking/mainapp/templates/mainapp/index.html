@@ -1,0 +1,145 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+
+
+{% block container %}
+<div style="z-index: 999">
+
+    <div class="slider-wrap">
+        <section class="home-slider owl-carousel">
+            <div class="slider-item" style="background-image: url('static/img/main.jpg');">
+                <div class="container">
+                    <div class="row slider-text align-items-center justify-content-center">
+                        <div class="col-md-8 text-center col-sm-12 ">
+                            <h1 data-aos="fade-up mb-5">The all-in-one business solution</h1>
+                            <h5 data-aos="fade-up mb-5" style="color: white;">for bed & breakfasts, guesthouses and small
+                                hotels</h5>
+                            <p data-aos="fade-up" data-aos-delay="200"><a href="#" class="btn btn-white btn-outline-white">Get
+                                Started</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slider-item" style="background-image: url('static/img/main.jpg');">
+                <div class="container">
+                    <div class="row slider-text align-items-center justify-content-center">
+                        <div class="col-md-8 text-center col-sm-12 ">
+                            <h1 data-aos="fade-up mb-5">Everything you need to run your property like a pro</h1>
+                            <p data-aos="fade-up" data-aos-delay="200"><a href="#" class="btn btn-white btn-outline-white">Get
+                                Started</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- END slider -->
+    </div>
+</div>
+    <section class="section bg-light py-5  bottom-slant-gray">
+        <div class="container">
+            <div class="row align-items-center">
+
+                <div class="col-lg-6">
+                    <img src="{% static '/img/management_system.jpg' %}" alt="Image" class="img-fluid">
+                </div>
+                <div class="col-lg-5 ml-auto">
+                    <div class="text-left heading-wrap">
+                        <h2 data-aos="fade-up">Property Management System</h2>
+                    </div>
+                    <p>Manage your guests’ stay from reservation to check out and everything in between</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <section class="section pb-0">
+        <div class="container">
+            <div class="row mb-5 justify-content-center" data-aos="fade">
+                <div class="col-md-7 text-center heading-wrap">
+                    <h2 data-aos="fade-up">Booking Engine</h2>
+                    <p data-aos="fade-up" data-aos-delay="100">Save time, delight your guests… Let Book! handle
+                        the rest..</p>
+                    <p data-aos="fade-up" data-aos-delay="100">Affordable, powerful technology at your fingertips</p>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-lg-4">
+                    <img src="{% static '/img/about_1.png' %}" alt="Image" class="img-fluid about_img_1" data-aos="fade"
+                         data-aos-delay="200">
+                </div>
+                <div class="col-lg-4">
+                    <img src="{% static '/img/about_2.png' %}" alt="Image" class="img-fluid about_img_1" data-aos="fade"
+                         data-aos-delay="200">
+                </div>
+                <div class="col-lg-4">
+                    <img src="{% static '/img/about_3.png' %}" alt="Image" class="img-fluid about_img_1" data-aos="fade"
+                         data-aos-delay="500">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section ">
+
+        <div class="clearfix mb-5 pb-5">
+            <div class="container-fluid mb-5">
+                <div class="row" data-aos="fade">
+                    <div class="col-md-12 text-center heading-wrap">
+                        <h2>Features</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <div class="text">
+                        <p class="dishes-price">Direct Booking Technology</p>
+                        <h2 class="dishes-heading">Take online reservations directly from your website,
+                            commission-free</h2>
+                    </div>
+                    <img src="img/dishes_1.jpg" alt="" class="img-fluid">
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <div class="text">
+                        <p class="dishes-price">Your Front Desk</p>
+                        <h2 class="dishes-heading"> Easily create phone and walk-in bookings. Little Hotelier’s leading
+                            property management system automatically updates your inventory, and gives you one place to
+                            view
+                            and manage all of your online reservations.</h2>
+                    </div>
+                    <img src="img/dishes_2.jpg" alt="" class="img-fluid">
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <div class="text">
+                        <p class="dishes-price">Adaptability</p>
+                        <h2 class="dishes-heading">Your site will automatically look good on smartphones, tablets and
+                            computers. We worked through each block so that the creation of an adaptive website was
+                            elementary.</h2>
+                    </div>
+                    <img src="img/dishes_2.jpg" alt="" class="img-fluid">
+                    </div>
+            </div>
+        </div>
+
+    </section> <!-- .section -->
+
+
+    <section class="section  bg-light top-slant-white">
+    <div class="clearfix mb-5 pb-5">
+        <div class="container-fluid">
+            <div class="row" data-aos="fade">
+                <div class="col-md-12 text-center heading-wrap">
+                    <h2>Connect to billions of travelers around the world</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section> <!-- .section -->
+
+{% endblock %}
+
