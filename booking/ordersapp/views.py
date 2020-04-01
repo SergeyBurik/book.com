@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from robokassa.forms import RobokassaForm
-from mainapp.models import Hotel, Room, Bookings
-
-from mainapp.views import send_confirmation_mail
+from mainapp.models import Bookings
 
 
 def pay_with_robokassa(request, hotel_id, room_id):

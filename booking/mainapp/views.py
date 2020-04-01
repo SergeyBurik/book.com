@@ -2,12 +2,9 @@ import datetime
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
-from django.urls import reverse
 from robokassa.forms import RobokassaForm
 
 from mainapp.models import Hotel, Room, Bookings
@@ -94,7 +91,7 @@ def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
     total = sum([booking.room.price for x in range(len(date_list))])
 
     data = {'booking': booking, 'nights': len(date_list), 'first_name': booking.client_name.split(':')[0],
-            'check_in': check_in, 'check_out': check_out, 'total': total, 'domain':settings.DOMAIN_NAME}
+            'check_in': check_in, 'check_out': check_out, 'total': total, 'domain': settings.DOMAIN_NAME}
 
     html_m = render_to_string('mainapp/confirmation_letter.html', data)
 
