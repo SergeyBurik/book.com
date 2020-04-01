@@ -1,0 +1,97 @@
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=Roboto:300&display=swap');
+      @media (max-width:480px) {
+        .mail-container {
+          width:95%;
+        }
+      }
+      @media (min-width:481px) {
+        .mail-container {
+          width: 60%;
+        }
+      }
+      .mail-container {
+        margin:auto;
+      }
+      .header {
+        width:100%;
+        height: 50px;
+        background:#003580;
+        color: white;
+        line-height:50px;
+      }
+      .header h2 {
+        margin-left: 20px;
+        font-weight:900;
+      }
+      *{
+        font-family:Roboto, sans-serif;
+      }
+      .header h4 {
+        position:absolute;
+        z-index:999;
+        right:15px;
+        top:0;
+      }
+      .center-block {
+        text-align:center;
+      }
+      .row {
+        margin-top:15px;
+        height:50px;
+        line-height:50px;
+      }
+      .icon {
+        height:25px;
+      }
+      .blue {
+        color:#0077CC;
+      }
+      .description h4{
+        line-height:10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h2>Book!</h2>
+      <h4>Booking number: {{booking.pk}}</h4>
+    </div>
+
+    <div class="mail-container">
+      <div class="center-block">
+        <div class="row">
+          <img class="icon" src="{{domain}}{% static '/img/completed.png' %}" alt="completed">
+        <span>
+          Thank you, {{first_name}}
+        </span>
+        </div>
+        <span>
+             Your reservation is confirmed.
+          </span>
+        <div class="row">
+          <img src="{{domain}}{% static '/img/arrow.png' %}" alt="arrow">
+          <span><strong>{{booking.hotel}}</strong> is waiting for you on {{check_in}}</span>
+        </div>
+      </div>
+      <div class="description">
+        <h3 class="blue">
+          {{booking.hotel}}
+        </h3>
+        <h5>{{booking.hotel.location}}</h5>
+        <h4>Your booking: {{nights}}</h4>
+        <hr>
+        <h4>Check in: {{check_in}}</h4>
+        <hr>
+        <h4>Check out: {{check_out}}</h4>
+        <hr>
+        <h4>Total: {{total}}</h4>
+      </div>
+    </div>
+  </body>
+</html>
