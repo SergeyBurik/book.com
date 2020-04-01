@@ -5,7 +5,6 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
-from robokassa.forms import RobokassaForm
 
 from mainapp.models import Hotel, Room, Bookings
 from mainapp.utils import check_booking, insert_booking, get_coordinates
@@ -58,7 +57,6 @@ def book_room(request, hotel_id, room_id):
     coordinates = get_coordinates(room.hotel.location)
     print(room.hotel.location)
     print(coordinates)
-    
     content = {
         'user': user,
         'hotel': hotel,
@@ -66,7 +64,6 @@ def book_room(request, hotel_id, room_id):
         'days': days,
         'summ': total,
     }
-    
     return render(request, 'mainapp/book_room.html', content)
 
 
@@ -77,14 +74,12 @@ def total_sum(hotel_id, room_id, check_in, check_out):
     end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
     date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
     total = sum([booking.room.price for x in range(len(date_list))])
-
     return total
   
   
 def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
     print('send_confirmation_mail')
     booking = get_object_or_404(Bookings, hotel__pk=hotel_id, room__pk=room_id, date=check_in)
-
     start = datetime.datetime.strptime(check_in, "%Y-%m-%d")
     end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
     date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
@@ -92,14 +87,10 @@ def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
     total = sum([booking.room.price for x in range(len(date_list))])
 
     data = {'booking': booking, 'nights': len(date_list), 'first_name': booking.client_name.split(':')[0],
-<<<<<<< HEAD
-            'check_in': check_in, 'check_out': check_out, 'total': total, 'domain': settings.DOMAIN_NAME}
-=======
             'check_in': check_in, 'check_out': check_out, 'total': total, 'domain': settings.DOMAIN_NAME,
             'coordinates': str(get_coordinates(booking.hotel.location)).replace('(', '').replace(')', '').replace(' ',
                                                                                                                   '')}
     print(data)
->>>>>>> 3b38d63806f5170eaff11975020f144788d062e4
 
     html_m = render_to_string('mainapp/confirmation_letter.html', data)
 
