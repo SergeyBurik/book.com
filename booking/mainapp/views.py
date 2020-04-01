@@ -11,8 +11,7 @@ from django.urls import reverse
 from robokassa.forms import RobokassaForm
 
 from mainapp.models import Hotel, Room, Bookings
-
-from mainapp.utils import check_booking, insert_booking
+from mainapp.utils import check_booking, insert_booking, get_coordinates
 
 
 def main_page(request):
@@ -55,12 +54,14 @@ def book_room(request, hotel_id, room_id):
                            comments, country, address)
             # send_confirmation_mail(hotel_id, room_id, check_in, check_out, f'{client_name}:{client_surname}')
             # ":" is just separator
-            messages.success(request, 'You successfully booked room! If you wont to pay now? Click!')
+            messages.success(request, 'You successfully booked room!')
         else:
             messages.error(request, 'This room is not available at this period')
 
-        total = total_sum(hotel_id, room_id, check_in, check_out)
-
+    coordinates = get_coordinates(room.hotel.location)
+    print(room.hotel.location)
+    print(coordinates)
+    
     content = {
         'user': user,
         'hotel': hotel,
@@ -68,7 +69,7 @@ def book_room(request, hotel_id, room_id):
         'days': days,
         'summ': total,
     }
-
+    
     return render(request, 'mainapp/book_room.html', content)
 
 
@@ -81,8 +82,8 @@ def total_sum(hotel_id, room_id, check_in, check_out):
     total = sum([booking.room.price for x in range(len(date_list))])
 
     return total
-
-
+  
+  
 def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
     print('send_confirmation_mail')
     booking = get_object_or_404(Bookings, hotel__pk=hotel_id, room__pk=room_id, date=check_in)
@@ -94,30 +95,12 @@ def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
     total = sum([booking.room.price for x in range(len(date_list))])
 
     data = {'booking': booking, 'nights': len(date_list), 'first_name': booking.client_name.split(':')[0],
-            'check_in': check_in, 'check_out': check_out, 'total': total, 'domain':settings.DOMAIN_NAME}
+            'check_in': check_in, 'check_out': check_out, 'total': total, 'domain': settings.DOMAIN_NAME,
+            'coordinates': str(get_coordinates(booking.hotel.location)).replace('(', '').replace(')', '').replace(' ',
+                                                                                                                  '')}
+    print(data)
 
     html_m = render_to_string('mainapp/confirmation_letter.html', data)
 
     return send_mail('Booking Confirmation', '', settings.EMAIL_HOST_USER,
                      [booking.client_email], html_message=html_m, fail_silently=False)
-
-
-def pay_with_robokassa(request, hotel_id, room_id, check_in, check_out):
-    booking = get_object_or_404(Bookings, hotel__pk=hotel_id, room__pk=room_id, date=check_in)
-
-    start = datetime.datetime.strptime(check_in, "%Y-%m-%d")
-    end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
-    date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
-    total = sum([booking.room.price for x in range(len(date_list))])
-
-    form = RobokassaForm(initial={
-                        'OutSum': total,
-                        'InvId': booking.id,
-                        'Hotel': booking.room.hotel.name,
-                        'Desc': booking.room.name,
-                        # 'Email': request.user.email,
-                        'IncCurrLabel': '',
-                        'Culture': 'ru'
-           })
-
-    return render(request, 'pay_with_robokassa.html', {'form': form})

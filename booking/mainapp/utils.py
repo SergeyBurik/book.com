@@ -1,7 +1,15 @@
 import datetime
 
 from django.shortcuts import get_object_or_404
+from geopy.geocoders import Nominatim
 from mainapp.models import Bookings, Room, Hotel
+
+
+# returns coordinates by address
+def get_coordinates(address):
+    geolocator = Nominatim(user_agent="get_coordinates")
+    location = geolocator.geocode(address)
+    return (round(location.latitude, 6), round(location.longitude, 6))
 
 
 # function which checks availability of room for selected dates
