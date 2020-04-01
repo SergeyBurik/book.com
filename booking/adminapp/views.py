@@ -65,7 +65,6 @@ def create_room(request):
         adults = request.POST['adults']
         kids = request.POST['kids']
         infants = request.POST['infants']
-        image = request.FILES['image']
 
         # try:
         # get hotel
@@ -92,7 +91,7 @@ def create_room(request):
         Room.objects.create(hotel=hotel, name=name,
                             price=int(price), description=description,
                             adult=int(adults), kids=int(kids),
-                            infants=int(infants), image=image,
+                            infants=int(infants),
                             is_active=True)
 
         return HttpResponseRedirect(reverse('management:main'))

@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
-from mainapp.models import Hotel, Room, Bookings
+from mainapp.models import Hotel, Room, Bookings, RoomGallery
 from mainapp.utils import check_booking, insert_booking, get_coordinates
 
 
@@ -15,14 +15,17 @@ def main_page(request):
     return render(request, 'mainapp/index.html', {'user': user})
 
 
+
 def bookings_main(request, hotel_id):
     hotel = get_object_or_404(Hotel, pk=hotel_id)
     rooms = Room.objects.filter(hotel=hotel, is_active=True)
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
+    coordinates = get_coordinates(hotel.location)
 
     return render(request, 'mainapp/booking_main.html', {'hotel': hotel,
                                                          'rooms': rooms,
-                                                         'days': days})
+                                                         'days': days,
+                                                         'coordinates': coordinates})
 
 
 def book_room(request, hotel_id, room_id):
@@ -54,15 +57,15 @@ def book_room(request, hotel_id, room_id):
         else:
             messages.error(request, 'This room is not available at this period')
 
+    images = RoomGallery.objects.filter(room=room)
     coordinates = get_coordinates(room.hotel.location)
-    print(room.hotel.location)
-    print(coordinates)
+
     return render(request, 'mainapp/book_room.html', {'user': user,
                                                       'hotel': hotel,
                                                       'room': room,
                                                       'days': days,
-                                                      'coordinates': coordinates
-                                                      })
+                                                      'coordinates': coordinates,
+                                                      'images': images})
 
 
 def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
@@ -77,8 +80,7 @@ def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
 
     data = {'booking': booking, 'nights': len(date_list), 'first_name': booking.client_name.split(':')[0],
             'check_in': check_in, 'check_out': check_out, 'total': total, 'domain': settings.DOMAIN_NAME,
-            'coordinates': str(get_coordinates(booking.hotel.location)).replace('(', '').replace(')', '').replace(' ',
-                                                                                                                  '')}
+            'coordinates': str(get_coordinates(booking.hotel.location))}
     print(data)
 
     html_m = render_to_string('mainapp/confirmation_letter.html', data)
