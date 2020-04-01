@@ -94,7 +94,7 @@ class Room(models.Model):
         ordering = ['name']
 
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default='')
-    name = models.CharField(verbose_name='Имя', unique=True, max_length=32)
+    name = models.CharField(verbose_name='Имя', max_length=32)
     price = models.DecimalField(verbose_name='Цена', max_digits=12,
                                 decimal_places=2, default=0)
     description = models.TextField(verbose_name='Описание', blank=True)
@@ -135,8 +135,8 @@ class RoomGallery(models.Model):
                               width_field='image_width',
                               verbose_name='Изображение номера'
                               )
-    is_avatar = models.BooleanField(verbose_name='Главное изображение номера',
-                                    default=False)
+    # is_avatar = models.BooleanField(verbose_name='Главное изображение номера', Можно использовать room.image как главное фото
+    #                                 default=False)
     image_height = models.PositiveIntegerField(null=True, blank=True,
                                                editable=False, default='100')
     image_width = models.PositiveIntegerField(null=True, blank=True,
