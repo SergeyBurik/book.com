@@ -1,8 +1,5 @@
 django
 flake8
 uuid
-<<<<<<< Updated upstream
 django-robokassa-payments
-=======
 geopy
->>>>>>> Stashed changes
