@@ -5,7 +5,7 @@ from mainapp.models import Hotel, Room
 class HotelForm(forms.ModelForm):
     class Meta:
         model = Hotel
-        fields = ('name', 'description', 'stars', 'banner', 'is_active')
+        fields = ('name', 'description', 'location', 'stars', 'banner', 'is_active')
 
 
 class RoomForm(forms.ModelForm):
