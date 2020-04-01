@@ -11,8 +11,14 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import json
 
+# from configparser import ConfigParser
+# local_config_path = os.path.join(BASE_DIR, 'conf', 'local.conf')
+# config = ConfigParser()
+# config.read(local_config_path)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -37,7 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainapp.apps.MainappConfig',
     'authapp.apps.AuthappConfig',
-    'adminapp.apps.AdminappConfig'
+    'adminapp.apps.AdminappConfig',
+    'ordersapp.apps.OrdersappConfig',
+    'robokassa',
 ]
 
 # Changes the built-in user model to ours
@@ -134,6 +142,7 @@ STATICFILES_DIRS = (
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -148,3 +157,12 @@ DOMAIN_NAME = 'http://localhost:8000'
 # EMAIL_USE_SSL = False
 # # вариант python -m smtpd -n -c DebuggingServer localhost:25
 # EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
+
+# ROBOKASSA
+with open('booking/robokassa.json', 'r') as f:
+    RB = json.load(f)
+
+ROBOKASSA_LOGIN = RB['ROBOKASSA_LOGIN']
+ROBOKASSA_PASSWORD1 = RB['ROBOKASSA_PASSWORD1']
+ROBOKASSA_PASSWORD2 = RB['ROBOKASSA_PASSWORD2']
+ROBOKASSA_TEST_MODE = True

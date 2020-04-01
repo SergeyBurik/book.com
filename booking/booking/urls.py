@@ -23,6 +23,7 @@ urlpatterns = [
     path('', include('mainapp.urls', namespace='main')),
     # path('', mainapp.main_page, name='main'),  # main page
     path('auth/', include("authapp.urls", namespace="auth")),
+    path('order/', include("ordersapp.urls", namespace="order")),
     path('management/', include("adminapp.urls", namespace="management")),
 ]
 

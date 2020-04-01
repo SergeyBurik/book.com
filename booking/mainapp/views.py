@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
+
 from mainapp.models import Hotel, Room, Bookings
 from mainapp.utils import check_booking, insert_booking, get_coordinates
 
@@ -30,7 +31,7 @@ def book_room(request, hotel_id, room_id):
     hotel = get_object_or_404(Hotel, pk=hotel_id)
     room = get_object_or_404(Room, hotel=hotel, pk=room_id, is_active=True)
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
-
+    total = None
     if request.method == 'POST':
         check_in = request.POST.get('start', None)
         check_out = request.POST.get('end', None)
@@ -46,9 +47,8 @@ def book_room(request, hotel_id, room_id):
 
         if check_booking(check_in, check_out, room_id, hotel_id):  # if there are not any reservations
             insert_booking(hotel, check_in, check_out, room, f'{client_name} {client_surname}', email, phone, time,
-                           comments,
-                           country, address)
-            send_confirmation_mail(hotel_id, room_id, check_in, check_out, f'{client_name}:{client_surname}')
+                           comments, country, address)
+            # send_confirmation_mail(hotel_id, room_id, check_in, check_out, f'{client_name}:{client_surname}')
             # ":" is just separator
             messages.success(request, 'You successfully booked room!')
         else:
@@ -57,18 +57,29 @@ def book_room(request, hotel_id, room_id):
     coordinates = get_coordinates(room.hotel.location)
     print(room.hotel.location)
     print(coordinates)
-    return render(request, 'mainapp/book_room.html', {'user': user,
-                                                      'hotel': hotel,
-                                                      'room': room,
-                                                      'days': days,
-                                                      'coordinates': coordinates
-                                                      })
+    content = {
+        'user': user,
+        'hotel': hotel,
+        'room': room,
+        'days': days,
+        'summ': total,
+    }
+    return render(request, 'mainapp/book_room.html', content)
+
+
+def total_sum(hotel_id, room_id, check_in, check_out):
+    booking = get_object_or_404(Bookings, hotel__pk=hotel_id, room__pk=room_id, date=check_in)
+
+    start = datetime.datetime.strptime(check_in, "%Y-%m-%d")
+    end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
+    date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
+    total = sum([booking.room.price for x in range(len(date_list))])
+    return total
 
 
 def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
     print('send_confirmation_mail')
     booking = get_object_or_404(Bookings, hotel__pk=hotel_id, room__pk=room_id, date=check_in)
-
     start = datetime.datetime.strptime(check_in, "%Y-%m-%d")
     end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
     date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]

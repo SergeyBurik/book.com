@@ -1,3 +1,5 @@
 django
 flake8
 uuid
+django-robokassa-payments
+geopy

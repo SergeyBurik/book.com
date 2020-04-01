@@ -126,16 +126,18 @@
 </script>
 <section class="section bg-light py-5  bottom-slant-gray">
     {% if messages %}
-    <div class="container">
-        {% for message in messages %}
-        <div class="alert alert-{{message.tags}}" role="alert">
-            {{message}}
+        <div class="container">
+            {% for message in messages %}
+                <div class="alert alert-{{message.tags}}" role="alert">
+                    <a class="" href="{% url 'main:pay' room.hotel.pk room.pk %}">{{message}}</a>
+                </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
     {% endif %}
     <div class="booking_form">
         <form action="{% url 'main:book_room' room.hotel.pk room.pk %}" method="post" enctype="multipart/form-data">
+<!--        <form action="{% url 'order:success' %}" method="post" enctype="multipart/form-data">-->
             {% csrf_token %}
             <div class="form-row">
                 <div id="range" style="width: 100%; text-align: center">
@@ -191,7 +193,6 @@
                     <input type="text" required name="address" id="address" class="form-control" placeholder="Address">
                 </div>
             </div>
-
             <button type="submit" class="btn btn-primary">Book!</button>
         </form>
     </div>
