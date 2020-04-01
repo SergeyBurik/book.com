@@ -47,6 +47,8 @@ class Hotel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     name = models.CharField(verbose_name='Название отеля', max_length=64,
                             unique=True)
+    phone_number = models.CharField(verbose_name='Номер телефона', default='', max_length=20)
+    location = models.CharField(verbose_name='Адрес отеля', default='', max_length=200)
     description = models.TextField(verbose_name='Описание отеля', blank=True)
     stars = models.CharField(max_length=2, choices=STARS_CHOICES, default=ONE)
     banner = models.ImageField(default='', upload_to='hotels/banners/')  # hotel's image
@@ -148,6 +150,7 @@ class Bookings(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default='')
     date = models.DateField()  # date of booking
     room = models.ForeignKey(Room, on_delete=models.CASCADE)  # room which we are trying to book
+    quantity = models.PositiveIntegerField(verbose_name='quantity of days', default=0)
     client_name = models.CharField(max_length=100)
     client_email = models.CharField(max_length=100)  # client's email
     phone_number = models.CharField(max_length=20, verbose_name="Client's phone number")
@@ -159,3 +162,4 @@ class Bookings(models.Model):
 
     def __str__(self):
         return f'Room Booking {self.room.name} - {self.room.hotel.name}'
+
