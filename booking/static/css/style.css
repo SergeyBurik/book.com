@@ -45,6 +45,8 @@ h1, h2, h3, h4, h5 {
     border-width: 1px
 }
 
+
+
 .form-control:active, .form-control:focus {
     border-color: #ff7404
 }
@@ -1760,7 +1762,7 @@ header .navbar .cta-btn a:hover {
 
 /* Style the images of gallery */
 .column img {
-    opacity: 0.9;
+    /*opacity: 0.9;*/
     cursor: zoom-in;
     padding: 5px;
 }

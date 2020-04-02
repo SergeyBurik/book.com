@@ -13,4 +13,5 @@ urlpatterns = [
     path('hotel-<int:hotel_id>/room-<int:room_id>/edit_room/', adminapp.edit_room, name="edit_room"),
     # ajax
     path('ajax/check_address/', adminapp.ajax_check_address, name="ajax_check_address"),
+    path('ajax/delete_image/', adminapp.ajax_delete_image, name="ajax_delete_image"),
 ]

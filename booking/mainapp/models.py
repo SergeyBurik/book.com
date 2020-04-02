@@ -22,7 +22,7 @@ class PathAndRename(object):
         return os.path.join(self.path, filename)
 
 
-path_and_rename = PathAndRename("media/rooms/")
+path_and_rename = PathAndRename("rooms/")
 
 
 class Hotel(models.Model):
@@ -112,13 +112,6 @@ class Room(models.Model):
     def __unicode__(self):
         return f'{self.name}'
 
-    # @property
-    # def get_avatar(self):
-    #     try:
-    #         avatar = self.images.filter(is_avatar=True).first().image.url
-    #     except AttributeError:
-    #         avatar = '/static/img/any.webp'
-    #     return avatar
 
 
 class RoomGallery(models.Model):
@@ -130,16 +123,8 @@ class RoomGallery(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE,
                              verbose_name='Название номера')
     image = models.ImageField(upload_to=path_and_rename,
-                              # height_field='image_height',
-                              # width_field='image_width',
-                              verbose_name='Изображение номера'
-                              )
-    # is_avatar = models.BooleanField(verbose_name='Главное изображение номера', Можно использовать room.image как главное фото
-    #                                 default=False)
-    # image_height = models.PositiveIntegerField(null=True, blank=True,
-    #                                            editable=False, default='100')
-    # image_width = models.PositiveIntegerField(null=True, blank=True,
-    #                                           editable=False, default='100')
+                              verbose_name='Изображение номера')
+
 
     def __str__(self):
         return f'{self.room.name}'
