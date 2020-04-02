@@ -17,7 +17,6 @@
 <script src="{% static 'css/vanillajs-datepicker/dist/js/locales/fr.js' %}"></script>
 
 <script src="{% static 'css/vanillajs-datepicker/dist/js/datepicker-full.min.js' %}"></script>
-
 {% endblock %}
 
 {% block header %}{% endblock %}
@@ -80,14 +79,11 @@
         </div>
         <!-- gallery pic -->
         <div class="row">
-            <div class="column">
-                <img src="{{room.image.url}}"
+            <div class="column" style="height: 500px;overflow: auto;">
+                {% for image in images %}
+                    <img src="{{image.image.url}}"
                      style="width:100%" onclick="gfg(this);">
-                <img src="https://via.placeholder.com/1600x900"
-                     style="width:100%" onclick="gfg(this);">
-                <img src="https://via.placeholder.com/1600x900"
-                     style="width:100%" onclick="gfg(this);">
-
+                {% endfor %}
             </div>
 
             <div class="coloumn" style="width: 70%;">
@@ -96,11 +92,12 @@
                                     height: 94%;
                                     object-fit: cover;
                                     margin-top: 15px;
-                                    border-radius: 0 10px 10px 0;" src="{{room.image.url}}">
+                                    border-radius: 0 10px 10px 0;" src="{{images.0.image.url}}">
             </div>
         </div>
-        <h2>Description</h2>
         <div class="room_description">
+            <h2>Description</h2>
+
             <h6 style="color:black;">
                 {{room.description}}
             </h6>

@@ -101,7 +101,7 @@ class Room(models.Model):
     adult = models.PositiveIntegerField(verbose_name='Взрослый', default=0)
     kids = models.PositiveIntegerField(verbose_name='Детский', default=0)
     infants = models.PositiveIntegerField(verbose_name='Детский', default=0)
-    image = models.ImageField(upload_to=path_and_rename, blank=True)
+    # image = models.ImageField(upload_to=path_and_rename, blank=True)
     is_active = models.BooleanField(verbose_name='Номер активен', default=True)
 
     objects = RoomManager()
@@ -112,13 +112,13 @@ class Room(models.Model):
     def __unicode__(self):
         return f'{self.name}'
 
-    @property
-    def get_avatar(self):
-        try:
-            avatar = self.images.filter(is_avatar=True).first().image.url
-        except AttributeError:
-            avatar = '/static/img/any.webp'
-        return avatar
+    # @property
+    # def get_avatar(self):
+    #     try:
+    #         avatar = self.images.filter(is_avatar=True).first().image.url
+    #     except AttributeError:
+    #         avatar = '/static/img/any.webp'
+    #     return avatar
 
 
 class RoomGallery(models.Model):
@@ -128,19 +128,18 @@ class RoomGallery(models.Model):
         ordering = ['image']
 
     room = models.ForeignKey(Room, on_delete=models.CASCADE,
-                             related_name='images',
                              verbose_name='Название номера')
     image = models.ImageField(upload_to=path_and_rename,
-                              height_field='image_height',
-                              width_field='image_width',
+                              # height_field='image_height',
+                              # width_field='image_width',
                               verbose_name='Изображение номера'
                               )
     # is_avatar = models.BooleanField(verbose_name='Главное изображение номера', Можно использовать room.image как главное фото
     #                                 default=False)
-    image_height = models.PositiveIntegerField(null=True, blank=True,
-                                               editable=False, default='100')
-    image_width = models.PositiveIntegerField(null=True, blank=True,
-                                              editable=False, default='100')
+    # image_height = models.PositiveIntegerField(null=True, blank=True,
+    #                                            editable=False, default='100')
+    # image_width = models.PositiveIntegerField(null=True, blank=True,
+    #                                           editable=False, default='100')
 
     def __str__(self):
         return f'{self.room.name}'

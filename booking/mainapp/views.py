@@ -5,9 +5,13 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
+<< << << < HEAD
 from robokassa.forms import RobokassaForm
 
 from mainapp.models import Hotel, Room, Bookings
+== == == =
+from mainapp.models import Hotel, Room, Bookings, RoomGallery
+>> >> >> > serg_patch - 3
 from mainapp.utils import check_booking, insert_booking, get_coordinates
 
 
@@ -21,10 +25,12 @@ def bookings_main(request, hotel_id):
     hotel = get_object_or_404(Hotel, pk=hotel_id)
     rooms = Room.objects.filter(hotel=hotel, is_active=True)
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
+    coordinates = get_coordinates(hotel.location)
 
     return render(request, 'mainapp/booking_main.html', {'hotel': hotel,
                                                          'rooms': rooms,
-                                                         'days': days})
+                                                         'days': days,
+                                                         'coordinates': coordinates})
 
 
 def book_room(request, hotel_id, room_id):
@@ -55,18 +61,21 @@ def book_room(request, hotel_id, room_id):
         else:
             messages.error(request, 'This room is not available at this period')
 
+    images = RoomGallery.objects.filter(room=room)
     coordinates = get_coordinates(room.hotel.location)
-    print(room.hotel.location)
-    print(coordinates)
-    content = {
-        'user': user,
-        'hotel': hotel,
-        'room': room,
-        'days': days,
-        'coordinates': coordinates,
-        'summ': total,
-    }
-    return render(request, 'mainapp/book_room.html', content)
+
+<< << << < HEAD
+print(room.hotel.location)
+print(coordinates)
+content = {
+    'user': user,
+    'hotel': hotel,
+    'room': room,
+    'days': days,
+    'coordinates': coordinates,
+    'summ': total,
+}
+return render(request, 'mainapp/book_room.html', content)
 
 
 def total_sum(hotel_id, room_id, check_in, check_out):
@@ -77,6 +86,16 @@ def total_sum(hotel_id, room_id, check_in, check_out):
     date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
     total = sum([booking.room.price for x in range(len(date_list))])
     return total
+
+== == == =
+
+return render(request, 'mainapp/book_room.html', {'user': user,
+                                                  'hotel': hotel,
+                                                  'room': room,
+                                                  'days': days,
+                                                  'coordinates': coordinates,
+                                                  'images': images})
+>> >> >> > serg_patch - 3
 
 
 def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
@@ -90,8 +109,7 @@ def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
 
     data = {'booking': booking, 'nights': len(date_list), 'first_name': booking.client_name.split(':')[0],
             'check_in': check_in, 'check_out': check_out, 'total': total, 'domain': settings.DOMAIN_NAME,
-            'coordinates': str(get_coordinates(booking.hotel.location)).replace('(', '').replace(')', '').replace(' ',
-                                                                                                                  '')}
+            'coordinates': str(get_coordinates(booking.hotel.location))}
     print(data)
 
     html_m = render_to_string('mainapp/confirmation_letter.html', data)
@@ -109,13 +127,13 @@ def pay_with_robokassa(request, hotel_id, room_id, check_in, check_out):
     total = sum([booking.room.price for x in range(len(date_list))])
 
     form = RobokassaForm(initial={
-                        'OutSum': total,
-                        'InvId': booking.id,
-                        'Hotel': booking.room.hotel.name,
-                        'Desc': booking.room.name,
-                        # 'Email': request.user.email,
-                        'IncCurrLabel': '',
-                        'Culture': 'ru'
-           })
+        'OutSum': total,
+        'InvId': booking.id,
+        'Hotel': booking.room.hotel.name,
+        'Desc': booking.room.name,
+        # 'Email': request.user.email,
+        'IncCurrLabel': '',
+        'Culture': 'ru'
+    })
 
     return render(request, 'pay_with_robokassa.html', {'form': form})
