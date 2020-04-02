@@ -63,6 +63,7 @@ def book_room(request, hotel_id, room_id):
         'hotel': hotel,
         'room': room,
         'days': days,
+        'coordinates': coordinates,
         'summ': total,
     }
     return render(request, 'mainapp/book_room.html', content)
