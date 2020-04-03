@@ -12,7 +12,6 @@
                         {% for message in messages %}
                             <li {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>
                                 {{ message }}
-                                {{ message.tags }}
                             </li>
                         {% endfor %}
                     </ul>
@@ -70,6 +69,7 @@
 
         $("body").on('click','.delete_image' , function () {
             console.log($(this));
+            let parent = $(this).parent('.form_image_container');
             $.ajax({
                 url: '/management/ajax/delete_image/',
                 data: {
@@ -80,11 +80,14 @@
                 dataType: 'json',
                 success: function (data) {
                     console.log($(this));
-                    $(this).parent('.form_image_container').html(``);
+                    if (data.code === 200) {
+                        parent.remove();
+                    } else {
+                        alert('Unable to delete photo');
+                    }
                 },
                 error: function () {
-                    console.log($(this));
-                    $(this).parent('.form_image_container').html(``);
+                    alert('Unable to delete photo');
                 }
             });
 
@@ -94,8 +97,8 @@
         const app = new Vue({
             el: '#edit_form',
             data: {
-                fields_count: ['image-1'],
-                count: 1
+                fields_count: [],
+                count: 0
             },
             methods: {
                 addImageForm: function (e) {
@@ -110,7 +113,7 @@
                     }
                 },
                 delete_field: function (e) {
-                    if (this.count > 1) {
+                    if (this.count > 0) {
                         console.log(e.target);
                         this.count--;
                         this.fields_count.pop();

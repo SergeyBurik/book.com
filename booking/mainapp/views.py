@@ -22,12 +22,14 @@ def bookings_main(request, hotel_id):
     hotel = get_object_or_404(Hotel, pk=hotel_id)
     rooms = Room.objects.filter(hotel=hotel, is_active=True)
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
+    images = RoomGallery.objects.filter(room__hotel=hotel)
     coordinates = get_coordinates(hotel.location)
 
     return render(request, 'mainapp/booking_main.html', {'hotel': hotel,
                                                          'rooms': rooms,
                                                          'days': days,
-                                                         'coordinates': coordinates})
+                                                         'coordinates': coordinates,
+                                                         'images': images})
 
 
 def book_room(request, hotel_id, room_id):
@@ -52,7 +54,7 @@ def book_room(request, hotel_id, room_id):
         if check_booking(check_in, check_out, room_id, hotel_id):  # if there are not any reservations
             insert_booking(hotel, check_in, check_out, room, f'{client_name} {client_surname}', email, phone, time,
                            comments, country, address)
-            # send_confirmation_mail(hotel_id, room_id, check_in, check_out, f'{client_name}:{client_surname}')
+            send_confirmation_mail(hotel_id, room_id, check_in, check_out, f'{client_name}:{client_surname}')
             # ":" is just separator
             messages.success(request, 'You successfully booked room!')
         else:
@@ -103,23 +105,3 @@ def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
 
     return send_mail('Booking Confirmation', '', settings.EMAIL_HOST_USER,
                      [booking.client_email], html_message=html_m, fail_silently=False)
-
-# def pay_with_robokassa(request, hotel_id, room_id, check_in, check_out):
-#     booking = get_object_or_404(Bookings, hotel__pk=hotel_id, room__pk=room_id, date=check_in)
-#
-#     start = datetime.datetime.strptime(check_in, "%Y-%m-%d")
-#     end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
-#     date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
-#     total = sum([booking.room.price for x in range(len(date_list))])
-#
-#     form = RobokassaForm(initial={
-#         'OutSum': total,
-#         'InvId': booking.id,
-#         'Hotel': booking.room.hotel.name,
-#         'Desc': booking.room.name,
-#         # 'Email': request.user.email,
-#         'IncCurrLabel': '',
-#         'Culture': 'ru'
-#     })
-#
-#     return render(request, 'pay_with_robokassa.html', {'form': form})

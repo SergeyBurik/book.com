@@ -123,6 +123,13 @@ def edit_room(request, hotel_id, room_id):
     form = RoomForm(request.POST or None, request.FILES or None, instance=room)
 
     if request.method == 'POST':
+        # saving images
+        images = request.POST.get('image_count', 0)
+        for image in range(1, int(images) + 1):
+            image_file = request.FILES.get(f'image-{image}')
+            if image_file:
+                RoomGallery.objects.create(room=room, image=image_file)
+
         if form.is_valid():
             obj = form.save(commit=False)
 
@@ -143,13 +150,14 @@ def edit_room(request, hotel_id, room_id):
 
 
 def ajax_delete_image(request):
-    # try:
-    room = request.GET.get('room', '')
-    hotel = request.GET.get('hotel', '')
-    image = request.GET.get('image', '')
-    RoomGallery.objects.get(room__name=room, room__hotel__name=hotel, image=image.replace('/media/', '')).delete()
-    # except:
-    #     return JsonResponse({'error': True})
+    try:
+        room = request.GET.get('room', '')
+        hotel = request.GET.get('hotel', '')
+        image = request.GET.get('image', '')
+        RoomGallery.objects.get(room__name=room, room__hotel__name=hotel, image=image.replace('/media/', '')).delete()
+        return JsonResponse({'code': 200})
+    except:
+        return JsonResponse({'code': 500})
 
 
 # page of editing room details
