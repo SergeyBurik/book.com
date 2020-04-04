@@ -11,6 +11,13 @@ def pay_with_robokassa(request, hotel_id, room_id):
     print('THIS ISSSSSSSSSSSSSSSSSSSSSSSSSs')
     print(total)
 
+    # booking = get_object_or_404(Bookings, hotel__pk=hotel_id, room__pk=room_id, date=check_in)
+    #
+    # start = datetime.datetime.strptime(check_in, "%Y-%m-%d")
+    # end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
+    # date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
+    # total = sum([booking.room.price for x in range(len(date_list))])
+
     form = RobokassaForm(initial={
         'OutSum': total,
         'InvId': booking_number,

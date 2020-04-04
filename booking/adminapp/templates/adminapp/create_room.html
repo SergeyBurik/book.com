@@ -5,59 +5,97 @@
 
 {% block content %}
     <main>
-            <div class="container-fluid">
-                <!-- multistep form -->
-                <form action="{% url 'management:create_room'  %}" @submit="checkForm" method="post" id="msform" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <!-- progressbar -->
-                    <ul id="progressbar">
-                        <li class="active">Step 1</li>
-                        <li>Step 2</li>
-                        <li>Step 3</li>
-                    </ul>
-                    <!-- fieldsets -->
-                    <fieldset>
-                        <h2 class="fs-title">Create new room</h2>
-                        <h3 class="fs-subtitle">In which hotel do you want to create room?</h3>
+        <div class="container-fluid" id="app">
+            <!-- multistep form -->
+            <form action="{% url 'management:create_room'  %}" @submit="checkForm"  method="post" id="msform" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- progressbar -->
+                <ul id="progressbar">
+                    <li class="active">Step 1</li>
+                    <li>Step 2</li>
+                    <li>Step 3</li>
+                </ul>
+                <!-- fieldsets -->
+                <fieldset>
+                    <h2 class="fs-title">Create new room</h2>
+                    <h3 class="fs-subtitle">In which hotel do you want to create room?</h3>
+                    <select name="hotel" id="hotel">
+                        {% for hotel in hotels %}
+                            <option value="{{hotel}}">{{hotel.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="button" name="next" class="next action-button" value="Next"/>
+                </fieldset>
+                <fieldset>
+                    <h2 class="fs-title">Create new room</h2>
+                    <h3 class="fs-subtitle">Enter some data</h3>
+                    <input type="text" id="name" name="name" placeholder="Enter room's name">
+                    <input type="text" id="price" name="price" placeholder="Enter price per night">
+                    <textarea name="description" placeholder="Description"></textarea>
+                    <input type="button" name="previous" class="previous action-button" value="Previous"/>
+                    <input type="button" name="next" class="next action-button" value="Next"/>
+                </fieldset>
+                <fieldset>
+                    <h2 class="fs-title">Create new Room</h2>
+                    <h3 class="fs-subtitle">Step 3</h3>
+                    <input type="text" id="adults" name="adults" placeholder="Adults:">
+                    <input type="text" id="kids" name="kids" placeholder="Kids:">
+                    <input type="text" id="infants" name="infants" placeholder="Infants:">
+                    <label for="image">Room's Images:</label>
 
-                        <select name="hotel" id="hotel">
-                            {% for hotel in hotels %}
-                                <option value="{{hotel}}">{{hotel.name}}</option>
-                            {% endfor %}
-                        </select>
-                        <input type="button" name="next" class="next action-button" value="Next"/>
-                    </fieldset>
-                    <fieldset>
-                        <h2 class="fs-title">Create new room</h2>
-                        <h3 class="fs-subtitle">Enter some data</h3>
+                    <div id="image_inputs">
+                        <div class="field_row" v-bind:id="num" v-for="num in fields_count">
+                            <input type="file"  required id="image" v-bind:name="num">
+                            <a href="#" v-bind:id="num" v-on:click="delete_field"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
 
-                        <input type="text" id="name" name="name" placeholder="Enter room's name">
-                        <input type="text" id="price" name="price" placeholder="Enter price per night">
-                        <textarea name="description" placeholder="Description"></textarea>
+                    <a href="#" v-on:click="addImageForm">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </a>
 
-                        <input type="button" name="previous" class="previous action-button" value="Previous"/>
-                        <input type="button" name="next" class="next action-button" value="Next"/>
-                    </fieldset>
-                    <fieldset>
-                        <h2 class="fs-title">Create new Hotel</h2>
-                        <h3 class="fs-subtitle">Step 3</h3>
+                    <input type="hidden" id="image_count" name="image_count">
 
-                        <input type="text" id="adults" name="adults" placeholder="Adults:">
-                        <input type="text" id="kids" name="kids" placeholder="Kids:">
-                        <input type="text" id="infants" name="infants" placeholder="Infants:">
-
-                        <label for="image">Room's Image:</label>
-                        <input type="file" id="image" name="image">
-
-                        <input type="button" name="previous" class="previous action-button" value="Previous"/>
-                        <input type="submit"  name="submit" class="submit action-button" value="Submit"/>
-                    </fieldset>
-                </form>
-            </div>
+                    <input type="button" name="previous" class="previous action-button" value="Previous"/>
+                    <input type="submit"  name="submit" class="submit action-button" value="Submit"/>
+                </fieldset>
+            </form>
+        </div>
         </main>
 {% endblock %}
 
 {% block jquery %}
+    <script>
+        const app = new Vue({
+          el: '#app',
+          data: {
+            fields_count: ['image-1'],
+            count: 1
+          },
+          methods:{
+            addImageForm: function (e) {
+                this.count++;
+                this.fields_count.push(`image-${this.count}`);
+                $('#image_count').val(this.count);
+            },
+            checkForm : function (e) {
+                if (this.count < 3) {
+                    console.log(this.count);
+                    e.preventDefault();
+                }
+            },
+            delete_field: function (e) {
+                if (this.count > 1) {
+                    console.log(e.target);
+                    this.count--;
+                    this.fields_count.pop();
+                    $('#image_count').val(this.count);
+
+                }
+            }
+          }
+        })
+    </script>
     <script>
         //jQuery time
         var current_fs, next_fs, previous_fs; //fieldsets
@@ -137,9 +175,11 @@
             });
         });
 
-        $(".submit").click(function () {
-            // return false;
-        })
+        //$(".submit").click(function () {
+          //  if (images_count < 3) {
+            //    return false;
+            //}
+        //})
 
     </script>
 {% endblock %}

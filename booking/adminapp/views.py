@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from mainapp.models import Bookings, Hotel, Room
+from mainapp.models import Bookings, Hotel, Room, RoomGallery
 from geopy.geocoders import Nominatim
 from adminapp.forms import HotelForm, RoomForm
 from adminapp import utils
@@ -65,7 +65,8 @@ def create_room(request):
         adults = request.POST['adults']
         kids = request.POST['kids']
         infants = request.POST['infants']
-        image = request.FILES['image']
+        images = request.POST.get('image_count', 0)
+        print(images)
 
         # try:
         # get hotel
@@ -85,15 +86,23 @@ def create_room(request):
             except ValueError:
                 name = f'{name} 1'
 
-        print(name)
-        print(hotel)
-
         # create room
         Room.objects.create(hotel=hotel, name=name,
                             price=int(price), description=description,
                             adult=int(adults), kids=int(kids),
-                            infants=int(infants), image=image,
+                            infants=int(infants),
                             is_active=True)
+
+        room = Room.objects.get(hotel=hotel, name=name,
+                                price=int(price), description=description,
+                                adult=int(adults), kids=int(kids),
+                                infants=int(infants),
+                                is_active=True)
+
+        for image in range(1, int(images) + 1):
+            image_file = request.FILES.get(f'image-{image}')
+            if image_file:
+                RoomGallery.objects.create(room=room, image=image_file)
 
         return HttpResponseRedirect(reverse('management:main'))
 
@@ -114,12 +123,19 @@ def edit_room(request, hotel_id, room_id):
     form = RoomForm(request.POST or None, request.FILES or None, instance=room)
 
     if request.method == 'POST':
+        # saving images
+        images = request.POST.get('image_count', 0)
+        for image in range(1, int(images) + 1):
+            image_file = request.FILES.get(f'image-{image}')
+            if image_file:
+                RoomGallery.objects.create(room=room, image=image_file)
+
         if form.is_valid():
             obj = form.save(commit=False)
 
             obj.save()
 
-            messages.success(request, "You successfully updated the post")
+            messages.success(request, "You successfully updated the room")
 
             context = {'form': form}
 
@@ -128,8 +144,21 @@ def edit_room(request, hotel_id, room_id):
         else:
             messages.warning(request, "The form was not updated successfully.")
 
-    context = {'form': form, 'hotel_id': hotel_id, 'room_id': room_id}
+    images = RoomGallery.objects.filter(room=room, room__hotel=hotel)
+    context = {'form': form, 'hotel_id': hotel_id, 'room_id': room_id, 'room': room, 'images': images}
     return render(request, 'adminapp/edit_room.html', context)
+
+
+def ajax_delete_image(request):
+    try:
+        room = request.GET.get('room', None)
+        hotel = request.GET.get('hotel', None)
+        image = request.GET.get('image', None)
+        RoomGallery.objects.get(room__pk=room, room__hotel__pk=hotel, image__contains=image.replace('/media/', '')).delete()
+        return JsonResponse({'code': 200})
+    except Exception as err:
+        print(err)
+        return JsonResponse({'code': 500})
 
 
 # page of editing room details

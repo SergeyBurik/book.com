@@ -4,207 +4,209 @@
 
 
 {% block static %}
-<link href="{% static 'css/vanillajs-datepicker/dist/css/datepicker.min.css' %}" rel="stylesheet"/>
-<!-- For Bootstrap 4 -->
-<link href="{% static 'css/vanillajs-datepicker/dist/css/datepicker-bs4.min.css' %}" rel="stylesheet"/>
-<!-- For Bulma -->
-<link href="{% static 'css/vanillajs-datepicker/dist/css/datepicker-bulma.min.css' %}" rel="stylesheet"/>
-<!-- For Foundation -->
-<link href="{% static 'css/vanillajs-datepicker/dist/css/datepicker-foundation.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/vanillajs-datepicker/dist/css/datepicker.min.css' %}" rel="stylesheet"/>
+    <!-- For Bootstrap 4 -->
+    <link href="{% static 'css/vanillajs-datepicker/dist/css/datepicker-bs4.min.css' %}" rel="stylesheet"/>
+    <!-- For Bulma -->
+    <link href="{% static 'css/vanillajs-datepicker/dist/css/datepicker-bulma.min.css' %}" rel="stylesheet"/>
+    <!-- For Foundation -->
+    <link href="{% static 'css/vanillajs-datepicker/dist/css/datepicker-foundation.min.css' %}" rel="stylesheet"/>
 
-<script src="{% static 'css/vanillajs-datepicker/dist/js/datepicker.min.js' %}"></script>
+    <script src="{% static 'css/vanillajs-datepicker/dist/js/datepicker.min.js' %}"></script>
 
-<script src="{% static 'css/vanillajs-datepicker/dist/js/locales/fr.js' %}"></script>
+    <script src="{% static 'css/vanillajs-datepicker/dist/js/locales/fr.js' %}"></script>
 
-<script src="{% static 'css/vanillajs-datepicker/dist/js/datepicker-full.min.js' %}"></script>
-
+    <script src="{% static 'css/vanillajs-datepicker/dist/js/datepicker-full.min.js' %}"></script>
 {% endblock %}
 
 {% block header %}{% endblock %}
 
 
 {% block container %}
-<section class="section pb-0" style="padding-top: 1em; padding-bottom: 115px!important;;">
-    <div class="row mb-5 justify-content-center" data-aos="fade"
-         style="background-image: url('{{hotel.banner.url}}'); background-position: center;">
-        <div class="col-md-7 text-center heading-wrap" style="color: white!important;">
-            <h2 data-aos="fade-up" style="color: white!important;">{{ hotel.name }}</h2>
-            <p data-aos="fade-up" data-aos-delay="100" style="color: white!important;">Book rooms here...</p>
+    <section class="section pb-0" style="padding-top: 1em; padding-bottom: 115px!important;;">
+        <div class="row mb-5 justify-content-center" data-aos="fade"
+             style="background-image: url('{{ hotel.banner.url }}'); background-position: center;">
+            <div class="col-md-7 text-center heading-wrap" style="color: white!important;">
+                <h2 data-aos="fade-up" style="color: white!important;">{{ hotel.name }}</h2>
+                <p data-aos="fade-up" data-aos-delay="100" style="color: white!important;">Book rooms here...</p>
+            </div>
         </div>
-    </div>
-    <div class="container">
+        <div class="container">
 
-        <div class="table-responsive" style="color: black!important;">
+            <div class="table-responsive" style="color: black!important;">
 
-            <table class="table table-bordered" id="dataTableBookings" width="100%" cellspacing="0">
-                <thead>
-                <tr>
-                    <th colspan="2">
-                    </th>
-                    {% for day in days %}
-                    <th>
-                        <span class="week_day">{{ day| date:"D" }}</span>
-                        <span class="month_day">{{ day|date:"d" }}</span>
-                        <span class="month">{{ day|date:"M" }}</span>
-                    </th>
-                    {% endfor %}
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th colspan="2">
-                        <span>{{room.name}}</span>
-                    </th>
-                    {% for day in days %}
-                    {% if room|query_booking:day %}
-                    <th>
-                        <span class="date_item">Sold</span>
-                    </th>
-                    {% else %}
-                    <th>
-                        <span class="date_item">{{room.price}}</span>
-                    </th>
-                    {% endif %}
-                    {% endfor %}
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-    </div>
-
-    <div class="container">
-        <div class="room_description_header">
-            <h1 style="color: black">{{room.name}}</h1>
-            <h5 class="room_description_location">{{room.hotel.location}}</h5>
-        </div>
-        <!-- gallery pic -->
-        <div class="row">
-            <div class="column">
-                <img src="{{room.image.url}}"
-                     style="width:100%" onclick="gfg(this);">
-                <img src="https://via.placeholder.com/1600x900"
-                     style="width:100%" onclick="gfg(this);">
-                <img src="https://via.placeholder.com/1600x900"
-                     style="width:100%" onclick="gfg(this);">
-
+                <table class="table table-bordered" id="dataTableBookings" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th colspan="2">
+                        </th>
+                        {% for day in days %}
+                            <th>
+                                <span class="week_day">{{ day| date:"D" }}</span>
+                                <span class="month_day">{{ day|date:"d" }}</span>
+                                <span class="month">{{ day|date:"M" }}</span>
+                            </th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th colspan="2">
+                            <span>{{ room.name }}</span>
+                        </th>
+                        {% for day in days %}
+                            {% if room|query_booking:day %}
+                                <th>
+                                    <span class="date_item">Sold</span>
+                                </th>
+                            {% else %}
+                                <th>
+                                    <span class="date_item">{{ room.price }}</span>
+                                </th>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
-            <div class="coloumn" style="width: 70%;">
-                <span onclick="this.parentElement.style.display='none'"></span>
-                <img id="expand" style="width:70%;
+        </div>
+
+        <div class="container">
+            <div class="room_description_header">
+                <h1 style="color: black">{{ room.name }}</h1>
+                <h5 class="room_description_location">{{ room.hotel.location }}</h5>
+            </div>
+            <!-- gallery pic -->
+            {% if images %}
+                <div class="row">
+                    <div class="column" style="height: 500px;overflow: auto;">
+                        {% for image in images %}
+                            <img src="{{ image.image.url }}"
+                                 style="width:100%" onclick="gfg(this);">
+                        {% endfor %}
+                    </div>
+
+                    <div class="coloumn" style="width: 70%;">
+                        <span onclick="this.parentElement.style.display='none'"></span>
+                        <img id="expand" style="width:70%;
                                     height: 94%;
                                     object-fit: cover;
                                     margin-top: 15px;
-                                    border-radius: 0 10px 10px 0;" src="{{room.image.url}}">
-            </div>
-        </div>
-        <h2>Description</h2>
-        <div class="room_description">
-            <h6 style="color:black;">
-                {{room.description}}
-            </h6>
-        </div>
-
-        <div id="map">
-            <iframe width="100%" height="300px" style="border: 0"
-                    src="https://maps.google.com/maps?q={{coordinates}}&hl=es;z=14&amp;output=embed"></iframe>
-        </div>
-    </div>
-
-
-</section>
-
-<script>
-    function gfg(imgs) {
-        var expandImg = document.getElementById("expand");
-        // var imgText = document.getElementById("geeks");
-        expandImg.src = imgs.src;
-        // imgText.innerHTML = imgs.alt;
-        expandImg.parentElement.style.display = "block";
-    }
-</script>
-<section class="section bg-light py-5  bottom-slant-gray">
-    {% if messages %}
-        <div class="container">
-            {% for message in messages %}
-                <div class="alert alert-{{message.tags}}" role="alert">
-                    <a class="" href="{% url 'main:pay' room.hotel.pk room.pk %}">{{message}}</a>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endif %}
-    <div class="booking_form">
-        <form action="{% url 'main:book_room' room.hotel.pk room.pk %}" method="post" enctype="multipart/form-data">
-<!--        <form action="{% url 'order:success' %}" method="post" enctype="multipart/form-data">-->
-            {% csrf_token %}
-            <div class="form-row">
-                <div id="range" style="width: 100%; text-align: center">
-                    <div class="form-group col-md-5" style="display: inline-block">
-                        <label for="arrivalDate">Check In Date</label>
-                        <input type="text" required name="start" id="arrivalDate" class="form-control"
-                               placeholder="Check In Date">
-                    </div>
-                    <div class="form-group col-md-6" style="display: inline-block">
-                        <label for="checkOutDate">Check Out Date</label>
-                        <input type="text" required name="end" id="checkOutDate" class="form-control"
-                               placeholder="Check Out Date">
+                                    border-radius: 0 10px 10px 0;" src="{{ images.0.image.url }}">
                     </div>
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="firstName">First Name</label>
-                    <input type="text" required name="client_name" id="firstName" class="form-control"
-                           placeholder="First Name">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="lastName">Last Name</label>
-                    <input type="text" required name="client_surname" id="lastName" class="form-control"
-                           placeholder="Last Name">
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="email">Email</label>
-                    <input type="text" required name="email" id="email" class="form-control" placeholder="Email">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="phone">Phone Number</label>
-                    <input type="text" required name="phone" id="phone" class="form-control" placeholder="Phone Number">
-                </div>
-            </div>
-            <div class="form-group ">
-                <label for="email">Arrival Time</label>
-                <input type="text" required name="time" id="time" class="form-control" placeholder="Arrival Time">
-            </div>
-            <div class="form-group">
-                <label for="comments">Comments</label>
-                <textarea name="comments" class="form-control" id="comments" cols="30" rows="3"></textarea>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="email">Country</label>
-                    <input type="text" required name="country" id="country" class="form-control" placeholder="Country">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="address">Address</label>
-                    <input type="text" required name="address" id="address" class="form-control" placeholder="Address">
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Book!</button>
-        </form>
-    </div>
-</section>
+            {% endif %}
+            <div class="room_description">
+                <h2>Description</h2>
 
-<script>
-    const elem = document.getElementById('range');
+                <h6 style="color:black;">
+                    {{ room.description }}
+                </h6>
+            </div>
 
-    const dateRangePicker = new DateRangePicker(elem, {
-        format: 'yyyy-mm-dd',
-    });
+            <div id="map">
+                <iframe width="100%" height="300px" style="border: 0"
+                        src="https://maps.google.com/maps?q={{ coordinates }}&hl=es;z=14&amp;output=embed"></iframe>
+            </div>
+        </div>
 
-</script>
+
+    </section>
+
+    <script>
+        function gfg(imgs) {
+            var expandImg = document.getElementById("expand");
+            // var imgText = document.getElementById("geeks");
+            expandImg.src = imgs.src;
+            // imgText.innerHTML = imgs.alt;
+            expandImg.parentElement.style.display = "block";
+        }
+    </script>
+    <section class="section bg-light py-5  bottom-slant-gray">
+        {% if messages %}
+            <div class="container">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}" role="alert">
+                        <a class="" href="{% url 'main:pay' room.hotel.pk room.pk %}">{{ message }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+            </div>
+        {% endif %}
+        <div class="booking_form">
+            <form action="{% url 'main:book_room' room.hotel.pk room.pk %}" method="post" enctype="multipart/form-data">
+                <!--        <form action="{% url 'order:success' %}" method="post" enctype="multipart/form-data">-->
+                {% csrf_token %}
+                <div class="form-row">
+                    <div id="range" style="width: 100%; text-align: center">
+                        <div class="form-group col-md-5" style="display: inline-block">
+                            <label for="arrivalDate">Check In Date</label>
+                            <input type="text" required name="start" id="arrivalDate" class="form-control"
+                                   placeholder="Check In Date">
+                        </div>
+                        <div class="form-group col-md-6" style="display: inline-block">
+                            <label for="checkOutDate">Check Out Date</label>
+                            <input type="text" required name="end" id="checkOutDate" class="form-control"
+                                   placeholder="Check Out Date">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="firstName">First Name</label>
+                        <input type="text" required name="client_name" id="firstName" class="form-control"
+                               placeholder="First Name">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" required name="client_surname" id="lastName" class="form-control"
+                               placeholder="Last Name">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="email">Email</label>
+                        <input type="text" required name="email" id="email" class="form-control" placeholder="Email">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="phone">Phone Number</label>
+                        <input type="text" required name="phone" id="phone" class="form-control"
+                               placeholder="Phone Number">
+                    </div>
+                </div>
+                <div class="form-group ">
+                    <label for="email">Arrival Time</label>
+                    <input type="text" required name="time" id="time" class="form-control" placeholder="Arrival Time">
+                </div>
+                <div class="form-group">
+                    <label for="comments">Comments</label>
+                    <textarea name="comments" class="form-control" id="comments" cols="30" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="email">Country</label>
+                        <input type="text" required name="country" id="country" class="form-control"
+                               placeholder="Country">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="address">Address</label>
+                        <input type="text" required name="address" id="address" class="form-control"
+                               placeholder="Address">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Book!</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        const elem = document.getElementById('range');
+
+        const dateRangePicker = new DateRangePicker(elem, {
+            format: 'yyyy-mm-dd',
+        });
+
+    </script>
 {% endblock %}
 
