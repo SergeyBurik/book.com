@@ -151,12 +151,13 @@ def edit_room(request, hotel_id, room_id):
 
 def ajax_delete_image(request):
     try:
-        room = request.GET.get('room', '')
-        hotel = request.GET.get('hotel', '')
-        image = request.GET.get('image', '')
-        RoomGallery.objects.get(room__name=room, room__hotel__name=hotel, image=image.replace('/media/', '')).delete()
+        room = request.GET.get('room', None)
+        hotel = request.GET.get('hotel', None)
+        image = request.GET.get('image', None)
+        RoomGallery.objects.get(room__pk=room, room__hotel__pk=hotel, image__contains=image.replace('/media/', '')).delete()
         return JsonResponse({'code': 200})
-    except:
+    except Exception as err:
+        print(err)
         return JsonResponse({'code': 500})
 
 
