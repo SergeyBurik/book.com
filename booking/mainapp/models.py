@@ -113,7 +113,6 @@ class Room(models.Model):
         return f'{self.name}'
 
 
-
 class RoomGallery(models.Model):
     class Meta:
         verbose_name = 'Изображение'
@@ -124,7 +123,6 @@ class RoomGallery(models.Model):
                              verbose_name='Название номера')
     image = models.ImageField(upload_to=path_and_rename,
                               verbose_name='Изображение номера')
-
 
     def __str__(self):
         return f'{self.room.name}'

@@ -13,7 +13,7 @@ def get_coordinates(address):
         return (round(location.latitude, 6), round(location.longitude, 6))
 
     except AttributeError:
-        return (0,0)
+        return (0, 0)
 
 
 # function which checks availability of room for selected dates

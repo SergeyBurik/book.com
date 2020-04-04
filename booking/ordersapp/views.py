@@ -1,7 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from robokassa.forms import RobokassaForm
 from mainapp.models import Bookings
-import datetime
 
 
 def pay_with_robokassa(request, hotel_id, room_id):
