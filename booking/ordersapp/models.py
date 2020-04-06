@@ -23,6 +23,9 @@ class Order(models.Model):
     # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     client_name = models.CharField(max_length=100)
     client_email = models.CharField(max_length=100)  # client's email
+    days = models.PositiveIntegerField(verbose_name='quantity of days', default=0)
+    total_sum = models.DecimalField(verbose_name='Сумма', max_digits=12,
+                                    decimal_places=2, default=0)
     created = models.DateTimeField(verbose_name='создан', auto_now_add=True)
     updated = models.DateTimeField(verbose_name='обновлен', auto_now=True)
     status = models.CharField(verbose_name='статус',

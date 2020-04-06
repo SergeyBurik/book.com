@@ -6,6 +6,9 @@ from mainapp.models import Bookings, Room, Hotel
 
 
 # returns coordinates by address
+from ordersapp.models import Order
+
+
 def get_coordinates(address):
     try:
         geolocator = Nominatim(user_agent="get_coordinates")
@@ -68,7 +71,9 @@ def insert_booking(hotel, check_in, check_out, room, client_name, client_email, 
     end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
     # dates list
     date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
-
+    days_quantity = len(date_list)
+    total_sum = room.price * days_quantity
+    # total_ = sum([booking.room.price for x in range(len(date_list))])
     for date in date_list:
         Bookings.objects.create(hotel=hotel,
                                 date=date,
@@ -80,3 +85,5 @@ def insert_booking(hotel, check_in, check_out, room, client_name, client_email, 
                                 comments=comments,
                                 country=country,
                                 address=address)
+
+    Order.objects.create(client_name=client_name, client_email=client_email, days=days_quantity, total_sum=total_sum)
