@@ -7,9 +7,13 @@ from mainapp.models import Bookings, Room, Hotel
 
 # returns coordinates by address
 def get_coordinates(address):
-    geolocator = Nominatim(user_agent="get_coordinates")
-    location = geolocator.geocode(address)
-    return (round(location.latitude, 6), round(location.longitude, 6))
+    try:
+        geolocator = Nominatim(user_agent="get_coordinates")
+        location = geolocator.geocode(address)
+        return (round(location.latitude, 6), round(location.longitude, 6))
+
+    except AttributeError:
+        return (0, 0)
 
 
 # function which checks availability of room for selected dates

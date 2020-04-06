@@ -8,6 +8,9 @@ form:not(.d-md-inline-block) {
 }
 
 @media (max-width: 480px) {
+  form {
+        padding: 20px!important;
+  }
   #msform {
     width: 95%;
   }
@@ -18,9 +21,59 @@ form:not(.d-md-inline-block) {
 
 }
 
+
 @media (min-width: 481px) {
   #msform {width: 80%}
+  #edit_form {
+    width: 55%;
+  }
 }
+.form_images img {
+  width: 99%;
+  object-fit: cover;
+  height: 72px;
+  margin-right: 3px;
+}
+/*s*/
+.form_image_container {
+  display: inline-block;
+  position: relative;
+  width: 31%;
+  max-width: 400px;
+}
+
+.form_image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .3s ease;
+}
+
+.form_image_container:hover .overlay {
+  opacity: 1;
+}
+
+.icon {
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+/*f*/
 
 form h2 {
   margin: 0 0 50px 0;
@@ -103,4 +156,14 @@ form label.floatLabel {
   top: -11px;
   background-color: rgba(255, 255, 255, 0.8);
   font-size: 14px;
+}
+
+fieldset input[type=file]{
+  padding: 0!important;
+  width: 70% !important;
+  margin-right: 10px;
+}
+
+.field_row{
+      display: flex;
 }

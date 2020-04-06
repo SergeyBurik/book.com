@@ -6,62 +6,81 @@
 
 {% block container %}
     <section class="section pb-0" style="padding-top: 1em; padding-bottom: 115px!important;;">
-        <div class="row mb-5 justify-content-center" data-aos="fade" style="background-image: url('{{hotel.banner.url}}'); background-position: center;">
-                <div class="col-md-7 text-center heading-wrap" style="color: white!important;">
-                    <h2 data-aos="fade-up" style="color: white!important;">{{ hotel.name }}</h2>
-                    <p data-aos="fade-up" data-aos-delay="100" style="color: white!important;">Book rooms here...</p>
-                </div>
+        <div class="row mb-5 justify-content-center" data-aos="fade"
+             style="background-image: url('{{ hotel.banner.url }}'); background-position: center;">
+            <div class="col-md-7 text-center heading-wrap" style="color: white!important;">
+                <h2 data-aos="fade-up" style="color: white!important;">{{ hotel.name }}</h2>
+                <p data-aos="fade-up" data-aos-delay="100" style="color: white!important;">Book rooms here...</p>
             </div>
+        </div>
         <div class="container">
 
             <div class="table-responsive" style="color: black!important;">
 
                 <table class="table table-bordered" id="dataTableBookings" width="100%" cellspacing="0">
                     <thead>
-                        <tr>
-                            <th colspan="2">
+                    <tr>
+                        <th colspan="2">
 
+                        </th>
+                        {% for day in days %}
+                            <th>
+                                <span class="week_day">{{ day| date:"D" }}</span>
+                                <span class="month_day">{{ day|date:"d" }}</span>
+                                <span class="month">{{ day|date:"M" }}</span>
                             </th>
-                            {% for day in days %}
-                                <th>
-                                    <span class="week_day">{{ day| date:"D" }}</span>
-                                    <span class="month_day">{{ day|date:"d" }}</span>
-                                    <span class="month">{{ day|date:"M" }}</span>
-                                </th>
-                            {% endfor %}
-                        </tr>
+                        {% endfor %}
+                    </tr>
                     </thead>
                     <tbody>
                     {% if rooms %}
                         {% for room in rooms %}
-                        <tr>
+                            <tr>
                             <th colspan="2">
-                                <span>{{room.name}}</span>
+                                <span>{{ room.name }}</span>
                             </th>
                             {% for day in days %}
                                 {% if room|query_booking:day %}
-                                <th>
-                                    <span class="date_item">Sold</span>
-                                </th>
+                                    <th>
+                                        <span class="date_item">Sold</span>
+                                    </th>
                                 {% else %}
-                                <th>
-                                    <a href="{% url 'main:book_room' room.hotel.pk room.pk %}">
-                                        <span class="date_item">{{room.price}}</span>
+                                    <th>
+                                        <a href="{% url 'main:book_room' room.hotel.pk room.pk %}">
+                                            <span class="date_item">{{ room.price }}</span>
 
-                                    </a>
-                                </th>
+                                        </a>
+                                    </th>
                                 {% endif %}
                             {% endfor %}
-                       {% endfor %}
-                   {% else %}
+                        {% endfor %}
+                    {% else %}
                         <tr>
                             <th colspan="16">
                                 You don't have any rooms yet
                             </th>
-                    </tr>
+                        </tr>
                     {% endif %}
                     </tbody>
                 </table>
+            </div>
+
+            <div class="room_description">
+                <h2>Description</h2>
+                <h6 style="color: black">{{ hotel.description }}</h6>
+            </div>
+
+            <div id="map">
+                <iframe width="100%" height="300px" style="border: 0"
+                        src="https://maps.google.com/maps?q={{ coordinates }}&hl=es;z=14&amp;output=embed"></iframe>
+            </div>
+            <div class="images">
+                {% for image in images %}
+                    <div class="image_item">
+                        <img src="{{ image.image.url }}" alt="{{ image.room.name }}">
+                    </div>
+                {% endfor %}
+
             </div>
         </div>
     </section>
