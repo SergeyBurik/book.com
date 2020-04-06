@@ -155,7 +155,7 @@ class UserProfile(models.Model):
     bank_name = models.CharField(default='', max_length=50, verbose_name='Наименование банка')
     credit_card = models.CharField(default='', max_length=30, verbose_name='Номер кредитной карты')
     jur_form = models.CharField(verbose_name='Правовая форма', max_length=1,
-                              choices=JURIDICAL_FORM, blank=True)
+                                choices=JURIDICAL_FORM, blank=True)
     avatar = models.ImageField(
         upload_to=path_and_rename,
         default='static/img/default_user.png',
