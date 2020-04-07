@@ -3,8 +3,10 @@ import datetime
 from django.conf import settings
 from django.contrib import messages
 from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
+from django.urls import reverse
 from mainapp.models import Hotel, Room, Bookings, RoomGallery
 from mainapp.utils import check_booking, insert_booking, get_coordinates
 
@@ -53,7 +55,13 @@ def book_room(request, hotel_id, room_id):
                            comments, country, address)
             # send_confirmation_mail(hotel_id, room_id, check_in, check_out, f'{client_name}:{client_surname}')
             # ":" is just separator
-            messages.success(request, 'You successfully booked room!')
+            return HttpResponseRedirect(reverse('order:pay',
+                                                kwargs={
+                                                    'hotel_id': hotel_id,
+                                                    'room_id': room_id,
+                                                    'check_in': check_in,
+                                                    'check_out': check_out
+                                                }))
         else:
             messages.error(request, 'This room is not available at this period')
 
