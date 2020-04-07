@@ -181,7 +181,7 @@ class UserProfileEditForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ('age', 'gender', 'avatar',)
+        fields = ('bank_name', 'credit_card', 'jur_form', 'avatar',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -86,7 +86,6 @@ class User(AbstractBaseUser):
     # user's phone number
     phone_number = models.CharField(default='', max_length=30, verbose_name='Номер телефона')
     # user's country
-    # country = models.CharField(default='', max_length=30, verbose_name='Страна')
     country = models.CharField(max_length=50, choices=country_dict,
                                default='Russia')
     # user's company name
@@ -141,20 +140,22 @@ class User(AbstractBaseUser):
 
 
 class UserProfile(models.Model):
-    MALE = 'M'
-    FEMALE = 'W'
+    FIZLIC = 'F'
+    YRLIC = 'Y'
+    IP = 'I'
 
-    GENDER_CHOICES = (
-        (MALE, 'Мужской'),
-        (FEMALE, 'Женский'),
+    JURIDICAL_FORM = (
+        (FIZLIC, 'Физ. лицо'),
+        (YRLIC, 'Юр. лицо'),
+        (IP, 'ИП'),
     )
 
     user = models.OneToOneField(User, primary_key=True,
                                 on_delete=models.CASCADE)
-    age = models.PositiveIntegerField(verbose_name='Возраст', null=True,
-                                      blank=True)
-    gender = models.CharField(verbose_name='Пол', max_length=1,
-                              choices=GENDER_CHOICES, blank=True)
+    bank_name = models.CharField(default='', max_length=50, verbose_name='Наименование банка')
+    credit_card = models.CharField(default='', max_length=30, verbose_name='Номер кредитной карты')
+    jur_form = models.CharField(verbose_name='Правовая форма', max_length=1,
+                                choices=JURIDICAL_FORM, blank=True)
     avatar = models.ImageField(
         upload_to=path_and_rename,
         default='static/img/default_user.png',
