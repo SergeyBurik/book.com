@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from mainapp.models import Bookings
 import datetime
@@ -74,11 +74,11 @@ def checkout(request, hotel_id, room_id, check_in, check_out):
                                      source_type="card")
 
                 return HttpResponseRedirect(reverse('main:book_room',
-                                        kwargs={
-                                            'hotel_id': hotel_id,
-                                            'room_id': room_id
-                                        })
-                                )
+                                                    kwargs={
+                                                        'hotel_id': hotel_id,
+                                                        'room_id': room_id
+                                                    })
+                                            )
             except Exception as e:
                 print(e)
                 messages.error(request, "Your card has been declined.")

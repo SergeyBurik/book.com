@@ -1,15 +1,15 @@
 import os
+from datetime import timedelta
 from uuid import uuid4
+
+from authapp.variables import country_dict
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils.timezone import now
-from datetime import timedelta
 # Менеджер модели пользователя
 from django.utils.deconstruct import deconstructible
-
-from authapp.variables import country_dict
+from django.utils.timezone import now
 
 
 def get_activation_key_time():
@@ -92,15 +92,13 @@ class User(AbstractBaseUser):
     credit_card = models.CharField(default='', max_length=30, verbose_name='Номер кредитной карты')
 
     # user's company name
-    company_name = models.CharField(default='', max_length=30,)
+    company_name = models.CharField(default='', max_length=30, )
     # admin user; non super-user
     staff = models.BooleanField(default=False, verbose_name='Сотрудник')
     # superuser
     admin = models.BooleanField(default=True, verbose_name='Администратор')
     is_sending = models.BooleanField(default=False,
                                      verbose_name='Подписаться')
-
-
 
     objects = UserManager()
     # Email и пароль обязательны к заполнению по умолчанию
