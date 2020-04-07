@@ -88,6 +88,9 @@ class User(AbstractBaseUser):
     # user's country
     country = models.CharField(max_length=50, choices=country_dict,
                                default='Russia')
+
+    credit_card = models.CharField(default='', max_length=30, verbose_name='Номер кредитной карты')
+
     # user's company name
     company_name = models.CharField(default='', max_length=30,)
     # admin user; non super-user
@@ -96,6 +99,8 @@ class User(AbstractBaseUser):
     admin = models.BooleanField(default=True, verbose_name='Администратор')
     is_sending = models.BooleanField(default=False,
                                      verbose_name='Подписаться')
+
+
 
     objects = UserManager()
     # Email и пароль обязательны к заполнению по умолчанию
@@ -153,7 +158,6 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, primary_key=True,
                                 on_delete=models.CASCADE)
     bank_name = models.CharField(default='', max_length=50, verbose_name='Наименование банка')
-    credit_card = models.CharField(default='', max_length=30, verbose_name='Номер кредитной карты')
     jur_form = models.CharField(verbose_name='Правовая форма', max_length=1,
                                 choices=JURIDICAL_FORM, blank=True)
     avatar = models.ImageField(

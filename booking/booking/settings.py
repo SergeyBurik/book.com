@@ -150,19 +150,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'sergioburik@gmail.com'
-EMAIL_HOST_PASSWORD = 's00320032b'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'test@gmail.com'
+# EMAIL_HOST_PASSWORD = 'wefwef'
 
 DOMAIN_NAME = 'http://localhost:8000'
 
-# EMAIL_HOST = 'localhost'
-# EMAIL_PORT = '25'
-# EMAIL_USE_SSL = False
-# # вариант python -m smtpd -n -c DebuggingServer localhost:25
-# EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = '25'
+EMAIL_USE_SSL = False
+# вариант python -m smtpd -n -c DebuggingServer localhost:25
+EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
 
 # ROBOKASSA
 with open('booking/robokassa.json', 'r') as f:
