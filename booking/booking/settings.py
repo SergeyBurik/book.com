@@ -46,6 +46,12 @@ INSTALLED_APPS = [
     'adminapp.apps.AdminappConfig',
     'ordersapp.apps.OrdersappConfig',
     'robokassa',
+
+    'django.contrib.sites',  # added for allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'stripe',
 ]
 
 # Changes the built-in user model to ours
@@ -166,3 +172,12 @@ ROBOKASSA_LOGIN = RB['ROBOKASSA_LOGIN']
 ROBOKASSA_PASSWORD1 = RB['ROBOKASSA_PASSWORD1']
 ROBOKASSA_PASSWORD2 = RB['ROBOKASSA_PASSWORD2']
 ROBOKASSA_TEST_MODE = True
+
+if DEBUG:
+    # test keys
+    STRIPE_PUBLISHABLE_KEY = 'pk_test_eBUgsA8a4AsiqmopC75IfVU500JEFE9jfc'
+    STRIPE_SECRET_KEY = 'sk_test_QnsOOx47VDcluiyegQvFt4ge00GJ7OOmU1'
+else:
+    # live keys
+    STRIPE_PUBLISHABLE_KEY = 'YOUR STRIPE LIVE PUB KEY'
+    STRIPE_SECRET_KEY = 'YOUR STRIPE LIVE SECRET KEY'
