@@ -1,15 +1,15 @@
 import os
+from datetime import timedelta
 from uuid import uuid4
+
+from authapp.variables import country_dict
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils.timezone import now
-from datetime import timedelta
 # Менеджер модели пользователя
 from django.utils.deconstruct import deconstructible
-
-from authapp.variables import country_dict
+from django.utils.timezone import now
 
 
 def get_activation_key_time():
@@ -88,8 +88,11 @@ class User(AbstractBaseUser):
     # user's country
     country = models.CharField(max_length=50, choices=country_dict,
                                default='Russia')
+
+    credit_card = models.CharField(default='', max_length=30, verbose_name='Номер кредитной карты')
+
     # user's company name
-    company_name = models.CharField(default='', max_length=30,)
+    company_name = models.CharField(default='', max_length=30, )
     # admin user; non super-user
     staff = models.BooleanField(default=False, verbose_name='Сотрудник')
     # superuser
@@ -153,7 +156,6 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, primary_key=True,
                                 on_delete=models.CASCADE)
     bank_name = models.CharField(default='', max_length=50, verbose_name='Наименование банка')
-    credit_card = models.CharField(default='', max_length=30, verbose_name='Номер кредитной карты')
     jur_form = models.CharField(verbose_name='Правовая форма', max_length=1,
                                 choices=JURIDICAL_FORM, blank=True)
     avatar = models.ImageField(
