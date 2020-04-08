@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 
 # Create your views here.
-from mainapp.models import Room, Hotel, Bookings
+from mainapp.models import Room, Hotel, Bookings, RoomGallery
 
 
 def get_rooms(request):
@@ -56,6 +56,8 @@ def get_room(request):
     if room_id:
         if isinstance(room_id, int):
             room = Room.objects.filter(pk=room_id, is_active=True)[0]
+            images = RoomGallery.objects.filter(room=room)
+
             response = {
                 "hotel": room.hotel,
                 "name": room.name,
@@ -65,6 +67,9 @@ def get_room(request):
                 "kids": room.kids,
                 "infants": room.infants,
                 "is_active": room.is_active,
+                "images": [
+                    {"path": image.url} for image in images
+                ]
             }
 
             return JsonResponse(response)
