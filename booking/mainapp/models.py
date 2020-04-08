@@ -132,7 +132,6 @@ class Bookings(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default='')
     date = models.DateField()  # date of booking
     room = models.ForeignKey(Room, on_delete=models.CASCADE)  # room which we are trying to book
-    quantity = models.PositiveIntegerField(verbose_name='quantity of days', default=0)
     client_name = models.CharField(max_length=100)
     client_email = models.CharField(max_length=100)  # client's email
     phone_number = models.CharField(max_length=20, verbose_name="Client's phone number")
