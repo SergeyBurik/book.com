@@ -25,6 +25,7 @@ urlpatterns = [
     path('auth/', include("authapp.urls", namespace="auth")),
     path('order/', include("ordersapp.urls", namespace="order")),
     path('management/', include("adminapp.urls", namespace="management")),
+    path('api/', include("apiapp.urls", namespace="api")),
 ]
 
 
