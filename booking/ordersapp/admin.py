@@ -1,3 +1,7 @@
-# from django.contrib import admin
+from django.contrib import admin
+from ordersapp.models import Order
 
-# Register your models here.
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    search_fields = 'id', 'client_email'

@@ -60,7 +60,7 @@ class UserRegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'name', 'surname', 'phone_number', 'country',
+        fields = ('email', 'name', 'surname', 'credit_card', 'phone_number', 'country',
                   'company_name', 'is_sending')
 
     def clean_password2(self):
@@ -89,6 +89,13 @@ class UserRegisterForm(forms.ModelForm):
             {
                 'type': 'password',
                 'placeholder': 'Password'
+            }
+        )
+
+        self.fields['credit_card'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'Card Number'
             }
         )
 
@@ -181,7 +188,7 @@ class UserProfileEditForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ('bank_name', 'credit_card', 'jur_form', 'avatar',)
+        fields = ('bank_name',  'jur_form', 'avatar',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
