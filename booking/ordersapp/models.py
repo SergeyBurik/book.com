@@ -1,7 +1,5 @@
 from django.db import models
 
-from mainapp.models import Room
-
 
 class Order(models.Model):
     FORMING = 'FM'

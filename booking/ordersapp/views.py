@@ -36,7 +36,7 @@ def checkout(request, hotel_id, room_id, check_in, check_out):
                     source=token,
                 )
 
-                card = booking.room.hotel.user.credit_card
+                # card = booking.room.hotel.user.credit_card
 
                 destination = stripe.Token.create(
                     card={
@@ -115,4 +115,3 @@ def order_forming_complete(request, pk):
     order.save()
 
     return HttpResponseRedirect(reverse('ordersapp:index'))
-
