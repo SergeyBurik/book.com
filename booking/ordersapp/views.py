@@ -16,6 +16,13 @@ from ordersapp.models import Order
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
+from mainapp.models import Bookings
+import datetime
+import stripe
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
 def checkout(request, hotel_id, room_id, check_in, check_out):
     booking = get_object_or_404(Bookings, hotel__pk=hotel_id, room__pk=room_id, date=check_in)
     start = datetime.datetime.strptime(check_in, "%Y-%m-%d")
