@@ -1,3 +1,4 @@
+import datetime
 import os
 from uuid import uuid4
 
@@ -123,9 +124,12 @@ class RoomGallery(models.Model):
                              verbose_name='Название номера')
     image = models.ImageField(upload_to=path_and_rename,
                               verbose_name='Изображение номера')
+    is_avatar = models.BooleanField(verbose_name='Главное изображение номера', default=False)
 
     def __str__(self):
         return f'{self.room.name}'
+
+# def make_avatar(args*):
 
 
 class Bookings(models.Model):
@@ -143,3 +147,18 @@ class Bookings(models.Model):
 
     def __str__(self):
         return f'Room Booking {self.room.name} - {self.room.hotel.name}'
+
+
+class Comment(models.Model):
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+        ordering = ['author']
+
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
+    author = models.CharField(verbose_name='Author', max_length=32)
+    comment = models.CharField(verbose_name='comment', max_length=200)
+    pub_date = models.DateField(verbose_name='создан', default=datetime.date.today)
+
+    def __str__(self):
+        return self.author
