@@ -1,3 +1,7 @@
+from mainapp.models import Bookings
+import datetime
+# import stripe
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -7,18 +11,9 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, DeleteView
 
-from mainapp.models import Bookings
-import datetime
 import stripe
 
 from ordersapp.models import Order
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
-
-from mainapp.models import Bookings
-import datetime
-import stripe
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 

@@ -121,7 +121,9 @@ def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
 def add_comment(request, hotel_id):
     try:
         hotel = Hotel.objects.get(id=hotel_id)
-    except:
+
+    except Exception as err:
+        print(err)
         Http404('Отель не найден!')
 
     hotel.comment_set.create(author=request.POST['name'], comment=request.POST['text'])
