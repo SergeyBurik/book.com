@@ -23,7 +23,15 @@ def bookings_main(request, hotel_id):
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
     images = RoomGallery.objects.filter(room__hotel=hotel, is_avatar=True)
     coordinates = get_coordinates(hotel.location)
-    comments = Comment.objects.order_by('-pub_date')[:5]
+    comments = Comment.objects.filter(hotel__id=hotel_id).order_by('-pub_date')[:5]
+
+    try:
+        rates = Comment.objects.filter(hotel__id=hotel_id)
+        rating = [rate.rate for rate in rates]
+        rating = sum(rating) / len(rating)
+    except ZeroDivisionError:
+        rating = 0
+
 
     content = {
         'hotel': hotel,
@@ -31,7 +39,8 @@ def bookings_main(request, hotel_id):
         'days': days,
         'coordinates': coordinates,
         'images': images,
-        'comments': comments
+        'comments': comments,
+        'rating': rating
     }
 
     return render(request, 'mainapp/booking_main.html', content)
@@ -119,13 +128,7 @@ def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
 
 
 def add_comment(request, hotel_id):
-    try:
-        hotel = Hotel.objects.get(id=hotel_id)
-
-    except Exception as err:
-        print(err)
-        Http404('Отель не найден!')
-
-    hotel.comment_set.create(author=request.POST['name'], comment=request.POST['text'])
+    hotel = get_object_or_404(Hotel, id=hotel_id)
+    hotel.comment_set.create(author=request.POST['name'], rate=request.POST['stars'], comment=request.POST['text'])
 
     return HttpResponseRedirect(reverse('main:bookings_main', args=(hotel.id,)))

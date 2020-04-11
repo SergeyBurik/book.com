@@ -5,122 +5,148 @@
 {% block header %}{% endblock %}
 
 {% block container %}
-    <section class="section pb-0" style="padding-top: 1em; padding-bottom: 115px!important;;">
-        <div class="row mb-5 justify-content-center" data-aos="fade"
-             style="background-image: url('{{ hotel.banner.url }}'); background-position: center;">
-            <div class="col-md-7 text-center heading-wrap" style="color: white!important;">
-                <h2 data-aos="fade-up" style="color: white!important;">{{ hotel.name }}</h2>
-                <p data-aos="fade-up" data-aos-delay="100" style="color: white!important;">Book rooms here...</p>
-            </div>
+<section class="section pb-0" style="padding-top: 1em; padding-bottom: 115px!important;;">
+    <div class="row mb-5 justify-content-center" data-aos="fade"
+         style="background-image: url('{{ hotel.banner.url }}'); background-position: center;">
+        <div class="col-md-7 text-center heading-wrap" style="color: white!important;">
+            <h2 data-aos="fade-up" style="color: white!important;">{{ hotel.name }}</h2>
+            <p data-aos="fade-up" data-aos-delay="100" style="color: white!important;">Book rooms here...</p>
         </div>
-        <div class="container">
+    </div>
+    <div class="container">
 
-            <div class="table-responsive" style="color: black!important;">
+        <div class="table-responsive" style="color: black!important;">
 
-                <table class="table table-bordered" id="dataTableBookings" width="100%" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th colspan="2">
+            <table class="table table-bordered" id="dataTableBookings" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th colspan="2">
 
-                        </th>
-                        {% for day in days %}
-                            <th>
-                                <span class="week_day">{{ day| date:"D" }}</span>
-                                <span class="month_day">{{ day|date:"d" }}</span>
-                                <span class="month">{{ day|date:"M" }}</span>
-                            </th>
-                        {% endfor %}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% if rooms %}
-                        {% for room in rooms %}
-                            <tr>
-                            <th colspan="2">
-                                <span>{{ room.name }}</span>
-                            </th>
-                            {% for day in days %}
-                                {% if room|query_booking:day %}
-                                    <th>
-                                        <span class="date_item">Sold</span>
-                                    </th>
-                                {% else %}
-                                    <th>
-                                        <a href="{% url 'main:book_room' room.hotel.pk room.pk %}">
-                                            <span class="date_item">{{ room.price }}</span>
-
-                                        </a>
-                                    </th>
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}
+                    </th>
+                    {% for day in days %}
+                    <th>
+                        <span class="week_day">{{ day| date:"D" }}</span>
+                        <span class="month_day">{{ day|date:"d" }}</span>
+                        <span class="month">{{ day|date:"M" }}</span>
+                    </th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% if rooms %}
+                {% for room in rooms %}
+                <tr>
+                    <th colspan="2">
+                        <span>{{ room.name }}</span>
+                    </th>
+                    {% for day in days %}
+                    {% if room|query_booking:day %}
+                    <th>
+                        <span class="date_item">Sold</span>
+                    </th>
                     {% else %}
-                        <tr>
-                            <th colspan="16">
-                                You don't have any rooms yet
-                            </th>
-                        </tr>
+                    <th>
+                        <a href="{% url 'main:book_room' room.hotel.pk room.pk %}">
+                            <span class="date_item">{{ room.price }}</span>
+
+                        </a>
+                    </th>
                     {% endif %}
-                    </tbody>
-                </table>
-            </div>
+                    {% endfor %}
+                    {% endfor %}
+                    {% else %}
+                <tr>
+                    <th colspan="16">
+                        You don't have any rooms yet
+                    </th>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
 
-            <div class="room_description">
-                <h2>Description</h2>
-                <h6 style="color: black">{{ hotel.description }}</h6>
-            </div>
+        <div class="room_description">
+            <h2>Description <span class="room_description_location" style="font-size: 0.5em">Rating - {{rating}}</span></h2>
+            <h6 style="color: black">{{ hotel.description }}</h6>
+        </div>
 
-            <div id="map">
-                <iframe width="100%" height="300px" style="border: 0"
-                        src="https://maps.google.com/maps?q={{ coordinates }}&hl=es;z=14&amp;output=embed"></iframe>
+        <div id="map">
+            <iframe width="100%" height="300px" style="border: 0"
+                    src="https://maps.google.com/maps?q={{ coordinates }}&hl=es;z=14&amp;output=embed"></iframe>
+        </div>
+        <div class="images">
+            {% for image in images %}
+            <div class="image_item">
+                <img src="{{ image.image.url }}" alt="{{ image.room.name }}">
             </div>
-            <div class="images">
-                {% for image in images %}
-                    <div class="image_item">
-                        <img src="{{ image.image.url }}" alt="{{ image.room.name }}">
-                    </div>
-                {% endfor %}
+            {% endfor %}
 
-            </div>
-            <div class="comments" style="
+        </div>
+        <div class="comments" style="
                                         border-top: 1px solid #c1c1c1;
                                         margin: 35px 0px;
                                         padding-top: 15px;">
-                {% if comments %}
-                    {% for comment in comments %}
-                        <div class="comment_item" style="
+            {% if comments %}
+            {% for comment in comments %}
+            <div class="comment_item" style="
                                                         border-bottom: 1px solid #c1c1c1;
                                                         margin-bottom: 30px;">
-                            <h5>{{ comment.author}}</h5>
-                            <h6>{{comment.pub_date}}</h6>
-                            <p>{{comment.comment}}</p>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <h4>This hotel doesn`t have any comments yet...</h4>
-                    <h4>Good news! You can be first!</h4>
-                {% endif %}
-                <form action="{%  url 'main:add_comment' hotel.id %}" method="POST">
-                    {% csrf_token %}
-                    <input class="comment-name" type="text" required placeholder="Your name" name="name" style="
+                <h5>{{ comment.author}}</h5>
+                <h6>{{comment.pub_date}}</h6>
+                <p>{{comment.comment}}</p>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h6 class="room_description_location">This hotel doesn`t have any comments yet...</h6>
+            <h6 class="room_description_location">Good news! You can be first!</h6>
+            {% endif %}
+            <h6 class="btn-toggle">Add review</h6>
+            <form id="form-toggle" action="{%  url 'main:add_comment' hotel.id %}" method="POST">
+                {% csrf_token %}
+                <input class="comment-name" type="text" required placeholder="Your name" name="name" style="
                                                                                             border: 1px solid #e0e0e0;
                                                                                             margin-bottom: 10px;
-                                                                                            padding-left: 10px;">
-                    <br>
-                    <textarea class="comment-text" name="text" required placeholder="Your comment" cols="30" rows="10"
-                    style="
+                                                                                            padding-left: 10px;
+                                                                                            display: block">
+                <h6>Rate this hotel</h6>
+                <div class="rate">
+                    <input type="hidden" name="stars" id="stars">
+                    <input type="radio" id="star5" name="rate" value="5"/>
+                    <label for="star5" title="text">5 stars</label>
+                    <input type="radio" id="star4" name="rate" value="4"/>
+                    <label for="star4" title="text">4 stars</label>
+                    <input type="radio" id="star3" name="rate" value="3"/>
+                    <label for="star3" title="text">3 stars</label>
+                    <input type="radio" id="star2" name="rate" value="2"/>
+                    <label for="star2" title="text">2 stars</label>
+                    <input type="radio" id="star1" name="rate" value="1"/>
+                    <label for="star1" title="text">1 star</label>
+                </div>
+                <br>
+                <textarea class="comment-text" name="text" required placeholder="Your comment" cols="30" rows="10"
+                          style="
                             width: 100%;
                             height: 100px;
                             padding-left: 10px;
                             border: 1px solid #e0e0e0;"></textarea>
-                    <br>
-                    <button class="bott" type="submit">Submit comment</button>
-                </form>
+                <br>
+                <button class="btn btn-info" type="submit">Submit comment</button>
+            </form>
 
-            </div>
         </div>
-    </section>
+    </div>
+</section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $('input:radio').change(
+      function(){
+        $("#stars").val(this.value)
+    });
 
 
+    $(".btn-toggle").click(function () {
+        $("#form-toggle").slideToggle();
+    });
+</script>
 {% endblock %}
 
