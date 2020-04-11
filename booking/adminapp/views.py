@@ -98,11 +98,15 @@ def create_room(request):
                                 adult=int(adults), kids=int(kids),
                                 infants=int(infants),
                                 is_active=True)
-
+        count = 1
         for image in range(1, int(images) + 1):
             image_file = request.FILES.get(f'image-{image}')
             if image_file:
-                RoomGallery.objects.create(room=room, image=image_file)
+                if count == 1:
+                    RoomGallery.objects.create(room=room, image=image_file, is_avatar=True)
+                    count += 1
+                else:
+                    RoomGallery.objects.create(room=room, image=image_file)
 
         return HttpResponseRedirect(reverse('management:main'))
 
@@ -129,7 +133,6 @@ def edit_room(request, hotel_id, room_id):
             image_file = request.FILES.get(f'image-{image}')
             if image_file:
                 RoomGallery.objects.create(room=room, image=image_file)
-
         if form.is_valid():
             obj = form.save(commit=False)
 

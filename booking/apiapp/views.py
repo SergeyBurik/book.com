@@ -2,8 +2,6 @@ import datetime
 import json
 
 from django.http import JsonResponse
-from django.shortcuts import render
-
 # Create your views here.
 from mainapp.models import Room, Hotel, Bookings, RoomGallery
 
@@ -174,7 +172,7 @@ def create_room(request):
     try:
         data = json.loads(request.POST['data'])
         hotel = Hotel.objects.get(id=data['id'])
-
+        print(hotel)
         Room.objects.create()
 
         return JsonResponse({"response": 200})

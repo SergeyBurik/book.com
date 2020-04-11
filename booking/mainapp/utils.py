@@ -85,5 +85,11 @@ def insert_booking(hotel, check_in, check_out, room, client_name, client_email, 
                                 comments=comments,
                                 country=country,
                                 address=address)
+    create_order(client_name, client_email, days_quantity, total_sum)
 
-    Order.objects.create(client_name=client_name, client_email=client_email, days=days_quantity, total_sum=total_sum)
+
+def create_order(name, email, quantity, total):
+    Order.objects.create(client_name=name,
+                         client_email=email,
+                         days=quantity,
+                         total_sum=total)

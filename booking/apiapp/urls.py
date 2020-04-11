@@ -2,7 +2,8 @@
 from django.urls import path
 from apiapp import views as apiapp
 
-app_name = 'mainapp'
+app_name = 'apiapp'
+
 
 urlpatterns = [
     path('getRooms/', apiapp.get_rooms, name='get_rooms'),

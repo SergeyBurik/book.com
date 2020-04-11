@@ -3,11 +3,11 @@ import datetime
 from django.conf import settings
 from django.contrib import messages
 from django.core.mail import send_mail
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse
-from mainapp.models import Hotel, Room, Bookings, RoomGallery
+from mainapp.models import Hotel, Room, Bookings, RoomGallery, Comment
 from mainapp.utils import check_booking, insert_booking, get_coordinates
 
 
@@ -21,14 +21,20 @@ def bookings_main(request, hotel_id):
     hotel = get_object_or_404(Hotel, pk=hotel_id)
     rooms = Room.objects.filter(hotel=hotel, is_active=True)
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
-    images = RoomGallery.objects.filter(room__hotel=hotel)
+    images = RoomGallery.objects.filter(room__hotel=hotel, is_avatar=True)
     coordinates = get_coordinates(hotel.location)
+    comments = Comment.objects.order_by('-pub_date')[:5]
 
-    return render(request, 'mainapp/booking_main.html', {'hotel': hotel,
-                                                         'rooms': rooms,
-                                                         'days': days,
-                                                         'coordinates': coordinates,
-                                                         'images': images})
+    content = {
+        'hotel': hotel,
+        'rooms': rooms,
+        'days': days,
+        'coordinates': coordinates,
+        'images': images,
+        'comments': comments
+    }
+
+    return render(request, 'mainapp/booking_main.html', content)
 
 
 def book_room(request, hotel_id, room_id):
@@ -110,3 +116,16 @@ def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
 
     return send_mail('Booking Confirmation', '', settings.EMAIL_HOST_USER,
                      [booking.client_email], html_message=html_m, fail_silently=False)
+
+
+def add_comment(request, hotel_id):
+    try:
+        hotel = Hotel.objects.get(id=hotel_id)
+
+    except Exception as err:
+        print(err)
+        Http404('Отель не найден!')
+
+    hotel.comment_set.create(author=request.POST['name'], comment=request.POST['text'])
+
+    return HttpResponseRedirect(reverse('main:bookings_main', args=(hotel.id,)))

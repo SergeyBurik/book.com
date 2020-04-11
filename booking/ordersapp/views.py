@@ -1,14 +1,22 @@
+from mainapp.models import Bookings
+import datetime
+# import stripe
+
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from mainapp.models import Bookings
-import datetime
+from django.views.generic import ListView, DetailView, DeleteView
+
 import stripe
 
+from ordersapp.models import Order
+
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
 
 def checkout(request, hotel_id, room_id, check_in, check_out):
     booking = get_object_or_404(Bookings, hotel__pk=hotel_id, room__pk=room_id, date=check_in)
@@ -30,7 +38,7 @@ def checkout(request, hotel_id, room_id, check_in, check_out):
                     source=token,
                 )
 
-                card = booking.room.hotel.user.credit_card
+                # card = booking.room.hotel.user.credit_card
 
                 destination = stripe.Token.create(
                     card={
@@ -77,3 +85,35 @@ def success(request):
     }
 
     return render(request, 'ordersapp/success.html', content)
+
+
+class OrderList(ListView):
+    model = Order
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
+
+    @login_required(login_url='/auth/login/')
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+
+class OrderRead(DetailView):
+    model = Order
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'заказ/просмотр'
+        return context
+
+
+class OrderDelete(DeleteView):
+    model = Order
+
+
+def order_forming_complete(request, pk):
+    order = get_object_or_404(Order, pk=pk)
+    order.status = Order.SENT_TO_PROCEED
+    order.save()
+
+    return HttpResponseRedirect(reverse('ordersapp:index'))
