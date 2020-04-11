@@ -158,6 +158,7 @@ class Comment(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     author = models.CharField(verbose_name='Author', max_length=32)
     comment = models.CharField(verbose_name='comment', max_length=200)
+    rate = models.PositiveIntegerField()
     pub_date = models.DateField(verbose_name='создан', default=datetime.date.today)
 
     def __str__(self):
