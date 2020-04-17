@@ -1,9 +1,12 @@
 import datetime
 
+from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
+from django.template.loader import render_to_string
 from geopy.geocoders import Nominatim
 from mainapp.models import Bookings, Room, Hotel
-
+from django.conf import settings
+import geopy
 
 # returns coordinates by address
 from ordersapp.models import Order
@@ -17,7 +20,29 @@ def get_coordinates(address):
 
     except AttributeError:
         return (0, 0)
+    except:
+        return (0,0)
 
+
+
+def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
+    print('send_confirmation_mail')
+    booking = get_object_or_404(Bookings, hotel__pk=hotel_id, room__pk=room_id, date=check_in)
+    start = datetime.datetime.strptime(check_in, "%Y-%m-%d")
+    end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
+    date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
+
+    total = sum([booking.room.price for x in range(len(date_list))])
+
+    data = {'booking': booking, 'nights': len(date_list), 'first_name': booking.client_name.split(':')[0],
+            'check_in': check_in, 'check_out': check_out, 'total': total, 'domain': settings.DOMAIN_NAME,
+            'coordinates': str(get_coordinates(booking.hotel.location))}
+    print(data)
+
+    html_m = render_to_string('mainapp/confirmation_letter.html', data)
+
+    return send_mail('Booking Confirmation', '', settings.EMAIL_HOST_USER,
+                     [booking.client_email], html_message=html_m, fail_silently=False)
 
 # function which checks availability of room for selected dates
 def check_booking(date_from, date_to, room_id, hotel_id):
