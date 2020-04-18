@@ -31,7 +31,6 @@ def bookings_main(request, hotel_id):
     except ZeroDivisionError:
         rating = 0
 
-
     content = {
         'hotel': hotel,
         'rooms': rooms,
@@ -104,9 +103,6 @@ def total_sum(hotel_id, room_id, check_in, check_out):
     date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
     total = sum([booking.room.price for x in range(len(date_list))])
     return total
-
-
-
 
 
 def add_comment(request, hotel_id):

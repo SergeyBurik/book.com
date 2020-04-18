@@ -101,7 +101,6 @@
                     {% endfor %}
                 {% else %}
                     <h6 class="room_description_location">This hotel doesn`t have any comments yet...</h6>
-                    <h6 class="room_description_location">Good news! You can be first!</h6>
                 {% endif %}
                 <h6 class="btn-toggle">Add review</h6>
                 <form id="form-toggle" action="{% url 'main:add_comment' hotel.id %}" method="POST">

@@ -100,7 +100,7 @@ def insert_booking(hotel, check_in, check_out, room, client_name, client_email, 
     total_sum = room.price * days_quantity
     # total_ = sum([booking.room.price for x in range(len(date_list))])
     for date in date_list:
-        Bookings.objects.create(hotel=hotel,
+        booking = Bookings.objects.create(hotel=hotel,
                                 date=date,
                                 room=room,
                                 client_name=client_name,
@@ -110,11 +110,13 @@ def insert_booking(hotel, check_in, check_out, room, client_name, client_email, 
                                 comments=comments,
                                 country=country,
                                 address=address)
-    create_order(client_name, client_email, days_quantity, total_sum)
+
+    create_order(client_name, client_email, days_quantity, total_sum, booking)
 
 
-def create_order(name, email, quantity, total):
+def create_order(name, email, quantity, total, booking):
     Order.objects.create(client_name=name,
                          client_email=email,
                          days=quantity,
+                         booking=booking,
                          total_sum=total)

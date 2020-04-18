@@ -10,6 +10,7 @@ from geopy.geocoders import Nominatim
 from adminapp.forms import HotelForm, RoomForm
 from adminapp import utils
 from mainapp.utils import check_booking, insert_booking, send_confirmation_mail
+from ordersapp.models import Order
 
 
 @login_required(login_url='/auth/login/')
@@ -18,6 +19,7 @@ def main(request):
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
     now = datetime.datetime.now()
 
+    # get hotel data
     hotel_data = []
     for hotel in hotels:
         hotel_data.append({"name": hotel.name,
@@ -26,12 +28,10 @@ def main(request):
                                       "price": room.price} for room in
                                      Room.objects.filter(hotel=hotel, is_active=True)]})
 
-    bookings = [booking for hotel in Hotel.objects.filter(user=request.user, is_active=True) for booking in
-                Bookings.objects.filter(hotel=hotel)]
+    orders = [order for hotel in Hotel.objects.filter(user=request.user, is_active=True) for order in
+              Order.objects.filter(booking__hotel=hotel)]
 
-    print(hotel_data)
-
-    context = {'bookings': bookings, 'hotels': hotels, 'days': days, 'rooms': rooms,
+    context = {'bookings': orders, 'hotels': hotels, 'days': days, 'rooms': rooms,
                'now': f'{now.hour}:{now.minute}', 'hotel_data': hotel_data}
 
     if request.method == "POST":

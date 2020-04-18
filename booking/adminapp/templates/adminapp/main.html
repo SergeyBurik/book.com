@@ -227,12 +227,12 @@
                             <tbody>
                             {% for booking in bookings %}
                                 <tr>
-                                    <td>{{ booking.client_name }}</td>
-                                    <td>{{ booking.country }}</td>
-                                    <td>{{ booking.address }}</td>
-                                    <td>{{ booking.phone_number }}</td>
-                                    <td>{{ booking.room.name }}</td>
-                                    <td>{{ booking.date }} ({{ booking.time }})</td>
+                                    <td>{{ booking.booking.client_name }}</td>
+                                    <td>{{ booking.booking.country }}</td>
+                                    <td>{{ booking.booking.address }}</td>
+                                    <td>{{ booking.booking.phone_number }}</td>
+                                    <td>{{ booking.booking.room.name }}</td>
+                                    <td>{{ booking.booking.date }} ({{ booking.booking.time }}) - {{ booking.days }} - nights </td>
                                 </tr>
                             {% endfor %}
 
