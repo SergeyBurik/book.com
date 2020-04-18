@@ -15,5 +15,5 @@ def query_booking(elem, day):
     day = datetime.datetime.strptime(str(day), "%Y-%m-%d")
     try:
         return eval(f'Bookings.objects.filter(room__pk={elem.id}, date="{str(day).split(" ")[0]}")')
-    except:
+    except AttributeError:
         return eval(f'Bookings.objects.filter(room__pk={elem["id"]}, date="{str(day).split(" ")[0]}")')

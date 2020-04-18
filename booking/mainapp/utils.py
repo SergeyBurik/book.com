@@ -6,7 +6,6 @@ from django.template.loader import render_to_string
 from geopy.geocoders import Nominatim
 from mainapp.models import Bookings, Room, Hotel
 from django.conf import settings
-import geopy
 
 # returns coordinates by address
 from ordersapp.models import Order
@@ -20,9 +19,8 @@ def get_coordinates(address):
 
     except AttributeError:
         return (0, 0)
-    except:
-        return (0,0)
-
+    finally:
+        return (0, 0)
 
 
 def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
@@ -43,6 +41,7 @@ def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
 
     return send_mail('Booking Confirmation', '', settings.EMAIL_HOST_USER,
                      [booking.client_email], html_message=html_m, fail_silently=False)
+
 
 # function which checks availability of room for selected dates
 def check_booking(date_from, date_to, room_id, hotel_id):
@@ -101,15 +100,15 @@ def insert_booking(hotel, check_in, check_out, room, client_name, client_email, 
     # total_ = sum([booking.room.price for x in range(len(date_list))])
     for date in date_list:
         booking = Bookings.objects.create(hotel=hotel,
-                                date=date,
-                                room=room,
-                                client_name=client_name,
-                                client_email=client_email,
-                                phone_number=phone_number,
-                                time=time,
-                                comments=comments,
-                                country=country,
-                                address=address)
+                                          date=date,
+                                          room=room,
+                                          client_name=client_name,
+                                          client_email=client_email,
+                                          phone_number=phone_number,
+                                          time=time,
+                                          comments=comments,
+                                          country=country,
+                                          address=address)
 
     create_order(client_name, client_email, days_quantity, total_sum, booking)
 

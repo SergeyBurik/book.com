@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from mainapp.models import Bookings, Hotel, Room, RoomGallery
+from mainapp.models import Hotel, Room, RoomGallery
 from geopy.geocoders import Nominatim
 from adminapp.forms import HotelForm, RoomForm
 from adminapp import utils
@@ -30,6 +30,9 @@ def main(request):
 
     orders = [order for hotel in Hotel.objects.filter(user=request.user, is_active=True) for order in
               Order.objects.filter(booking__hotel=hotel)]
+
+    rooms = [room for hotel in Hotel.objects.filter(user=request.user, is_active=True) for room in
+             Room.objects.filter(hotel=hotel)]
 
     context = {'bookings': orders, 'hotels': hotels, 'days': days, 'rooms': rooms,
                'now': f'{now.hour}:{now.minute}', 'hotel_data': hotel_data}

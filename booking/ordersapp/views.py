@@ -30,7 +30,7 @@ def checkout(request, hotel_id, room_id, check_in, check_out):
     # trying to find order
 
     order = Order.objects.get(booking__hotel=booking.hotel, booking__room=booking.room, days=len(date_list),
-                         client_email=booking.client_email)
+                              client_email=booking.client_email)
 
     if order.status == Order.PAID:
         # if it is already paid
