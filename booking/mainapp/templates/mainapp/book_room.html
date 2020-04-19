@@ -175,9 +175,15 @@
                                placeholder="Phone Number">
                     </div>
                 </div>
-                <div class="form-group ">
+
+                <div class="form-group">
                     <label for="email">Arrival Time</label>
-                    <input type="text" required name="time" id="time" class="form-control" placeholder="Arrival Time">
+                    <div class='input-group date' id='time'>
+                        <input type='text' class="form-control" name="time">
+                        <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="comments">Comments</label>
@@ -206,7 +212,15 @@
         const dateRangePicker = new DateRangePicker(elem, {
             format: 'yyyy-mm-dd',
         });
-
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(function () {
+                $('#time').datetimepicker({
+                    format: 'LT'
+                });
+            });
+        });
     </script>
 {% endblock %}
 

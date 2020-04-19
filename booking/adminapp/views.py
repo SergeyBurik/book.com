@@ -5,25 +5,66 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from mainapp.models import Bookings, Hotel, Room, RoomGallery
+from mainapp.models import Hotel, Room, RoomGallery
 from geopy.geocoders import Nominatim
 from adminapp.forms import HotelForm, RoomForm
 from adminapp import utils
+from mainapp.utils import check_booking, insert_booking, send_confirmation_mail
+from ordersapp.models import Order
 
 
 @login_required(login_url='/auth/login/')
 def main(request):
     hotels = Hotel.objects.filter(user=request.user, is_active=True)
-    bookings = []
-    rooms = []
-
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
+    now = datetime.datetime.now()
 
+    # get hotel data
+    hotel_data = []
     for hotel in hotels:
-        bookings += Bookings.objects.filter(hotel=hotel)
-        rooms += Room.objects.filter(hotel=hotel)
+        hotel_data.append({"name": hotel.name,
+                           "rooms": [{"id": room.id,
+                                      "name": room.name,
+                                      "price": room.price} for room in
+                                     Room.objects.filter(hotel=hotel, is_active=True)]})
 
-    context = {'bookings': bookings, 'hotels': hotels, 'days': days, 'rooms': rooms}
+    orders = [order for hotel in Hotel.objects.filter(user=request.user, is_active=True) for order in
+              Order.objects.filter(booking__hotel=hotel)]
+
+    rooms = [room for hotel in Hotel.objects.filter(user=request.user, is_active=True) for room in
+             Room.objects.filter(hotel=hotel)]
+
+    context = {'bookings': orders, 'hotels': hotels, 'days': days, 'rooms': rooms,
+               'now': f'{now.hour}:{now.minute}', 'hotel_data': hotel_data}
+
+    if request.method == "POST":
+        check_in = request.POST.get('start', None)
+        check_out = request.POST.get('end', None)
+        room_id = request.POST.get('room', None)
+        hotel_id = request.POST.get('hotel', None)
+        client_name = request.POST.get('name', None)
+        email = request.POST.get('email', None)
+        phone = request.POST.get('phone', None)
+        time = request.POST.get('time', None)
+        comments = request.POST.get('comments', None)
+        country = request.POST.get('country', None)
+        address = request.POST.get('address', None)
+
+        room = get_object_or_404(Room, id=room_id)
+        hotel = get_object_or_404(Hotel, id=hotel_id)
+
+        if room.hotel.id == hotel.id:
+            if check_booking(check_in, check_out, room_id, hotel_id):  # if there are not any reservations
+                insert_booking(hotel, check_in, check_out, room,
+                               f'{client_name}', email, phone, time,
+                               comments, country, address)
+                send_confirmation_mail(hotel_id, room_id, check_in, check_out, f'{client_name}')
+
+                return HttpResponseRedirect(reverse('management:main'))
+            else:
+                messages.error(request, 'Unable to create booking')
+        else:
+            messages.error(request, 'Unable to create booking')
 
     return render(request, 'adminapp/main.html', context)
 
@@ -157,7 +198,8 @@ def ajax_delete_image(request):
         room = request.GET.get('room', None)
         hotel = request.GET.get('hotel', None)
         image = request.GET.get('image', None)
-        RoomGallery.objects.get(room__pk=room, room__hotel__pk=hotel, image__contains=image.replace('/media/', '')).delete()
+        RoomGallery.objects.get(room__pk=room, room__hotel__pk=hotel,
+                                image__contains=image.replace('/media/', '')).delete()
         return JsonResponse({'code': 200})
     except Exception as err:
         print(err)

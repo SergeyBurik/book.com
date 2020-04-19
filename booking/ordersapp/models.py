@@ -1,5 +1,7 @@
 from django.db import models
 
+from mainapp.models import Bookings
+
 
 class Order(models.Model):
     FORMING = 'FM'
@@ -14,7 +16,7 @@ class Order(models.Model):
         (SENT_TO_PROCEED, 'отправлен в обработку'),
         (PAID, 'оплачен'),
         (PROCEEDED, 'обрабатывается'),
-        (READY, 'готов к выдаче'),
+        (READY, 'готов'),
         (CANCEL, 'отменен'),
     )
     # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -23,6 +25,7 @@ class Order(models.Model):
     days = models.PositiveIntegerField(verbose_name='quantity of days', default=0)
     total_sum = models.DecimalField(verbose_name='Сумма', max_digits=12,
                                     decimal_places=2, default=0)
+    booking = models.ForeignKey(Bookings, on_delete=models.CASCADE)
     created = models.DateTimeField(verbose_name='создан', auto_now_add=True)
     updated = models.DateTimeField(verbose_name='обновлен', auto_now=True)
     status = models.CharField(verbose_name='статус',
