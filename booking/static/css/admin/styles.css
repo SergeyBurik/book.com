@@ -4746,18 +4746,30 @@ input[type=button].btn-block {
     padding: 1.25rem;
 }
 
-.card-body .hotel:not(:first-child){
+.card-body .list-item:not(:first-child) {
     margin-top: 187px;
 }
 
 @media screen and (max-width: 900px) {
-    .hotel img {
-        width: 100%!important;
+    .list-item img {
+        width: 100% !important;
         margin-bottom: 10px;
     }
+
+
 }
 
-.hotel img {
+.item-description img {
+    width: 100% !important;
+    margin-bottom: 10px;
+}
+
+
+.btn .hover-white:hover {
+    color: white;
+}
+
+.list-item img {
     float: left;
     width: 250px;
     margin-right: 10px;
@@ -10762,7 +10774,7 @@ body {
 }
 
 .sb-sidenav a {
-    color:#3c4043;
+    color: #3c4043;
 }
 
 .sb-sidenav .sb-sidenav-menu {

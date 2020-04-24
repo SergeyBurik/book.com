@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from geopy.geocoders import Nominatim
 from mainapp.models import Bookings, Room, Hotel
 from django.conf import settings
-
+import geopy
 # returns coordinates by address
 from ordersapp.models import Order
 
@@ -16,10 +16,9 @@ def get_coordinates(address):
         geolocator = Nominatim(user_agent="get_coordinates")
         location = geolocator.geocode(address)
         return (round(location.latitude, 6), round(location.longitude, 6))
-
     except AttributeError:
         return (0, 0)
-    finally:
+    except geopy.exc.GeocoderTimedOut:
         return (0, 0)
 
 

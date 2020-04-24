@@ -31,7 +31,6 @@ def get_rooms(request):
                     ]
                 })
 
-                print(response)
             return JsonResponse(response, safe=False)
 
     return JsonResponse({"error": "You should provide hotel id"})
@@ -61,9 +60,9 @@ def get_hotel(request):
                 "banner": hotel.banner.url,
             }
 
-            return JsonResponse(response)
+            return JsonResponse(json.dumps(str(response), ensure_ascii=False), safe=False)
 
-    return JsonResponse({"error": "You should provide hotel id"})
+    return JsonResponse({"error": "You should provide hotel id"}, safe=False)
 
 
 def get_room(request):
