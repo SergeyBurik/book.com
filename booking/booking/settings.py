@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'adminapp.apps.AdminappConfig',
     'ordersapp.apps.OrdersappConfig',
     'robokassa',
+    'constructor_app.apps.ConstructorAppConfig',
 
     'django.contrib.sites',  # added for allauth
     'allauth',

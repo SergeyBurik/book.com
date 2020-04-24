@@ -1,0 +1,38 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% load query_booking %}
+
+
+{% block content %}
+    <main>
+        <div class="container-fluid">
+            <div class="card mb-4" style="margin-top: 30px">
+                <div class="card-header"><i class="fas fa-table mr-1"></i>Templates</div>
+                <div class="card-body item-description">
+                    <p class="h3">
+                        {{ template.name }}
+                    </p>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-8 col-lg-8">
+                            <img src="{{ template.banner.url }}" alt="{{ template.name }}">
+                        </div>
+                        <div class="col-sm-12 col-md-4 col-lg-4">
+                            <p class="h3">Description</p>
+                            <span class="h5">
+                                {{ template.description }}
+                            </span>
+                            <br>
+                            <span class="h3">
+                                <strong>{{ template.price }}$</strong>
+                            </span>
+                            <br>
+                            <button type="button" style="margin-top: 20px" class="btn btn-outline-primary">
+                                <a href="{% url 'constructor:pack' order.id %}" class="hover-white">Buy</a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

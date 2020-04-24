@@ -3,7 +3,7 @@ import json
 
 from django.http import JsonResponse
 # Create your views here.
-from mainapp.models import Room, Hotel, Bookings, RoomGallery
+from mainapp.models import Room, Hotel, Bookings, RoomGallery, Comment
 
 
 def get_rooms(request):
@@ -31,7 +31,6 @@ def get_rooms(request):
                     ]
                 })
 
-                print(response)
             return JsonResponse(response, safe=False)
 
     return JsonResponse({"error": "You should provide hotel id"})
@@ -41,11 +40,19 @@ def get_hotel(request):
     hotel_id = request.GET['hotel']
     if hotel_id:
         if isinstance(hotel_id, str):
+            try:
+                rates = Comment.objects.filter(hotel__id=hotel_id)
+                rating = [rate.rate for rate in rates]
+                rating = sum(rating) / len(rating)
+            except ZeroDivisionError:
+                rating = 0
+
             hotel = Hotel.objects.filter(id=hotel_id, is_active=True)[0]
             response = {
                 "id": hotel.id,
                 "user": f'{hotel.user.name} {hotel.user.surname}',
                 "name": hotel.name,
+                "rating": rating,
                 "phone_number": hotel.phone_number,
                 "location": hotel.location,
                 "description": hotel.description,
@@ -53,9 +60,9 @@ def get_hotel(request):
                 "banner": hotel.banner.url,
             }
 
-            return JsonResponse(response)
+            return JsonResponse(json.dumps(str(response), ensure_ascii=False), safe=False)
 
-    return JsonResponse({"error": "You should provide hotel id"})
+    return JsonResponse({"error": "You should provide hotel id"}, safe=False)
 
 
 def get_room(request):

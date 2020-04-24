@@ -1,4 +1,4 @@
-"""booking URL Configuration
+"""template1 URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
@@ -14,21 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
+from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('mainapp.urls', namespace='main')),
-    path('auth/', include("authapp.urls", namespace="auth")),
-    path('order/', include("ordersapp.urls", namespace="order")),
-    path('management/', include("adminapp.urls", namespace="management")),
-    path('api/', include("apiapp.urls", namespace="api")),
-    path('constructor/', include("constructor_app.urls", namespace="constructor")),
 ]
-
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
