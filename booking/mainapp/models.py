@@ -129,6 +129,7 @@ class RoomGallery(models.Model):
     def __str__(self):
         return f'{self.room.name}'
 
+
 # def make_avatar(args*):
 
 
