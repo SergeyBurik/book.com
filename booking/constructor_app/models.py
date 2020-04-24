@@ -1,5 +1,8 @@
 from django.db import models
 
+from authapp.models import User
+from mainapp.models import Hotel
+
 
 class Template(models.Model):
     name = models.CharField(max_length=100, verbose_name="Template's name")
@@ -11,3 +14,32 @@ class Template(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Order(models.Model):
+    FORMING = 'FM'
+    SENT_TO_PROCEED = 'STP'
+    PROCEEDED = 'PRD'
+    PAID = 'PD'
+    READY = 'RDY'
+    CANCEL = 'CNC'
+
+    ORDER_STATUS_CHOICES = (
+        (FORMING, 'формируется'),
+        (SENT_TO_PROCEED, 'отправлен в обработку'),
+        (PAID, 'оплачен'),
+        (PROCEEDED, 'обрабатывается'),
+        (READY, 'готов'),
+        (CANCEL, 'отменен'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.CharField(verbose_name='статус',
+                              max_length=3,
+                              choices=ORDER_STATUS_CHOICES,
+                              default=FORMING)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
+    template = models.ForeignKey(Template, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.name + ' ' + self.hotel.name

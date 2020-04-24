@@ -24,7 +24,7 @@
                                         <strong>{{ template.price }}$</strong>
                                     </p>
                                     <button type="button" class="btn btn-outline-primary">
-                                        <a href="{% url 'constructor:about_template' template.id %}" class="hover-white">Buy</a>
+                                        <a href="{% url 'constructor:about_template' template.id %}?hotel_id={{ hotel_id }}" class="hover-white">Buy</a>
                                     </button>
                                 </div>
                             </div>

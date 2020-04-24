@@ -25,7 +25,7 @@
                                 <a href="{% url 'main:bookings_main' hotel.pk %}">See Booking Page</a>
                             </p>
                             <p class="h6">
-                                <a href="{% url 'constructor:main' %}">Create Web Site for this hotel</a>
+                                <a href="{% url 'constructor:main' %}?hotel_id={{ hotel.id }}">Create Web Site for this hotel</a>
                             </p>
                         </div>
                     {% endfor %}

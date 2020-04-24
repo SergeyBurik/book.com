@@ -17,6 +17,7 @@
                             <img src="{{ template.banner.url }}" alt="{{ template.name }}">
                         </div>
                         <div class="col-sm-12 col-md-4 col-lg-4">
+                            <p class="h3">Description</p>
                             <span class="h5">
                                 {{ template.description }}
                             </span>
@@ -26,7 +27,7 @@
                             </span>
                             <br>
                             <button type="button" style="margin-top: 20px" class="btn btn-outline-primary">
-                                <a href="#" class="hover-white">Buy</a>
+                                <a href="{% url 'constructor:pack' order.id %}" class="hover-white">Buy</a>
                             </button>
                         </div>
                     </div>
