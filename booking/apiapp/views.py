@@ -60,7 +60,7 @@ def get_hotel(request):
                 "banner": hotel.banner.url,
             }
 
-            return JsonResponse(json.dumps(str(response), ensure_ascii=False), safe=False)
+            return JsonResponse(response, safe=False)
 
     return JsonResponse({"error": "You should provide hotel id"}, safe=False)
 

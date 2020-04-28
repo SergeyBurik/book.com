@@ -32,7 +32,7 @@ def main(request):
               Order.objects.filter(booking__hotel=hotel)]
 
     rooms = [room for hotel in Hotel.objects.filter(user=request.user, is_active=True) for room in
-             Room.objects.filter(hotel=hotel)]
+             Room.objects.filter(hotel=hotel, is_active=True)]
 
     context = {'bookings': orders, 'hotels': hotels, 'days': days, 'rooms': rooms,
                'now': f'{now.hour}:{now.minute}', 'hotel_data': hotel_data}
@@ -50,8 +50,8 @@ def main(request):
         country = request.POST.get('country', None)
         address = request.POST.get('address', None)
 
-        room = get_object_or_404(Room, id=room_id)
-        hotel = get_object_or_404(Hotel, id=hotel_id)
+        room = get_object_or_404(Room,  id=room_id, is_active=True)
+        hotel = get_object_or_404(Hotel, id=hotel_id, is_active=True)
 
         if room.hotel.id == hotel.id:
             if check_booking(check_in, check_out, room_id, hotel_id):  # if there are not any reservations
@@ -111,9 +111,9 @@ def create_room(request):
 
         # try:
         # get hotel
-        hotel = Hotel.objects.get(name=hotel)
+        hotel = Hotel.objects.get(name=hotel, is_active=True)
         # try to find a room with the same name
-        rooms = Room.objects.filter(hotel=hotel, name=name)
+        rooms = Room.objects.filter(hotel=hotel, name=name, is_active=True)
 
         if rooms:
             try:
@@ -162,21 +162,22 @@ def create_room(request):
 @login_required(login_url='/auth/login/')
 def edit_room(request, hotel_id, room_id):
     # if there is such room
-    hotel = get_object_or_404(Hotel, pk=hotel_id, user=request.user)
+    hotel = get_object_or_404(Hotel, pk=hotel_id, user=request.user, is_active=True)
     room = get_object_or_404(Room, pk=room_id, hotel=hotel, is_active=True)
 
     form = RoomForm(request.POST or None, request.FILES or None, instance=room)
 
     if request.method == 'POST':
         # saving images
+
         images = request.POST.get('image_count', 0)
-        for image in range(1, int(images) + 1):
-            image_file = request.FILES.get(f'image-{image}')
-            if image_file:
-                RoomGallery.objects.create(room=room, image=image_file)
+        if images:
+            for image in range(1, int(images) + 1):
+                image_file = request.FILES.get(f'image-{image}')
+                if image_file:
+                    RoomGallery.objects.create(room=room, image=image_file)
         if form.is_valid():
             obj = form.save(commit=False)
-
             obj.save()
 
             messages.success(request, "You successfully updated the room")
@@ -186,7 +187,7 @@ def edit_room(request, hotel_id, room_id):
             return HttpResponseRedirect(reverse('management:rooms'))
 
         else:
-            messages.warning(request, "The form was not updated successfully.")
+            messages.warning(request, "The room was not updated successfully.")
 
     images = RoomGallery.objects.filter(room=room, room__hotel=hotel)
     context = {'form': form, 'hotel_id': hotel_id, 'room_id': room_id, 'room': room, 'images': images}
@@ -234,6 +235,12 @@ def edit_hotel(request, pk):
     return render(request, 'adminapp/edit_hotel.html', context)
 
 
+def ajax_get_rooms(request):
+    hotel = get_object_or_404(Hotel, id=request.GET['hotel'])
+    return JsonResponse(
+        {'rooms': [{'pk': room.pk, 'name': room.name} for room in Room.objects.filter(hotel=hotel, is_active=True)]})
+
+
 # page of hotel details
 @login_required(login_url='/auth/login/')
 def hotels(request):
@@ -250,11 +257,27 @@ def rooms(request):
     rooms_ = []
 
     for hotel in hotels:
-        rooms_ += Room.objects.filter(hotel=hotel)
+        rooms_ += Room.objects.filter(hotel=hotel, is_active=True)
 
     content = {'rooms': rooms_}
     return render(request, 'adminapp/rooms.html', content)
 
+
+@login_required(login_url='/auth/login')
+def delete_room(request, id):
+    room = get_object_or_404(Room, id=id, hotel__user=request.user, is_active=True)
+    room.is_active = False
+    room.save()
+
+    return HttpResponseRedirect(reverse('management:rooms'))
+
+@login_required(login_url='/auth/login')
+def delete_hotel(request, id):
+    hotel = get_object_or_404(Hotel, id=id, user=request.user, is_active=True)
+    hotel.is_active = False
+    hotel.save()
+
+    return HttpResponseRedirect(reverse('management:hotels'))
 
 # function which creates hotel
 @login_required(login_url='/auth/login/')

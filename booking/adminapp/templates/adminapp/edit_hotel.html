@@ -1,6 +1,7 @@
 {% extends 'adminapp/base.html' %}
 {% load static %}
 {% load query_booking %}
+{% load truncate_text %}
 
 
 {% block content %}
@@ -12,7 +13,6 @@
                         {% for message in messages %}
                             <li {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>
                                 {{ message }}
-                                {{ message.tags }}
                             </li>
                         {% endfor %}
                     </ul>

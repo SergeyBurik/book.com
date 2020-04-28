@@ -15,7 +15,7 @@ def main_page(request):
 
 
 def bookings_main(request, hotel_id):
-    hotel = get_object_or_404(Hotel, pk=hotel_id)
+    hotel = get_object_or_404(Hotel, pk=hotel_id, is_active=True)
     rooms = Room.objects.filter(hotel=hotel, is_active=True)
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
     images = RoomGallery.objects.filter(room__hotel=hotel, is_avatar=True)
@@ -44,7 +44,7 @@ def bookings_main(request, hotel_id):
 
 def book_room(request, hotel_id, room_id):
     user = request.user
-    hotel = get_object_or_404(Hotel, pk=hotel_id)
+    hotel = get_object_or_404(Hotel, pk=hotel_id, is_active=True)
     room = get_object_or_404(Room, hotel=hotel, pk=room_id, is_active=True)
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
     total = None
@@ -94,7 +94,7 @@ def book_room(request, hotel_id, room_id):
 
 
 def total_sum(hotel_id, room_id, check_in, check_out):
-    booking = get_object_or_404(Bookings, hotel__pk=hotel_id, room__pk=room_id, date=check_in)
+    booking = get_object_or_404(Bookings, hotel__pk=hotel_id, hotel__is_active = True, room__pk=room_id, date=check_in)
 
     start = datetime.datetime.strptime(check_in, "%Y-%m-%d")
     end = datetime.datetime.strptime(check_out, "%Y-%m-%d")

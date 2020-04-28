@@ -19,10 +19,7 @@ def zipdir(zipname, directory, path=None):
 
     # calling function to get all file paths in the directory
     file_paths = get_all_file_paths(directory)
-    # printing the list of all files to be zipped
-    print('Following files will be zipped:')
-    for file_name in file_paths:
-        print(file_name)
+    print(file_paths)
 
     if path:
         completeName = os.path.join(path, zipname)
@@ -33,5 +30,6 @@ def zipdir(zipname, directory, path=None):
     with zipfile.ZipFile(f'{completeName}', 'w') as zip:
         # writing each file one by one
         for file in file_paths:
+            print(file)
             zip.write(file)
         zip.close()

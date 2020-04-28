@@ -30,7 +30,6 @@ def pack_project(request, id):
     # copying projects to zip archive
 
     if order.status == Order.FORMING:
-        print('sdfsd')
         utils.zipdir(order.hotel.name, f'{settings.DOMAIN_NAME}/{order.template.path}',
                      f'{settings.BASE_DIR}/media/ready_projects/')
 

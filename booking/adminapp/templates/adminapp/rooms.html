@@ -1,5 +1,6 @@
 {% load static %}
 {% load get_room_image %}
+{% load truncate_text %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -54,16 +55,19 @@
                         <div class="card-header"><i class="fas fa-table mr-1"></i>Rooms</div>
                         <div class="card-body">
                             {% for room in rooms %}
-                            <div class="hotel">
+                            <div class="list-item">
                                 <p class="h3">
                                     {{room.name}}. ({{room.hotel.name}}).
                                     <a href="{% url 'management:edit_room' room.hotel.pk room.pk %}">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
+                                    <a href="{% url 'management:delete_room' room.pk %}">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </a>
                                 </p>
                                 <img src="{{ room|get_room_image }}" alt="{{room.name}}">
                                 <p class="h5">
-                                    {{room.description}}
+                                    {{room.description|truncate_text}}
                                 </p>
                             </div>
                             {% endfor %}
