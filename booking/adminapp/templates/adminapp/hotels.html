@@ -1,0 +1,40 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% load query_booking %}
+{% load truncate_text %}
+
+
+{% block content %}
+    <main>
+        <div class="container-fluid">
+            <div class="card mb-4" style="margin-top: 30px">
+                <div class="card-header"><i class="fas fa-table mr-1"></i>Hotels</div>
+                <div class="card-body">
+                    {% for hotel in hotels %}
+                        <div class="list-item">
+                            <p class="h3">
+                                {{ hotel.name }}.
+                                <a href="{% url 'management:edit_hotel' hotel.pk %}">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                                <a href="{% url 'management:delete_hotel' hotel.pk %}">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </a>
+                            </p>
+                            <img src="{{ hotel.banner.url }}" alt="{{ hotel.name }}">
+                            <p class="h5">
+                                {{ hotel.description|truncate_text }}
+                            </p>
+                            <p class="h7">
+                                <a href="{% url 'main:bookings_main' hotel.pk %}">See Booking Page</a>
+                            </p>
+                            <p class="h6">
+                                <a href="{% url 'constructor:main' %}?hotel_id={{ hotel.id }}">Create Web Site for this hotel</a>
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

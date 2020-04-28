@@ -1,0 +1,132 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% load query_booking %}
+{% load file_name %}
+
+
+{% block content %}
+    <main>
+        <div class="container-fluid">
+            <div class="container">
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>
+                                {{ message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <form action="{% url 'management:edit_room' hotel_id room_id %}" id="edit_form" style="margin-bottom: 20px"
+                  method="post"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <label>Edit Images</label>
+                <div class="form_images">
+                    {% for image in images %}
+                        <div class="form_image_container" id="{{ room.hotel.pk }}-{{ room.pk }}-{{ image.image.url|file_name:'/media/rooms/' }}">
+                            <img src="{{ image.image.url }}" class="form_image" alt="{{ room.name }}">
+                            <div class="overlay">
+                                <a href="javascript:void(0)" class="delete_image" data-room="{{ room.pk }}"
+                                    data-hotel="{{ room.hotel.pk }}"
+                                    data-image="{{ image.image.url|file_name:'/media/rooms/' }}"><i
+                                        class="fa fa-trash icon" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+
+                <label>Add Images</label>
+                <div id="image_inputs" style="text-align: center">
+                    <div class="field_row" v-bind:id="num" v-for="num in fields_count">
+                        <input type="file" required id="image" v-bind:name="num">
+                        <a href="#" v-bind:id="num" v-on:click="delete_field"><i class="fa fa-trash"
+                                                                                 aria-hidden="true"></i></a>
+                    </div>
+                    <a href="#" v-on:click="addImageForm">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </a>
+                </div>
+
+
+                <input type="hidden" id="image_count" name="image_count">
+
+                <input type="submit" value="Edit Room"/>
+            </form>
+        </div>
+    </main>
+{% endblock %}
+
+{% block jquery %}
+    <script>
+        $(document).click(function (e) {
+           console.log(e.target);
+        });
+
+        $("body").on('click','.delete_image' , function () {
+            let room = $(this).data('room');
+            let hotel = $(this).data('hotel');
+            let image = $(this).data('image');
+            let el = '#'+hotel.toString()+'-'+room.toString()+'-'+image;
+            console.log(el);
+            let parent = $(el);
+            $.ajax({
+                url: '/management/ajax/delete_image/',
+                data: {
+                    'room': room,
+                    'hotel': hotel,
+                    'image': image,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log($(this));
+                    if (data.code === 200) {
+                        parent.remove();
+                    } else {
+                        alert('Unable to delete photo');
+                    }
+                },
+                error: function () {
+                    alert('Unable to delete photo');
+                }
+            });
+
+        });
+    </script>
+    <script>
+        const app = new Vue({
+            el: '#edit_form',
+            data: {
+                fields_count: [],
+                count: 0
+            },
+            methods: {
+                addImageForm: function (e) {
+                    this.count++;
+                    this.fields_count.push(`image-${this.count}`);
+                    $('#image_count').val(this.count);
+                },
+                checkForm: function (e) {
+                    if (this.count < 3) {
+                        console.log(this.count);
+                        e.preventDefault();
+                    }
+                },
+                delete_field: function (e) {
+                    if (this.count > 0) {
+                        console.log(e.target);
+                        this.count--;
+                        this.fields_count.pop();
+                        $('#image_count').val(this.count);
+
+                    }
+                }
+            }
+        })
+    </script>
+{% endblock %}
