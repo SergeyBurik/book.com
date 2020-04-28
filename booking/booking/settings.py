@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
+import json
 
 # from configparser import ConfigParser
 # local_config_path = os.path.join(BASE_DIR, 'conf', 'local.conf')
@@ -164,3 +164,4 @@ DOMAIN_NAME = 'http://localhost:8000'
 # EMAIL_USE_SSL = False
 # вариант python -m smtpd -n -c DebuggingServer localhost:25
 # EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
+

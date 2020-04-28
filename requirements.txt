@@ -1,0 +1,8 @@
+django
+django-allauth
+flake8
+uuid
+django-robokassa-payments
+geopy
+stripe
+
