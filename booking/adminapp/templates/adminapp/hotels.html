@@ -1,6 +1,7 @@
 {% extends 'adminapp/base.html' %}
 {% load static %}
 {% load query_booking %}
+{% load truncate_text %}
 
 
 {% block content %}
@@ -16,10 +17,13 @@
                                 <a href="{% url 'management:edit_hotel' hotel.pk %}">
                                     <i class="fas fa-pencil-alt"></i>
                                 </a>
+                                <a href="{% url 'management:delete_hotel' hotel.pk %}">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </a>
                             </p>
                             <img src="{{ hotel.banner.url }}" alt="{{ hotel.name }}">
                             <p class="h5">
-                                {{ hotel.description }}
+                                {{ hotel.description|truncate_text }}
                             </p>
                             <p class="h7">
                                 <a href="{% url 'main:bookings_main' hotel.pk %}">See Booking Page</a>

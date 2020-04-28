@@ -36,7 +36,7 @@ form:not(.d-md-inline-block) {
 
 .createBookingForm {
     position: fixed;
-    margin: 5% auto; /* Will not center vertically and won't work in IE6/7. */
+    margin: 0 auto; /* Will not center vertically and won't work in IE6/7. */
     left: 0;
   display: none;
     right: 0;

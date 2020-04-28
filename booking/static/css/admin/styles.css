@@ -58,6 +58,32 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
     display: block;
 }
 
+@media (min-width: 600px) {
+    ::-webkit-scrollbar {
+        -webkit-appearance: none;
+    }
+
+    ::-webkit-scrollbar:vertical {
+        width: 12px;
+    }
+
+    ::-webkit-scrollbar:horizontal {
+        height: 12px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, .5);
+        border-radius: 10px;
+        border: 2px solid #ffffff;
+    }
+
+    ::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background-color: #ffffff;
+    }
+}
+
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -639,6 +665,13 @@ pre code {
     width: 100%;
     padding-right: 0.75rem;
     padding-left: 0.75rem;
+}
+
+@media (max-width: 992px) {
+    .sb-sidenav {
+        background: aliceblue;
+    }
+    
 }
 
 .col {

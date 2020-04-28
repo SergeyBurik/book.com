@@ -1,6 +1,7 @@
 {% extends 'adminapp/base.html' %}
 {% load static %}
 {% load query_booking %}
+{% load truncate_text %}
 
 
 {% block content %}
@@ -18,7 +19,7 @@
                                     </p>
                                     <img src="{{ template.banner.url }}" style="width: 100%" alt="{{ template.name }}">
                                     <p class="h5">
-                                        {{ template.description }}
+                                        {{ template.description|truncate_text }}
                                     </p>
                                     <p class="h4">
                                         <strong>{{ template.price }}$</strong>
