@@ -1,4 +1,5 @@
-#coding:utf-8
+# coding:utf-8
+
 
 import os
 import zipfile
@@ -13,6 +14,7 @@ def get_all_file_paths(directory):
             file_paths.append(filepath)
 
     return file_paths
+
 
 def zipdir(zipname, directory, path=None):
     # path to folder which needs to be zipped

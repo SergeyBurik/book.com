@@ -271,6 +271,7 @@ def delete_room(request, id):
 
     return HttpResponseRedirect(reverse('management:rooms'))
 
+
 @login_required(login_url='/auth/login')
 def delete_hotel(request, id):
     hotel = get_object_or_404(Hotel, id=id, user=request.user, is_active=True)
@@ -278,6 +279,7 @@ def delete_hotel(request, id):
     hotel.save()
 
     return HttpResponseRedirect(reverse('management:hotels'))
+
 
 # function which creates hotel
 @login_required(login_url='/auth/login/')

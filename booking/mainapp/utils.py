@@ -38,7 +38,7 @@ def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
 
     html_m = render_to_string('mainapp/confirmation_letter.html', data)
 
-    return send_mail('Booking Confirmation', '', settings.EMAIL_HOST_USER,
+    return send_mail('Booking Confirmation', f'{data}', settings.EMAIL_HOST_USER,
                      [booking.client_email], html_message=html_m, fail_silently=False)
 
 

@@ -94,17 +94,23 @@ def book_room(request, hotel_id, room_id):
 
 
 def total_sum(hotel_id, room_id, check_in, check_out):
-    booking = get_object_or_404(Bookings, hotel__pk=hotel_id, hotel__is_active = True, room__pk=room_id, date=check_in)
+    booking = get_object_or_404(Bookings, hotel__pk=hotel_id,
+                                hotel__is_active=True, room__pk=room_id,
+                                date=check_in)
 
     start = datetime.datetime.strptime(check_in, "%Y-%m-%d")
     end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
-    date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
+    date_list = [start + datetime.timedelta(days=x)
+                 for x in range(0, (end - start).days + 1)]
     total = sum([booking.room.price for x in range(len(date_list))])
     return total
 
 
 def add_comment(request, hotel_id):
     hotel = get_object_or_404(Hotel, id=hotel_id)
-    hotel.comment_set.create(author=request.POST['name'], rate=request.POST['stars'], comment=request.POST['text'])
+    hotel.comment_set.create(author=request.POST['name'],
+                             rate=request.POST['stars'],
+                             comment=request.POST['text'])
 
-    return HttpResponseRedirect(reverse('main:bookings_main', args=(hotel.id,)))
+    return HttpResponseRedirect(reverse('main:bookings_main',
+                                        args=(hotel.id,)))
