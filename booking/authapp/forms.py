@@ -15,7 +15,8 @@ class UserAdminCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email',)
+        fields = ('email', 'name', 'surname', 'phone_number', 'country',
+                  'company_name')
 
     def clean_password2(self):
         # Проверка, что две записи пароля совпадают.
@@ -44,7 +45,8 @@ class UserAdminChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'active', 'staff', 'admin')
+        fields = ('email', 'name', 'surname', 'phone_number', 'country',
+                  'company_name', 'is_sending')
 
     def clean_password(self):
         return self.initial["password"]
@@ -58,7 +60,8 @@ class UserRegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'password1', 'password2', 'is_sending')
+        fields = ('email', 'name', 'surname', 'credit_card', 'phone_number', 'country',
+                  'company_name', 'is_sending')
 
     def clean_password2(self):
         # Проверка, что две записи пароля совпадают.
@@ -78,20 +81,63 @@ class UserRegisterForm(forms.ModelForm):
 
         self.fields['email'].widget.attrs.update(
             {
-                'type': 'text',
-                'placeholder': 'Email'
+                'type': 'email',
+                'placeholder': 'Enter email'
             }
         )
         self.fields['password1'].widget.attrs.update(
             {
                 'type': 'password',
-                'placeholder': 'Придумайте пароль'
+                'placeholder': 'Password'
             }
         )
+
+        self.fields['credit_card'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'Card Number'
+            }
+        )
+
+        self.fields['name'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'First name'
+            }
+        )
+
+        self.fields['country'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'Your country'
+            }
+        )
+
+        self.fields['company_name'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'Create an organization name'
+            }
+        )
+
+        self.fields['surname'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'Last name'
+            }
+        )
+
+        self.fields['phone_number'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'Phone number'
+            }
+        )
+
         self.fields['password2'].widget.attrs.update(
             {
                 'type': 'password',
-                'placeholder': 'Повторите пароль'
+                'placeholder': 'Repeat password'
             }
         )
         self.fields['is_sending'].widget.attrs.update(
@@ -113,10 +159,14 @@ class UserRegisterForm(forms.ModelForm):
         user_activation = UserActivation()
         user_activation.user = user
         user_activation.activation_key = hashlib.sha1((user.email + salt)
-                                                      .encode('utf8'))\
+                                                      .encode('utf8')) \
             .hexdigest()
 
         user_activation.save()
+        print(user_activation)
+        print(user.active)
+        print(user_activation.user)
+        print(user_activation.user.active)
         return user
 
 
@@ -138,7 +188,7 @@ class UserProfileEditForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ('age', 'gender', 'avatar',)
+        fields = ('bank_name',  'jur_form', 'avatar',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

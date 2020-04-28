@@ -1,0 +1,66 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% load query_booking %}
+{% load truncate_text %}
+
+
+{% block content %}
+    <main>
+        <div class="container-fluid">
+            <div class="container">
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>
+                                {{ message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <form action="{% url 'management:edit_hotel' pk %}" id="edit_form" style="margin-bottom: 20px" method="post"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Edit Hotel"/>
+            </form>
+        </div>
+    </main>
+{% endblock %}
+{% block jquery %}
+    <script>
+        let locationCheck = false;
+        $("#id_location").blur(function () {
+            console.log($(this).val());
+
+            $.ajax({
+                url: '/management/ajax/check_address/',
+                data: {'address': $(this).val()},
+                dataType: 'json',
+                success: function (data) {
+                    if (data.coordinates.length) {
+                        $("#id_location").css({'border-color': 'green'});
+
+                        $("#form-message").html(`
+                        <div class="form-message-success">
+                            <h5>
+                                ${data.address}
+                            </h5>
+                            <h5>
+                                ${data.coordinates}
+                            </h5>
+                        </div>
+                    `);
+                        locationCheck = true;
+                    }
+                },
+                error: function () {
+                    $("#id_location").css({'border-color': 'red'});
+                    locationCheck = false;
+                }
+            });
+
+        })
+    </script>
+{% endblock %}

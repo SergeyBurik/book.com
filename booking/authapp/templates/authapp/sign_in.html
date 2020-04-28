@@ -1,0 +1,172 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Book.com - Sign in</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800|DM+Serif+Display:400,400i&display=swap"
+          rel="stylesheet">
+
+    <link rel="shortcut icon" href="ftco-32x32.png">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700,800" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static '/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static '/css/animate.css'%}">
+    <link rel="stylesheet" href="{% static '/css/owl.carousel.min.css'%}">
+    <link rel="stylesheet" href="{% static '/css/aos.css'%}">
+    <link rel="stylesheet" href="{% static '/css/auth.css'%}">
+
+    <link rel="stylesheet" href="{% static '/css/magnific-popup.css'%}">
+
+
+    <link rel="stylesheet" href="{% static '/fonts/ionicons/css/ionicons.min.css'%}">
+    <link rel="stylesheet" href="{% static '/fonts/fontawesome/css/font-awesome.min.css'%}">
+    <link rel="stylesheet" href="{% static '/fonts/flaticon/font/flaticon.css'%}">
+
+    <!-- Theme Style -->
+    <link rel="stylesheet" href="{% static '/css/style.css'%}">
+</head>
+<body>
+
+<header role="banner">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'main:main' %}">Book.com</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05"
+                    aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarsExample05">
+                <ul class="navbar-nav ml-auto pl-lg-5 pl-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'main:main' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="recipes.html">Booking Engine</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="services.html" id="dropdown04" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Login</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown04">
+                            <a class="dropdown-item" href="{% url 'auth:login' %}">Sign in</a>
+                            <a class="dropdown-item" href="{% url 'auth:join' %}">Sign up</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<!-- END header -->
+<section  style="background: url(/static/img/simple-codelines.svg), #2b3137;background-size: cover; height: 100vh; overflow: auto">
+    <div class="auth">
+        <form action="{% url 'authapp:login' %}" method="post" style="margin-top:100px">
+            {% csrf_token %}
+
+            <h2>Sign In</h2>
+            {{ login_form.as_p }}
+            {% if login_form.errors %}
+            {% for error in login_form.errors %}{{error}}{% endfor %}
+            {% endif %}
+<!--            <p>-->
+<!--                <label for="Email" class="floatLabel">Email</label>-->
+<!--                <input required id="Email" name="email" type="text">-->
+<!--            </p>-->
+<!--            <p>-->
+<!--                <label for="password" class="floatLabel">Password</label>-->
+<!--                <input required id="password" name="password" type="password">-->
+<!--            </p>-->
+            <p>
+                <input type="submit" value="Sign in for Book.com" id="submit">
+            </p>
+        </form>
+    </div>
+</section>
+
+
+<footer class="site-footer" role="contentinfo">
+
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-md-4 mb-5">
+                <h3>About Us</h3>
+                <p class="mb-5">Book.com is an all in one booking and accommodation management system for small hotels,
+                    guesthouses and B&B’s.
+                    <br>
+                    With Little Hotelier, small accommodation providers level the playing field, increase occupancy and
+                    drive revenue.</p>
+                <ul class="list-unstyled footer-link d-flex footer-social">
+                    <li><a href="#" class="p-2"><span class="fa fa-twitter"></span></a></li>
+                    <li><a href="#" class="p-2"><span class="fa fa-facebook"></span></a></li>
+                    <li><a href="#" class="p-2"><span class="fa fa-linkedin"></span></a></li>
+                    <li><a href="#" class="p-2"><span class="fa fa-instagram"></span></a></li>
+                </ul>
+
+            </div>
+            <div class="col-md-5 mb-5">
+                <div class="mb-5">
+                    <h3>Opening Hours</h3>
+                    <p><strong class="d-block font-weight-normal text-black">Monday-Friday</strong>9AM-9PM</p>
+                </div>
+                <div>
+                    <h3>Contact Info</h3>
+                    <ul class="list-unstyled footer-link">
+                        <li class="d-block">
+                            <span class="d-block text-black">Address:</span>
+                            <span>c. Moscow, 34 ylitsa Lenina</span></li>
+                        <li class="d-block"><span class="d-block text-black">Phone:</span><span>+1 242 4942 290</span>
+                        </li>
+                        <li class="d-block"><span
+                                class="d-block text-black">Email:</span><span>info@yourdomain.com</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-3 mb-5">
+                <h3>Quick Links</h3>
+                <ul class="list-unstyled footer-link">
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                    <li><a href="#">Disclaimers</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-md-center text-left">
+               <!--  <p>
+
+                </p> -->
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- END footer -->
+<!-- END footer -->
+<script src="/static/js/sign_up.js"></script>
+<script src="{% static '/js/jquery-3.2.1.min.js'%}"></script>
+<script src="{% static '/js/popper.min.js'%}"></script>
+<script src="{% static '/js/bootstrap.min.js'%}"></script>
+<script src="{% static '/js/owl.carousel.min.js'%}"></script>
+<script src="{% static '/js/jquery.waypoints.min.js'%}"></script>
+<script src="{% static '/js/aos.js'%}"></script>
+
+<script src="{% static '/js/jquery.magnific-popup.min.js'%}"></script>
+<script src="{% static '/js/magnific-popup-options.js'%}"></script>
+
+
+<script src="{% static '/js/main.js'%}"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+django
+Pillow
+django-allauth
+flake8
+uuid
+geopy
+stripe

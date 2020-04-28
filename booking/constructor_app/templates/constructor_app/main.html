@@ -1,0 +1,38 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% load query_booking %}
+{% load truncate_text %}
+
+
+{% block content %}
+    <main>
+        <div class="container-fluid">
+            <div class="card mb-4" style="margin-top: 30px">
+                <div class="card-header"><i class="fas fa-table mr-1"></i>Templates</div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for template in templates %}
+                            <div class="col-sm-12 col-md-4 col-lg-4" style="margin-top: 10px; margin-bottom: 10px">
+                                <div class="list-item">
+                                    <p class="h3">
+                                        {{ template.name }}.
+                                    </p>
+                                    <img src="{{ template.banner.url }}" style="width: 100%" alt="{{ template.name }}">
+                                    <p class="h5">
+                                        {{ template.description|truncate_text }}
+                                    </p>
+                                    <p class="h4">
+                                        <strong>{{ template.price }}$</strong>
+                                    </p>
+                                    <button type="button" class="btn btn-outline-primary">
+                                        <a href="{% url 'constructor:about_template' template.id %}?hotel_id={{ hotel_id }}" class="hover-white">Buy</a>
+                                    </button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,82 @@
+[
+    {
+        "room": "1001",
+        "image": "room1001",
+        "is_avatar": "true"
+    },
+    {
+        "room": "1001",
+        "image": "room1001_1",
+        "is_avatar": ""
+    },
+    {
+        "room": "1001",
+        "image": "room1001_2",
+        "is_avatar": ""
+    },
+    {
+        "room": "1001",
+        "image": "room1001_3",
+        "is_avatar": ""
+    },
+    {
+        "room": "1002",
+        "image": "room1002",
+        "is_avatar": "true"
+    },
+    {
+        "room": "1002",
+        "image": "room1002_1",
+        "is_avatar": ""
+    },
+    {
+        "room": "1002",
+        "image": "room1002_2",
+        "is_avatar": ""
+    },
+    {
+        "room": "1002",
+        "image": "room1002_3",
+        "is_avatar": ""
+    },
+    {
+        "room": "1003",
+        "image": "room1003",
+        "is_avatar": "true"
+    },
+    {
+        "room": "1003",
+        "image": "room1003_1",
+        "is_avatar": ""
+    },
+    {
+        "room": "1003",
+        "image": "room1003_2",
+        "is_avatar": ""
+    },
+    {
+        "room": "1003",
+        "image": "room1003_3",
+        "is_avatar": ""
+    },
+    {
+        "room": "1004",
+        "image": "room1004",
+        "is_avatar": "true"
+    },
+    {
+        "room": "1004",
+        "image": "room1004_1",
+        "is_avatar": ""
+    },
+    {
+        "room": "1004",
+        "image": "room1004_2",
+        "is_avatar": ""
+    },
+    {
+        "room": "1004",
+        "image": "room1004_3",
+        "is_avatar": ""
+    }
+]

@@ -1,0 +1,305 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% load query_booking %}
+
+{% block content %}
+<main>
+    <div class="container-fluid">
+        <h1 class="mt-4">Dashboard</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body">Bookings</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small stretched-link" href="#">Your bookings - {{ bookings|length }}</a>
+                        <div class="small"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card  mb-4">
+                    <div class="card-body">Rooms</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small stretched-link" href="{% url 'management:rooms' %}">Your rooms
+                            - {{ rooms|length }}</a>
+                        <div class="small "><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body">Hotels</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small stretched-link" href="{% url 'management:hotels' %}">Your hotels
+                            - {{ hotels|length }}</a>
+                        <div class="small"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body">Manual booking</div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <a class="small stretched-link createBookingBtn" href="#">Create</a>
+                        <div class="small"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="createHotel">
+            <a href="{% url 'management:create_hotel' %}">
+                Create Hotel <i class="fas fa-plus"></i>
+            </a>
+        </div>
+
+        <div class="createHotel" style="right: 206px;">
+            <a href="{% url 'management:create_room' %}">
+                Create Room <i class="fas fa-plus"></i>
+            </a>
+        </div>
+
+        <div class="createBookingForm">
+            <form action="#" id="edit_form" style="margin-bottom: 20px; max-height: 90vh;
+    overflow-y: scroll;"
+                  method="post"
+                  enctype="multipart/form-data">
+                {% csrf_token %}
+                <p>
+                    <span class="formClose" style="background: 0; float: right; font-size: 20px">
+                        <i class="far fa-window-close"></i>
+                    </span>
+                </p>
+
+                <p>
+                    <input type="text" required name="name" placeholder="Enter name">
+                </p>
+                <p>
+                    <select name="hotel" id="hotel" required>
+                        <option value="">Hotel</option>
+                        {% for hotel in hotels %}
+                        <option value="{{ hotel.pk }}">{{ hotel.name }}</option>
+                        {% endfor %}
+                    </select>
+                </p>
+                <p>
+                    <select name="room" id="rooms" required>
+                        <option value="">Room</option>
+                    </select>
+                </p>
+                <p>
+                    <input type="email" required name="email" placeholder="Client's email">
+                </p>
+                <p>
+                    <input type="text" required name="phone" placeholder="Client's phone number">
+                </p>
+                <p>
+                <div class="form-row">
+                    <div id="range" style="width: 100%; text-align: center">
+                        <div class="form-group col-md-5" style="display: inline-block">
+                            <label for="arrivalDate">Check In Date</label>
+                            <input type="text" required name="start" id="arrivalDate" class="form-control"
+                                   placeholder="Check In Date">
+                        </div>
+                        <div class="form-group col-md-5" style="display: inline-block">
+                            <label for="checkOutDate">Check Out Date</label>
+                            <input type="text" required name="end" id="checkOutDate" class="form-control"
+                                   placeholder="Check Out Date">
+                        </div>
+                    </div>
+                </div>
+                </p>
+                <p>
+                    <input type="text" required name="time" value="{{ now }}" placeholder="Time of arrival">
+                </p>
+                <p>
+                    <textarea name="comments" cols="30" rows="3" placeholder="Comments"></textarea>
+                </p>
+                <p>
+                    <input type="text" required name="country" value="Default country" placeholder="Country">
+                </p>
+                <p>
+                    <input type="text" required name="address" value="Default address" placeholder="Address">
+                </p>
+                <input type="submit" value="Book"/>
+            </form>
+        </div>
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+
+        {% endif %}
+
+        <div class="card mb-4">
+            <div class="card-header"><i class="fas fa-table mr-1"></i>Bookings</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTableBookings" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th colspan="2">
+
+                            </th>
+                            {% for day in days %}
+                            <th>
+                                <span class="week_day">{{ day| date:"D" }}</span>
+                                <span class="month_day">{{ day|date:"d" }}</span>
+                                <span class="month">{{ day|date:"M" }}</span>
+                            </th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if hotel_data %}
+                        {% for hotel in hotel_data %}
+                        <tr>
+                            <th colspan="16">
+                                {{ hotel.name }}
+                            </th>
+                        </tr>
+                        {% for room in hotel.rooms %}
+                        <tr>
+                            <th colspan="2">
+                                <span>{{ room.name }}</span>
+                            </th>
+
+                            {% for day in days %}
+                            {% if room|query_booking:day %}
+                            <th>
+                                <span class="date_item">Sold</span>
+                            </th>
+                            {% else %}
+                            <th>
+                                <span class="date_item">{{ room.price }}</span>
+                            </th>
+                            {% endif %}
+                            {% endfor %}
+
+                            {% endfor %}
+                            {% endfor %}
+                            {% else %}
+                        <tr>
+                            <th colspan="16">
+                                You don't have any rooms yet
+                            </th>
+                        </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header"><i class="fas fa-table mr-1"></i>Bookings</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Country</th>
+                            <th>Address</th>
+                            <th>Phone Number</th>
+                            <th>Room</th>
+                            <th>Dates</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>Name</th>
+                            <th>Country</th>
+                            <th>Address</th>
+                            <th>Phone Number</th>
+                            <th>Room</th>
+                            <th>Dates</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking.booking.client_name }}</td>
+                            <td>{{ booking.booking.country }}</td>
+                            <td>{{ booking.booking.address }}</td>
+                            <td>{{ booking.booking.phone_number }}</td>
+                            <td>{{ booking.booking.room.name }}</td>
+                            <td>{{ booking.booking.date }} ({{ booking.booking.time }}) - {{ booking.days }} -
+                                nights
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    $("#hotel").change(function () {
+        let hotel_id = $(this).val();
+        let rooms;
+
+        console.log(hotel_id);
+
+        $.ajax({
+            url: '/management/ajax/get_rooms/',
+            data: {
+                'hotel': hotel_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                for (let room of data.rooms) {
+                    $("#rooms").append(`<option value="${room.pk}">${room.name}</option>`)
+                }
+            },
+            error: function () {
+                alert('Unable to fetch data about rooms');
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('.createBookingBtn').click(function () {
+            $('.createBookingForm').toggle();
+        });
+    });
+
+</script>
+<link href="{% static 'css/vanillajs-datepicker/dist/css/datepicker.min.css' %}" rel="stylesheet"/>
+<!-- For Bootstrap 4 -->
+<link href="{% static 'css/vanillajs-datepicker/dist/css/datepicker-bs4.min.css' %}" rel="stylesheet"/>
+<!-- For Bulma -->
+<link href="{% static 'css/vanillajs-datepicker/dist/css/datepicker-bulma.min.css' %}" rel="stylesheet"/>
+<!-- For Foundation -->
+<link href="{% static 'css/vanillajs-datepicker/dist/css/datepicker-foundation.min.css' %}" rel="stylesheet"/>
+
+<script src="{% static 'css/vanillajs-datepicker/dist/js/datepicker.min.js' %}"></script>
+
+<script src="{% static 'css/vanillajs-datepicker/dist/js/locales/fr.js' %}"></script>
+
+<script src="{% static 'css/vanillajs-datepicker/dist/js/datepicker-full.min.js' %}"></script>
+<script>
+    const elem = document.getElementById('range');
+
+    const dateRangePicker = new DateRangePicker(elem, {
+        format: 'yyyy-mm-dd',
+    });
+
+</script>
+<script>
+    $(".formClose").click(function (e) {
+        $('.createBookingForm').css({'display': 'none'});
+    });
+</script>
+{% endblock %}

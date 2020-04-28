@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+      body {
+          font-family: Roboto, sans-serif;
+      }
+      .content {
+        margin:auto;
+        width: 50%;
+      }
+      .letter {
+        text-align:center;
+        font-family:'Montserrat', sans-serif;;
+      }
+      .header{
+        font-weight:900;
+        font-size:25px;
+        width:100%;
+        background: #4481ff;
+        height:35px;
+        color:white;
+      }
+      .message{
+        line-height:28px;
+      }
+
+      a {
+        margin-top:25px;
+        margin-bottom:100px;
+      }
+      .content{
+        background:white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="letter">
+      <div class="content">
+        <div class="header">
+          <span>
+            Account Verify on Book!
+          </span>
+        </div>
+        <div class="message">
+          Hello, {{ username }}. <br>
+          Your profile activation link: <br>
+
+          <a href="{{link}}" class="myButton">Verify!</a>
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
