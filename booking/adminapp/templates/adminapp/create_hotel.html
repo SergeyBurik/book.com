@@ -1,4 +1,6 @@
+{% extends 'adminapp/base.html' %}
 {% load static %}
+<<<<<<< Updated upstream
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -106,111 +108,194 @@
                         <a href="#">Privacy Policy</a>
                         &middot;
                         <a href="#">Terms &amp; Conditions</a>
+=======
+{% load query_booking %}
+
+{% block content %}
+    <main>
+        <div class="container-fluid">
+            <!-- multistep form -->
+            <form action="{% url 'management:create_hotel' %}" method="post" id="msform" enctype="multipart/form-data">
+                {% csrf_token %}
+                <!-- progressbar -->
+                <ul id="progressbar">
+                    <li class="active">Step 1</li>
+                    <li>Step 2</li>
+                    <li>Step 3</li>
+                </ul>
+                <!-- fieldsets -->
+                <fieldset>
+                    <h2 class="fs-title">Create new hotel</h2>
+                    <h3 class="fs-subtitle">Step 1</h3>
+                    <input type="text" name="name" placeholder="Name of Hotel"/>
+                    <input type="button" name="next" class="next action-button" value="Next"/>
+                </fieldset>
+                <fieldset>
+                    <h2 class="fs-title">Create new hotel</h2>
+                    <h3 class="fs-subtitle">Step 2</h3>
+                    <textarea name="description" placeholder="Description"></textarea>
+
+                    <label for="stars">Stars:</label>
+                    <select name="stars" id="stars">
+                        <option value="ON">1*</option>
+                        <option value="TW">2*</option>
+                        <option value="TR">3*</option>
+                        <option value="FR">4*</option>
+                        <option value="FV">5*</option>
+                    </select>
+
+                    <input type="button" name="previous" class="previous action-button" value="Previous"/>
+                    <input type="button" name="next" class="next action-button" value="Next"/>
+                </fieldset>
+                <fieldset>
+                    <h2 class="fs-title">Create new Hotel</h2>
+                    <h3 class="fs-subtitle">Step 3</h3>
+
+
+                    <label for="banner">Hotel's Banner:</label>
+                    <input type="file"  style="width: 100%!important;" id="banner" name="banner">
+
+                    <label for="location">Enter the full address of the hotel</label>
+                    <input type="text" id="location" name="location" placeholder="Address"/>
+                    <div id="form-message">
+
                     </div>
-                </div>
-            </div>
-        </footer>
-    </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
-<script src="{% static 'scripts.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-<script src="{% static 'css/admin/chart-area-demo.js' %}"></script>
-<script src="{% static 'css/admin/chart-bar-demo.js' %}"></script>
-<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-<script src="{% static 'css/admin/datatables-demo.js' %}"></script>
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha256-KM512VNnjElC30ehFwehXjx1YCHPiQkOPmqnrWtpccM=" crossorigin="anonymous"></script>
 
+                    <label for="number">Hotel's contact phone number</label>
+                    <input type="text" id="number" name="number" placeholder="Number"/>
+                    <h3 class="form-error" id="error-n"></h3>
 
+                    <input type="button" name="previous" class="previous action-button" value="Previous"/>
+                    <input type="submit" name="submit" class="submit action-button" value="Submit"/>
+                </fieldset>
+            </form>
+        </div>
+    </main>
+{% endblock %}
 
-<script>
+{% block jquery %}
+    <script>
+        let locationCheck = false;
+        $("#location").blur(function () {
+            $.ajax({
+                url: '/management/ajax/check_address/',
+                data: {'address': $(this).val()},
+                dataType: 'json',
+                success: function (data) {
+                    if (data.coordinates.length) {
+                        $("#form-message").html(`
+                        <div class="form-message-success">
+                            <h5>
+                                ${data.address}
+                            </h5>
+                            <h5>
+                                ${data.coordinates}
+                            </h5>
+                        </div>
+                    `);
+                        locationCheck = true;
+                    }
+                },
+                error: function () {
+                    $("#form-message").html(`
+                    <div class="form-message-danger">
+                        <h5>
+                            Invalid Address
+                        </h5>
+>>>>>>> Stashed changes
+                    </div>
+                `);
 
-    //jQuery time
-    var current_fs, next_fs, previous_fs; //fieldsets
-    var left, opacity, scale; //fieldset properties which we will animate
-    var animating; //flag to prevent quick multi-click glitches
+                    locationCheck = false;
+                }
+            });
 
-    $(".next").click(function () {
-        if (animating) return false;
-        animating = true;
-
-        current_fs = $(this).parent();
-        next_fs = $(this).parent().next();
-
-        //activate next step on progressbar using the index of next_fs
-        $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
-
-        //show the next fieldset
-        next_fs.show();
-        //hide the current fieldset with style
-        current_fs.animate({opacity: 0}, {
-            step: function (now, mx) {
-                //as the opacity of current_fs reduces to 0 - stored in "now"
-                //1. scale current_fs down to 80%
-                scale = 1 - (1 - now) * 0.2;
-                //2. bring next_fs from the right(50%)
-                left = (now * 50) + "%";
-                //3. increase opacity of next_fs to 1 as it moves in
-                opacity = 1 - now;
-                current_fs.css({
-                    'transform': 'scale(' + scale + ')',
-                    'position': 'absolute'
-                });
-                next_fs.css({'left': left, 'opacity': opacity});
-            },
-            duration: 800,
-            complete: function () {
-                current_fs.hide();
-                animating = false;
-            },
-            //this comes from the custom easing plugin
-            easing: 'easeInOutBack'
         });
-    });
 
-    $(".previous").click(function () {
-        if (animating) return false;
-        animating = true;
+        //jQuery time
+        var current_fs, next_fs, previous_fs; //fieldsets
+        var left, opacity, scale; //fieldset properties which we will animate
+        var animating; //flag to prevent quick multi-click glitches
 
-        current_fs = $(this).parent();
-        previous_fs = $(this).parent().prev();
+        $(".next").click(function () {
+            if (animating) return false;
+            animating = true;
 
-        //de-activate current step on progressbar
-        $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+            current_fs = $(this).parent();
+            next_fs = $(this).parent().next();
 
-        //show the previous fieldset
-        previous_fs.show();
-        //hide the current fieldset with style
-        current_fs.animate({opacity: 0}, {
-            step: function (now, mx) {
-                //as the opacity of current_fs reduces to 0 - stored in "now"
-                //1. scale previous_fs from 80% to 100%
-                scale = 0.8 + (1 - now) * 0.2;
-                //2. take current_fs to the right(50%) - from 0%
-                left = ((1 - now) * 50) + "%";
-                //3. increase opacity of previous_fs to 1 as it moves in
-                opacity = 1 - now;
-                current_fs.css({'left': left});
-                previous_fs.css({'transform': 'scale(' + scale + ')', 'opacity': opacity});
-            },
-            duration: 800,
-            complete: function () {
-                current_fs.hide();
-                animating = false;
-            },
-            //this comes from the custom easing plugin
-            easing: 'easeInOutBack'
+            //activate next step on progressbar using the index of next_fs
+            $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+            //show the next fieldset
+            next_fs.show();
+            //hide the current fieldset with style
+            current_fs.animate({opacity: 0}, {
+                step: function (now, mx) {
+                    //as the opacity of current_fs reduces to 0 - stored in "now"
+                    //1. scale current_fs down to 80%
+                    scale = 1 - (1 - now) * 0.2;
+                    //2. bring next_fs from the right(50%)
+                    left = (now * 50) + "%";
+                    //3. increase opacity of next_fs to 1 as it moves in
+                    opacity = 1 - now;
+                    current_fs.css({
+                        'transform': 'scale(' + scale + ')',
+                        'position': 'absolute'
+                    });
+                    next_fs.css({'left': left, 'opacity': opacity});
+                },
+                duration: 800,
+                complete: function () {
+                    current_fs.hide();
+                    animating = false;
+                },
+                //this comes from the custom easing plugin
+                easing: 'easeInOutBack'
+            });
         });
-    });
 
-    $(".submit").click(function () {
-        // return false;
-    })
+        $(".previous").click(function () {
+            if (animating) return false;
+            animating = true;
 
-</script>
-</body>
-</html>
+            current_fs = $(this).parent();
+            previous_fs = $(this).parent().prev();
+
+            //de-activate current step on progressbar
+            $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+            //show the previous fieldset
+            previous_fs.show();
+            //hide the current fieldset with style
+            current_fs.animate({opacity: 0}, {
+                step: function (now, mx) {
+                    //as the opacity of current_fs reduces to 0 - stored in "now"
+                    //1. scale previous_fs from 80% to 100%
+                    scale = 0.8 + (1 - now) * 0.2;
+                    //2. take current_fs to the right(50%) - from 0%
+                    left = ((1 - now) * 50) + "%";
+                    //3. increase opacity of previous_fs to 1 as it moves in
+                    opacity = 1 - now;
+                    current_fs.css({'left': left});
+                    previous_fs.css({'transform': 'scale(' + scale + ')', 'opacity': opacity});
+                },
+                duration: 800,
+                complete: function () {
+                    current_fs.hide();
+                    animating = false;
+                },
+                //this comes from the custom easing plugin
+                easing: 'easeInOutBack'
+            });
+        });
+
+        $(".submit").click(function () {
+            if (!locationCheck) {
+                return false;
+            }
+        })
+
+    </script>
+{% endblock %}
+

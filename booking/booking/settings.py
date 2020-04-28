@@ -12,7 +12,13 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+
+# from configparser import ConfigParser
+# local_config_path = os.path.join(BASE_DIR, 'conf', 'local.conf')
+# config = ConfigParser()
+# config.read(local_config_path)
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -37,7 +43,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'mainapp.apps.MainappConfig',
     'authapp.apps.AuthappConfig',
-    'adminapp.apps.AdminappConfig'
+    'adminapp.apps.AdminappConfig',
+    'ordersapp.apps.OrdersappConfig',
+    'constructor_app.apps.ConstructorAppConfig',
+    'django.contrib.sites',  # added for allauth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
 
 # Changes the built-in user model to ours
@@ -153,17 +165,26 @@ STATICFILES_DIRS = (
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.mail.ru'
-# EMAIL_PORT = 465
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'testmailbook@mail.ru'
-# EMAIL_HOST_PASSWORD = 'StrongPassword'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'django.test04@gmail.com'
+EMAIL_HOST_PASSWORD = 'book1234B'
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 DOMAIN_NAME = 'http://localhost:8000'
 
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = '25'
-EMAIL_USE_SSL = False
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = '25'
+# EMAIL_USE_SSL = False
 # вариант python -m smtpd -n -c DebuggingServer localhost:25
-EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
+# EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
+
+
+
+
+

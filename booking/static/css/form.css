@@ -1,0 +1,226 @@
+form:not(.d-md-inline-block) {
+    background: #fff;
+    padding: 4em 4em 2em;
+    /*max-width: 400px;*/
+    margin: 50px auto 0;
+    box-shadow: 0 0 1em #222;
+    border-radius: 2px;
+}
+
+@media (max-width: 480px) {
+    form {
+        padding: 20px !important;
+    }
+
+    #msform {
+        width: 95%;
+    }
+
+    #msform fieldset {
+        width: 100%;
+        margin: 0;
+    }
+
+}
+
+
+@media (min-width: 481px) {
+    #msform {
+        width: 80%
+    }
+
+    #edit_form {
+        width: 55%;
+    }
+}
+
+.createBookingForm {
+    position: fixed;
+    margin: 0 auto; /* Will not center vertically and won't work in IE6/7. */
+    left: 0;
+  display: none;
+    right: 0;
+    top: 0;
+    z-index: 9999;
+}
+.datepicker {
+  z-index: 99999999!important;
+}
+
+form select {
+    height: 30px;
+}
+
+.createBookingForm select {
+  width: 100%;
+}
+
+
+@media (max-width: 600px) {
+    .createBookingForm {
+        width: 95%!important;
+    }
+}
+
+@media (min-width: 601px) and (max-width: 1000px) {
+    .createBookingForm {
+        width: 80%;
+    }
+}
+
+@media (min-width: 1001px) {
+    .createBookingForm {
+        width: 75%;
+    }
+}
+
+.form_images img {
+    width: 99%;
+    object-fit: cover;
+    height: 72px;
+    margin-right: 3px;
+}
+
+/*s*/
+.form_image_container {
+    display: inline-block;
+    position: relative;
+    width: 31%;
+    max-width: 400px;
+}
+
+.form_image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .3s ease;
+}
+
+.form_image_container:hover .overlay {
+    opacity: 1;
+}
+
+.icon {
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+/*f*/
+
+form h2 {
+    margin: 0 0 50px 0;
+    padding: 10px;
+    text-align: center;
+    font-size: 30px;
+    color: #666666;
+    border-bottom: solid 1px #e5e5e5;
+}
+
+form textarea {
+    width: 100%;
+}
+
+form p {
+    margin: 0 0 1em 0;
+    position: relative;
+}
+
+form input {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    outline: none;
+    height: 30px;
+    margin: 0;
+}
+
+form input[type="text"],
+form input[type="password"] {
+    background: #fff;
+    border: 1px solid #dbdbdb;
+    font-size: 1em;
+    padding: .8em .5em;
+    border-radius: 2px;
+}
+
+form input[type="text"]:focus,
+form input[type="password"]:focus {
+    background: #fff;
+}
+
+form span {
+    display: block;
+    background: #F9A5A5;
+    padding: 2px 5px;
+    color: #666;
+}
+
+form input[type="submit"] {
+    font-size: 17px;
+    height: 40px;
+    background: #28a745;
+    box-shadow: 0 3px 0 0 rgba(123, 163, 73, 0.7);
+    border-radius: 2px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    line-height: 1.6em;
+    margin: 2em 0 0;
+    outline: none;
+    padding: .8em 0;
+    text-shadow: 0 1px #68B25B;
+}
+
+form input[type="submit"]:hover {
+    background: #28a745;
+    text-shadow: 0 1px 3px rgba(70, 93, 41, 0.7);
+}
+
+form label {
+    /*position: absolute;*/
+    left: 8px;
+    top: -24px;
+    color: #999;
+    font-size: 16px;
+    display: inline-block;
+    padding: 4px 10px;
+    font-weight: 400;
+    background-color: rgba(255, 255, 255, 0);
+    -moz-transition: color 0.3s, top 0.3s, background-color 0.8s;
+    -o-transition: color 0.3s, top 0.3s, background-color 0.8s;
+    -webkit-transition: color 0.3s, top 0.3s, background-color 0.8s;
+    transition: color 0.3s, top 0.3s, background-color 0.8s;
+}
+
+form label.floatLabel {
+    top: -11px;
+    background-color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+}
+
+fieldset input[type=file] {
+    padding: 0 !important;
+    width: 70% !important;
+    margin-right: 10px;
+}
+
+.field_row {
+    display: flex;
+}

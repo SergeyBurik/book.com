@@ -1,0 +1,41 @@
+{% extends 'ordersapp/base.html' %}
+{% load static %}
+{% load query_booking %}
+
+
+
+{% block container %}
+    <div class="pay-info" style="
+                                display: flex;
+                                justify-content: space-around;
+                                flex-direction: column;
+                                align-items: center;
+                                margin-top: 50px;
+                                margin-bottom: 80px;">
+        {% if total %}
+            <div style="
+            font-family:'Open Sans', Arial, sans-serif;
+             font-weight: 700;
+            font-size: 20px;
+            line-height: 1.8;
+            color: #000000";
+            > Total summ of your booking: </div>
+            <h1> {{ total }}</h1>
+        {% endif %}
+        {% if booking_number %}
+            <p> {{ booking_number }}</p>
+        {% endif %}
+        <form action="{{ form.target }}" method="POST">
+            <p>{{ form.as_p }}</p>
+            <p><input type="submit" value="Pay by RoboKassa"></p>
+        </form>
+    </div>
+<script>
+    const elem = document.getElementById('range');
+
+    const dateRangePicker = new DateRangePicker(elem, {
+        format: 'yyyy-mm-dd',
+    });
+
+</script>
+{% endblock %}

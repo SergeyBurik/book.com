@@ -1,0 +1,10 @@
+{% block container %}
+    <h1> УСПЕХ!!!!!!!!!!!!!!!!!!!!!! {{sum}} {{total}} </h1>
+    <a class="" href="{% url 'mainapp:main' %}">На главную</a>
+    <a class="" href="{% url 'ordersapp:pay' %}">Оплатить</a>
+        <div class="container">
+            {% for booking in bookings %}
+                <a> {{ booking.room_id }}</a>
+            {% endfor %}
+        </div>
+{% endblock %}

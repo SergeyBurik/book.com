@@ -1,4 +1,9 @@
 {% load static %}
+<<<<<<< Updated upstream
+=======
+{% load get_room_image %}
+{% load truncate_text %}
+>>>>>>> Stashed changes
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -53,6 +58,7 @@
                         <div class="card-header"><i class="fas fa-table mr-1"></i>Rooms</div>
                         <div class="card-body">
                             {% for room in rooms %}
+<<<<<<< Updated upstream
                             <div class="hotel">
                                 <p class="h3">
                                     {{room.name}}. ({{room.hotel.name}} - {{room.hotel.stars}} stars).
@@ -60,6 +66,21 @@
                                 <img src="{{ room.image.url }}" alt="{{room.name}}">
                                 <p class="h5">
                                     {{room.description}}
+=======
+                            <div class="list-item">
+                                <p class="h3">
+                                    {{room.name}}. ({{room.hotel.name}}).
+                                    <a href="{% url 'management:edit_room' room.hotel.pk room.pk %}">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <a href="{% url 'management:delete_room' room.pk %}">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </a>
+                                </p>
+                                <img src="{{ room|get_room_image }}" alt="{{room.name}}">
+                                <p class="h5">
+                                    {{room.description|truncate_text}}
+>>>>>>> Stashed changes
                                 </p>
                             </div>
                             {% endfor %}
@@ -86,7 +107,11 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
             crossorigin="anonymous"></script>
+<<<<<<< Updated upstream
     <script src="{% static 'scripts.js' %}"></script>
+=======
+    <script src="{% static 'js/scripts.js' %}"></script>
+>>>>>>> Stashed changes
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
     <script src="{% static 'css/admin/chart-area-demo.js' %}"></script>
     <script src="{% static 'css/admin/chart-bar-demo.js' %}"></script>

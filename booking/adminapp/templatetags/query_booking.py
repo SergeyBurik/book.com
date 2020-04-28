@@ -13,8 +13,15 @@ register = template.Library()
 @register.filter(name='query_booking')
 def query_booking(elem, day):
     day = datetime.datetime.strptime(str(day), "%Y-%m-%d")
+<<<<<<< Updated upstream
     # res = eval(f'Bookings.objects.filter(room__pk={elem.pk},'
     #            f' date="{str(day).split(" ")[0]}")')
     # return res
     return eval(f'Bookings.objects.filter(room__pk={elem.pk}, date="{str(day).split(" ")[0]}")')
     # return Bookings.objects.filter(room__pk={elem.pk}, date="{str(day).split(" ")[0]}")
+=======
+    try:
+        return eval(f'Bookings.objects.filter(room__pk={elem.id}, date="{str(day).split(" ")[0]}")')
+    except AttributeError:
+        return eval(f'Bookings.objects.filter(room__pk={elem["id"]}, date="{str(day).split(" ")[0]}")')
+>>>>>>> Stashed changes

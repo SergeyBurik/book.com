@@ -1,13 +1,15 @@
 import os
+from datetime import timedelta
 from uuid import uuid4
+
+from authapp.variables import country_dict
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils.timezone import now
-from datetime import timedelta
 # Менеджер модели пользователя
 from django.utils.deconstruct import deconstructible
+from django.utils.timezone import now
 
 from authapp.variables import country_dict
 
@@ -86,11 +88,19 @@ class User(AbstractBaseUser):
     # user's phone number
     phone_number = models.CharField(default='', max_length=30, verbose_name='Номер телефона')
     # user's country
+<<<<<<< Updated upstream
     # country = models.CharField(default='', max_length=30, verbose_name='Страна')
     country = models.CharField(max_length=50, choices=country_dict,
                                default='Russia')
+=======
+    country = models.CharField(max_length=50, choices=country_dict,
+                               default='Russia')
+
+    credit_card = models.CharField(default='', max_length=30, verbose_name='Номер кредитной карты')
+
+>>>>>>> Stashed changes
     # user's company name
-    company_name = models.CharField(default='', max_length=30,)
+    company_name = models.CharField(default='', max_length=30, )
     # admin user; non super-user
     staff = models.BooleanField(default=False, verbose_name='Сотрудник')
     # superuser
@@ -141,20 +151,21 @@ class User(AbstractBaseUser):
 
 
 class UserProfile(models.Model):
-    MALE = 'M'
-    FEMALE = 'W'
+    FIZLIC = 'F'
+    YRLIC = 'Y'
+    IP = 'I'
 
-    GENDER_CHOICES = (
-        (MALE, 'Мужской'),
-        (FEMALE, 'Женский'),
+    JURIDICAL_FORM = (
+        (FIZLIC, 'Физ. лицо'),
+        (YRLIC, 'Юр. лицо'),
+        (IP, 'ИП'),
     )
 
     user = models.OneToOneField(User, primary_key=True,
                                 on_delete=models.CASCADE)
-    age = models.PositiveIntegerField(verbose_name='Возраст', null=True,
-                                      blank=True)
-    gender = models.CharField(verbose_name='Пол', max_length=1,
-                              choices=GENDER_CHOICES, blank=True)
+    bank_name = models.CharField(default='', max_length=50, verbose_name='Наименование банка')
+    jur_form = models.CharField(verbose_name='Правовая форма', max_length=1,
+                                choices=JURIDICAL_FORM, blank=True)
     avatar = models.ImageField(
         upload_to=path_and_rename,
         default='static/img/default_user.png',

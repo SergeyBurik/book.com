@@ -1,5 +1,15 @@
+<<<<<<< Updated upstream
 psycopg2
 pillow
 django
 flake8
 uuid
+=======
+django
+Pillow
+django-allauth
+flake8
+uuid
+geopy
+stripe
+>>>>>>> Stashed changes

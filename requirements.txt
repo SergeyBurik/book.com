@@ -1,2 +1,11 @@
 django
+Pillow
+django-allauth
 flake8
+<<<<<<< Updated upstream
+=======
+uuid
+django-robokassa-payments
+geopy
+stripe
+>>>>>>> Stashed changes
