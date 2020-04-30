@@ -1,9 +1,14 @@
+import json
 import zipfile
+
+from django.db import IntegrityError
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from constructor_app import utils
 from constructor_app.models import Template, Order
 from mainapp.models import Hotel
+
+from constructor_app.models import Site
 
 
 def main(request):
@@ -30,11 +35,16 @@ def pack_project(request, id):
     # copying projects to zip archive
 
     if order.status == Order.FORMING:
-        utils.zipdir(order.hotel.name, f'{settings.DOMAIN_NAME}/{order.template.path}',
-                     f'{settings.BASE_DIR}/media/ready_projects/')
-
-        order.status = Order.READY
-        order.save()
+        try:
+            # create zip achieve
+            zip = utils.zipdir(order.hotel.name, f'{settings.BASE_DIR}/{order.template.path}',
+                               f'{settings.BASE_DIR}/media/ready_projects/')
+            # create site
+            Site.objects.create(user=request.user, hotel=order.hotel, token=abs(hash(order.hotel.name)) % (10 ** 9))
+            order.status = Order.READY
+            order.save()
+        except IntegrityError:
+            pass
 
     return render(request, 'constructor_app/result.html',
                   {'order': order, 'path': f'{settings.DOMAIN_NAME}/media/ready_projects/{order.hotel.name}.zip'})

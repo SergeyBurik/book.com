@@ -15,6 +15,17 @@ class Template(models.Model):
     def __str__(self):
         return self.name
 
+class Site(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
+    url = models.CharField(verbose_name="URL", max_length=300, null=True)
+    token = models.CharField(verbose_name="API Token", max_length=100, null=True, unique=True)
+    # path -> in the future
+    date_of_expiry = models.DateField(null=True)
+
+    def __str__(self):
+        return f'{self.user.name} - {self.hotel.name}'
+
 
 class Order(models.Model):
     FORMING = 'FM'
