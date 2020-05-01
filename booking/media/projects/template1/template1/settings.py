@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+import json
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mainapp'
 ]
 
 MIDDLEWARE = [
@@ -117,4 +118,43 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+
 STATIC_URL = '/static/'
+
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'django.test04@gmail.com'
+EMAIL_HOST_PASSWORD = 'book1234B'
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+try:
+    CONF_FILE = json.load(open(f'{BASE_DIR}/conf.json/', 'r'))
+
+    DOMAIN_NAME = CONF_FILE['website_domain']
+    API_TOKEN = str(CONF_FILE['api_token'])
+    HOTEL_ID = str(CONF_FILE['hotel_id'])
+    HOST = CONF_FILE['host_domain_name']
+except FileNotFoundError:
+    DOMAIN_NAME = '127.0.0.1:8001'
+    API_TOKEN = '000000000'
+    HOTEL_ID = '1'
+    HOST = '127.0.0.1:8000'
+
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = '25'
+# EMAIL_USE_SSL = False
+# вариант python -m smtpd -n -c DebuggingServer localhost:25
+# EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None

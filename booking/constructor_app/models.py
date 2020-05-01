@@ -1,3 +1,6 @@
+import datetime
+
+from dateutil.relativedelta import relativedelta
 from django.db import models
 
 from authapp.models import User
@@ -51,6 +54,7 @@ class WebSite(models.Model):
     token = models.CharField(max_length=9, null=True, unique=True)
     url = models.CharField(max_length=100, null=True, unique=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    date_of_expiry = models.DateField(default=datetime.datetime.today() + relativedelta(years=+1))
 
     def __str__(self):
         return self.hotel.name

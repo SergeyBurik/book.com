@@ -3,8 +3,21 @@ import json
 
 from django.http import JsonResponse
 # Create your views here.
+from django.shortcuts import get_object_or_404
 from mainapp.models import Room, Hotel, Bookings, RoomGallery, Comment
 
+
+def get_ratings(request):
+    hotel_id = request.GET['hotel']
+    if hotel_id:
+        if isinstance(hotel_id, str):
+            response = [{"text": comment.comment,
+                         "author":comment.author,
+                         "rate": comment.rate} for comment in Comment.objects.filter(hotel__id=hotel_id)]
+
+            return JsonResponse(response, safe=False)
+
+    return JsonResponse({"error": "You should provide hotel id"})
 
 def get_rooms(request):
     hotel_id = request.GET['hotel']
@@ -59,6 +72,20 @@ def get_hotel(request):
                 "stars": hotel.stars,
                 "banner": hotel.banner.url,
             }
+
+            return JsonResponse(response, safe=False)
+
+    return JsonResponse({"error": "You should provide hotel id"}, safe=False)
+
+
+def get_hotel_images(request):
+    hotel_id = request.GET['hotel']
+    if hotel_id:
+        if isinstance(hotel_id, str):
+            hotel = get_object_or_404(Hotel, id=request.GET['hotel'])
+
+            response = [{'url': image.image.url} for image in RoomGallery.objects.filter(room__hotel=hotel)]
+            response.append({'url': hotel.banner.url})
 
             return JsonResponse(response, safe=False)
 

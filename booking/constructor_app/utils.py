@@ -27,7 +27,7 @@ def copytree(src, dst, symlinks=False, ignore=None):
             shutil.copy2(s, d)
 
 
-def zipdir(zipname, directory, path=None):
+def zipdir(zipname, directory, path=None, order_id=None):
     # path to folder which needs to be zipped
 
     # calling function to get all file paths in the directory
@@ -39,10 +39,8 @@ def zipdir(zipname, directory, path=None):
         completeName = zipname
 
     # writing files to a zipfile
-    with zipfile.ZipFile(f'{completeName}', 'w') as zip:
+    with zipfile.ZipFile(completeName+'.zip', 'w') as zip:
         # writing each file one by one
         for file in file_paths:
-            print(file)
-            print(file.split('preparing_projects/')[1])
-            zip.write(file, file.split('preparing_projects/')[1])
+            zip.write(file, file.split(f'preparing_projects/{order_id}')[1])
         zip.close()

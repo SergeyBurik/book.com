@@ -12,4 +12,6 @@ urlpatterns = [
     path('getBookings/', apiapp.get_bookings, name='get_bookings'),
     path('getHotelBookings/', apiapp.get_hotel_bookings, name='get_hotel_bookings'),
     path('createBooking/', apiapp.create_booking, name='create_booking'),
+    path('getImages/', apiapp.get_hotel_images, name='get_hotel_images'),
+    path('getRatings/', apiapp.get_ratings, name='get_ratings'),
 ]

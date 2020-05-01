@@ -47,17 +47,20 @@ def pack_project(request, id):
         site = get_object_or_404(WebSite, order=order)
 
     # add conf.json
-    data = {'hotel_id': order.hotel.id, 'api_token': site.token}
+    data = {'hotel_id': order.hotel.id, 'api_token': site.token, 'host_domain_name': settings.DOMAIN_NAME,
+            'website_domain': site.url}
+
     with open(f'{prj_path}/data.json', 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
     # copying projects to zip archive
     if order.status == Order.FORMING:
-        utils.zipdir(order.hotel.name, prj_path,
-                     f'{settings.BASE_DIR}/media/ready_projects')
+        utils.zipdir(order.hotel.name + str(order.id), prj_path,
+                     f'{settings.BASE_DIR}/media/ready_projects', order.id)
 
         order.status = Order.READY
         order.save()
 
     return render(request, 'constructor_app/result.html',
-                  {'order': order, 'path': f'{settings.DOMAIN_NAME}/media/ready_projects/{order.hotel.name}.zip'})
+                  {'order': order,
+                   'path': f'{settings.DOMAIN_NAME}/media/ready_projects/{order.hotel.name}{order.id}.zip'})
