@@ -43,3 +43,14 @@ class Order(models.Model):
 
     def __str__(self):
         return self.user.name + ' ' + self.hotel.name
+
+
+class WebSite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
+    token = models.CharField(max_length=9, null=True, unique=True)
+    url = models.CharField(max_length=100, null=True, unique=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.hotel.name
