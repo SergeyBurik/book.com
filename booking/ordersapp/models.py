@@ -40,4 +40,4 @@ class Order(models.Model):
         verbose_name_plural = 'заказы'
 
     def __str__(self):
-        return f'Заказ: {self.pk}'
+        return 'Заказ: {}'.format(self.pk)

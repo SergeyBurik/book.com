@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+import json
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mainapp'
 ]
 
 MIDDLEWARE = [
@@ -117,4 +118,26 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+
 STATIC_URL = '/static/'
+
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+try:
+    CONF_FILE = json.load(open(f'{BASE_DIR}/conf.json/', 'r'))
+
+    DOMAIN_NAME = CONF_FILE['website_domain']
+    API_TOKEN = str(CONF_FILE['api_token'])
+    HOTEL_ID = str(CONF_FILE['hotel_id'])
+    HOST = CONF_FILE['host_domain_name']
+except FileNotFoundError:
+    DOMAIN_NAME = '127.0.0.1:8001'
+    API_TOKEN = '000000000'
+    HOTEL_ID = '1'
+    HOST = '127.0.0.1:8000'

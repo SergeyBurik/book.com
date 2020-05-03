@@ -69,7 +69,7 @@ def logout(request):
 def send_verify_mail(user):
     activation_key = UserActivation.objects.get(user=user).activation_key
     verify_link = reverse('auth:verify', args=[user.email, activation_key])
-    title = f'Account Verification {user.name} {user.surname}'
+    title = 'Account Verification {} {}'.format(user.name, user.surname)
 
     print(os.path.join(settings.BASE_DIR, 'static', 'assets', 'letter.html'))
 

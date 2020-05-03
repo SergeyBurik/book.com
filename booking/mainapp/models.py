@@ -18,7 +18,7 @@ class PathAndRename(object):
 
     def __call__(self, instance, filename):
         ext = filename.split('.')[-1]
-        filename = f'{uuid4().hex}.{ext}'
+        filename = '{}.{}'.format(uuid4().hex, ext)
 
         return os.path.join(self.path, filename)
 
@@ -111,7 +111,7 @@ class Room(models.Model):
         return "{} ({})".format(self.name, self.hotel.name)
 
     def __unicode__(self):
-        return f'{self.name}'
+        return self.name
 
 
 class RoomGallery(models.Model):
@@ -127,7 +127,7 @@ class RoomGallery(models.Model):
     is_avatar = models.BooleanField(verbose_name='Главное изображение номера', default=False)
 
     def __str__(self):
-        return f'{self.room.name}'
+        return self.room.name
 
 
 # def make_avatar(args*):
@@ -147,7 +147,7 @@ class Bookings(models.Model):
     address = models.CharField(max_length=100)  # client's address of living
 
     def __str__(self):
-        return f'Room Booking {self.room.name} - {self.room.hotel.name}'
+        return 'Room Booking {} - {}'.format(self.room.name, self.room.hotel.name)
 
 
 class Comment(models.Model):

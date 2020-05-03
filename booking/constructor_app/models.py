@@ -1,3 +1,6 @@
+import datetime
+
+from dateutil.relativedelta import relativedelta
 from django.db import models
 
 from authapp.models import User
@@ -43,3 +46,16 @@ class Order(models.Model):
 
     def __str__(self):
         return self.user.name + ' ' + self.hotel.name
+
+
+class WebSite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
+    token = models.CharField(max_length=9, null=True, unique=True)
+    url = models.CharField(max_length=100, null=True, unique=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    date_of_expiry = models.DateField(default=datetime.datetime.today() + relativedelta(years=+1))
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.hotel.name

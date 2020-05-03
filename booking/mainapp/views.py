@@ -62,9 +62,9 @@ def book_room(request, hotel_id, room_id):
         print(check_in, check_out, client_name, client_surname, email, phone, time, comments, country, address)
 
         if check_booking(check_in, check_out, room_id, hotel_id):  # if there are not any reservations
-            insert_booking(hotel, check_in, check_out, room, f'{client_name} {client_surname}', email, phone, time,
+            insert_booking(hotel, check_in, check_out, room, '{} {}'.format(client_name, client_surname), email, phone, time,
                            comments, country, address)
-            send_confirmation_mail(hotel_id, room_id, check_in, check_out, f'{client_name}:{client_surname}')
+            send_confirmation_mail(hotel_id, room_id, check_in, check_out, '{}:{}'.format(client_name, client_surname))
             # ":" is just separator
             return HttpResponseRedirect(reverse('order:pay',
                                                 kwargs={
