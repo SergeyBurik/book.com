@@ -1,6 +1,9 @@
 import requests
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.conf import settings
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from mainapp import utils
 
 
@@ -51,5 +54,18 @@ def room_detail(request, id):
         requests.get(
             f'http://{settings.HOST}/api/getRatings?hotel={settings.HOTEL_ID}&token={settings.API_TOKEN}').content)
 
-    content = {'room': room, 'data': data, 'host': settings.HOST, 'reviews': reviews}
+    if request.method == "POST":
+        if request.POST['form-type'] == 'add-rating':
+            requests.post(f'http://{settings.HOST}/api/addRating/?token={settings.API_TOKEN}',
+                          data={'hotel': settings.HOTEL_ID,
+                                'author': request.POST['author'],
+                                'text': request.POST['text'],
+                                'rate': request.POST['stars']})
+
+        elif request.POST['form-type'] == 'book-room':
+            pass
+
+        return HttpResponseRedirect(reverse('main:room', kwargs={'id': id}))
+
+    content = {'room': room, 'data': data, 'host': settings.HOST, 'reviews': reviews[:4], 'id': id}
     return render(request, 'mainapp/room-detail.html', content)

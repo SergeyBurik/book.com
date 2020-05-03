@@ -1,5 +1,6 @@
 {% load static %}
 {% load random_image %}
+{% load range %}
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -132,15 +133,15 @@
                                 <tbody>
                                 <tr>
                                     <td class="r-o">Adults:</td>
-                                    <td>Adults: {{ room.adults }}</td>
+                                    <td>{{ room.adult }}</td>
                                 </tr>
                                 <tr>
                                     <td class="r-o">Children:</td>
-                                    <td>Adults: {{ room.children }}</td>
+                                    <td>{{ room.kids }}</td>
                                 </tr>
                                 <tr>
                                     <td class="r-o">Infants:</td>
-                                    <td>Infants: {{ room.infants }}</td>
+                                    <td>{{ room.infants }}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -174,7 +175,13 @@
                         <div class="ts-item">
                             <p>{{rating.text}}</p>
                             <div class="ti-author">
-                                <h5>{{rating.author}} - {{rating.rate}}</h5>
+                                <h5>{{rating.author}}</h5>
+                                <div class="rating">
+                                    {% for star in rating.rate|range %}
+                                        <i class="icon_star"></i>
+                                    {% endfor %}
+                                    <!--<i class="icon_star-_alt"></i>-->
+                                </div>
                             </div>
                         </div>
                     {% endfor %}

@@ -74,15 +74,15 @@
                             <tbody>
                             <tr>
                                 <td class="r-o">Adults:</td>
-                                <td>Adults: {{ room.adults }}</td>
+                                <td>{{ room.adult }}</td>
                             </tr>
                             <tr>
                                 <td class="r-o">Children:</td>
-                                <td>Adults: {{ room.children }}</td>
+                                <td>{{ room.kids }}</td>
                             </tr>
                             <tr>
                                 <td class="r-o">Infants:</td>
-                                <td>Infants: {{ room.infants }}</td>
+                                <td>{{ room.infants }}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -95,43 +95,48 @@
                     <h4>Reviews</h4>
 
                     {% for review in reviews %}
-                        <div class="review-item">
-                            <div class="ri-text">
-                                <div class="rating">
-                                    {% for star in review.rate|range %}
-                                        <i class="icon_star"></i>
-                                    {% endfor %}
-                                    <!--<i class="icon_star-_alt"></i>-->
-                                </div>
-                                <h5>{{ review.author }}</h5>
-                                <p>{{ review.text }}</p>
+                    <div class="review-item">
+                        <div class="ri-text">
+                            <div class="rating">
+                                {% for star in review.rate|range %}
+                                <i class="icon_star"></i>
+                                {% endfor %}
+                                <!--<i class="icon_star-_alt"></i>-->
                             </div>
+                            <h5>{{ review.author }}</h5>
+                            <p>{{ review.text }}</p>
                         </div>
+                    </div>
                     {% endfor %}
 
                 </div>
                 <div class="review-add">
                     <h4>Add Review</h4>
-                    <form action="#" class="ra-form">
+                    <form action="{% url 'main:room' id %}" method="post" class="ra-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="form-type" value="add-rating">
                         <div class="row">
                             <div class="col-lg-6">
-                                <input type="text" placeholder="Name*">
-                            </div>
-                            <div class="col-lg-6">
-                                <input type="text" placeholder="Email*">
+                                <input type="text" name="author" placeholder="Name*">
                             </div>
                             <div class="col-lg-12">
                                 <div>
                                     <h5>You Rating:</h5>
-                                    <div class="rating">
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star"></i>
-                                        <i class="icon_star-half_alt"></i>
+                                    <div class="rate">
+                                        <input type="hidden" name="stars" id="stars">
+                                        <input type="radio" id="star5" name="rate" value="5"/>
+                                        <label for="star5" title="text">5 stars</label>
+                                        <input type="radio" id="star4" name="rate" value="4"/>
+                                        <label for="star4" title="text">4 stars</label>
+                                        <input type="radio" id="star3" name="rate" value="3"/>
+                                        <label for="star3" title="text">3 stars</label>
+                                        <input type="radio" id="star2" name="rate" value="2"/>
+                                        <label for="star2" title="text">2 stars</label>
+                                        <input type="radio" id="star1" name="rate" value="1"/>
+                                        <label for="star1" title="text">1 star</label>
                                     </div>
                                 </div>
-                                <textarea placeholder="Your Review"></textarea>
+                                <textarea placeholder="Your Review" name="text"></textarea>
                                 <button type="submit">Submit Now</button>
                             </div>
                         </div>
@@ -184,6 +189,12 @@
 <script src="{% static 'site/js/jquery.slicknav.js' %}"></script>
 <script src="{% static 'site/js/owl.carousel.min.js' %}"></script>
 <script src="{% static 'site/js/main.js' %}"></script>
+<script>
+    $('input:radio').change(
+        function () {
+            $("#stars").val(this.value)
+        });
+</script>
 </body>
 
 </html>

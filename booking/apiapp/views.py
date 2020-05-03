@@ -4,6 +4,7 @@ import json
 from django.http import JsonResponse
 # Create your views here.
 from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from mainapp.models import Room, Hotel, Bookings, RoomGallery, Comment
 
 from constructor_app.models import WebSite
@@ -66,6 +67,18 @@ def get_rooms(request):
             return JsonResponse(response, safe=False)
 
     return JsonResponse({"error": "You should provide hotel id"})
+
+@csrf_exempt
+@token_pass
+def add_rating(request):
+    if request.method == "POST":
+        Comment.objects.create(hotel=get_object_or_404(Hotel, id=request.POST['hotel']),
+                               author=request.POST['author'],
+                               comment=request.POST['text'],
+                               rate=request.POST['rate'])
+        return JsonResponse({'code': 200})
+    else:
+        return JsonResponse({'code': 500})
 
 
 @token_pass
@@ -209,7 +222,8 @@ def filter_rooms(request):
         data = json.loads(request.GET['data'].replace("\'", "\""))
         if hotel_id:
             if isinstance(hotel_id, str):
-                rooms = Room.objects.filter(hotel__id=hotel_id, is_active=True, hotel__is_active=True, adult__gte=data['adults'])
+                rooms = Room.objects.filter(hotel__id=hotel_id, is_active=True, hotel__is_active=True,
+                                            adult__gte=data['adults'])
                 res = []
 
                 start = datetime.datetime.strptime(data['check_in'], "%Y-%m-%d")
