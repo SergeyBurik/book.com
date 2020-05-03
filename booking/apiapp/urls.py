@@ -14,4 +14,5 @@ urlpatterns = [
     path('createBooking/', apiapp.create_booking, name='create_booking'),
     path('getImages/', apiapp.get_hotel_images, name='get_hotel_images'),
     path('getRatings/', apiapp.get_ratings, name='get_ratings'),
+    path('filterRooms/', apiapp.filter_rooms, name='filter_rooms'),
 ]

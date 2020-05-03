@@ -55,6 +55,7 @@ class WebSite(models.Model):
     url = models.CharField(max_length=100, null=True, unique=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     date_of_expiry = models.DateField(default=datetime.datetime.today() + relativedelta(years=+1))
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.hotel.name
