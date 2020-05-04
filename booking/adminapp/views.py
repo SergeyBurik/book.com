@@ -5,25 +5,66 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from mainapp.models import Bookings, Hotel, Room, RoomGallery
+from mainapp.models import Hotel, Room, RoomGallery, HotelComfort
 from geopy.geocoders import Nominatim
-from adminapp.forms import HotelForm, RoomForm
+from adminapp.forms import HotelForm, RoomForm, HotelComfortsForm
 from adminapp import utils
+from mainapp.utils import check_booking, insert_booking, send_confirmation_mail
+from ordersapp.models import Order
 
 
 @login_required(login_url='/auth/login/')
 def main(request):
     hotels = Hotel.objects.filter(user=request.user, is_active=True)
-    bookings = []
-    rooms = []
-
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
+    now = datetime.datetime.now()
 
+    # get hotel data
+    hotel_data = []
     for hotel in hotels:
-        bookings += Bookings.objects.filter(hotel=hotel)
-        rooms += Room.objects.filter(hotel=hotel)
+        hotel_data.append({"name": hotel.name,
+                           "rooms": [{"id": room.id,
+                                      "name": room.name,
+                                      "price": room.price} for room in
+                                     Room.objects.filter(hotel=hotel, is_active=True)]})
 
-    context = {'bookings': bookings, 'hotels': hotels, 'days': days, 'rooms': rooms}
+    orders = [order for hotel in Hotel.objects.filter(user=request.user, is_active=True) for order in
+              Order.objects.filter(booking__hotel=hotel)]
+
+    rooms = [room for hotel in Hotel.objects.filter(user=request.user, is_active=True) for room in
+             Room.objects.filter(hotel=hotel, is_active=True)]
+
+    context = {'bookings': orders, 'hotels': hotels, 'days': days, 'rooms': rooms,
+               'now': f'{now.hour}:{now.minute}', 'hotel_data': hotel_data}
+
+    if request.method == "POST":
+        check_in = request.POST.get('start', None)
+        check_out = request.POST.get('end', None)
+        room_id = request.POST.get('room', None)
+        hotel_id = request.POST.get('hotel', None)
+        client_name = request.POST.get('name', None)
+        email = request.POST.get('email', None)
+        phone = request.POST.get('phone', None)
+        time = request.POST.get('time', None)
+        comments = request.POST.get('comments', None)
+        country = request.POST.get('country', None)
+        address = request.POST.get('address', None)
+
+        room = get_object_or_404(Room,  id=room_id, is_active=True)
+        hotel = get_object_or_404(Hotel, id=hotel_id, is_active=True)
+
+        if room.hotel.id == hotel.id:
+            if check_booking(check_in, check_out, room_id, hotel_id):  # if there are not any reservations
+                insert_booking(hotel, check_in, check_out, room,
+                               f'{client_name}', email, phone, time,
+                               comments, country, address)
+                send_confirmation_mail(hotel_id, room_id, check_in, check_out, f'{client_name}')
+
+                return HttpResponseRedirect(reverse('management:main'))
+            else:
+                messages.error(request, 'Unable to create booking')
+        else:
+            messages.error(request, 'Unable to create booking')
 
     return render(request, 'adminapp/main.html', context)
 
@@ -70,9 +111,9 @@ def create_room(request):
 
         # try:
         # get hotel
-        hotel = Hotel.objects.get(name=hotel)
+        hotel = Hotel.objects.get(name=hotel, is_active=True)
         # try to find a room with the same name
-        rooms = Room.objects.filter(hotel=hotel, name=name)
+        rooms = Room.objects.filter(hotel=hotel, name=name, is_active=True)
 
         if rooms:
             try:
@@ -121,21 +162,22 @@ def create_room(request):
 @login_required(login_url='/auth/login/')
 def edit_room(request, hotel_id, room_id):
     # if there is such room
-    hotel = get_object_or_404(Hotel, pk=hotel_id, user=request.user)
+    hotel = get_object_or_404(Hotel, pk=hotel_id, user=request.user, is_active=True)
     room = get_object_or_404(Room, pk=room_id, hotel=hotel, is_active=True)
 
     form = RoomForm(request.POST or None, request.FILES or None, instance=room)
 
     if request.method == 'POST':
         # saving images
+
         images = request.POST.get('image_count', 0)
-        for image in range(1, int(images) + 1):
-            image_file = request.FILES.get(f'image-{image}')
-            if image_file:
-                RoomGallery.objects.create(room=room, image=image_file)
+        if images:
+            for image in range(1, int(images) + 1):
+                image_file = request.FILES.get(f'image-{image}')
+                if image_file:
+                    RoomGallery.objects.create(room=room, image=image_file)
         if form.is_valid():
             obj = form.save(commit=False)
-
             obj.save()
 
             messages.success(request, "You successfully updated the room")
@@ -145,7 +187,7 @@ def edit_room(request, hotel_id, room_id):
             return HttpResponseRedirect(reverse('management:rooms'))
 
         else:
-            messages.warning(request, "The form was not updated successfully.")
+            messages.warning(request, "The room was not updated successfully.")
 
     images = RoomGallery.objects.filter(room=room, room__hotel=hotel)
     context = {'form': form, 'hotel_id': hotel_id, 'room_id': room_id, 'room': room, 'images': images}
@@ -157,7 +199,8 @@ def ajax_delete_image(request):
         room = request.GET.get('room', None)
         hotel = request.GET.get('hotel', None)
         image = request.GET.get('image', None)
-        RoomGallery.objects.get(room__pk=room, room__hotel__pk=hotel, image__contains=image.replace('/media/', '')).delete()
+        RoomGallery.objects.get(room__pk=room, room__hotel__pk=hotel,
+                                image__contains=image.replace('/media/', '')).delete()
         return JsonResponse({'code': 200})
     except Exception as err:
         print(err)
@@ -171,25 +214,31 @@ def edit_hotel(request, pk):
     hotel = get_object_or_404(Hotel, pk=pk, user=request.user, is_active=True)
 
     form = HotelForm(request.POST or None, request.FILES or None, instance=hotel)
+    form_comforts = HotelComfortsForm(request.POST or None, request.FILES or None, instance=hotel)
 
     if request.method == 'POST':
-        if form.is_valid():
-            obj = form.save(commit=False)
 
+        if form.is_valid() and form_comforts.is_valid():
+            obj = form.save(commit=False)
             obj.save()
+            obj2 = form_comforts.save(commit=False)
+            obj2.save()
 
             messages.success(request, "You successfully updated the post")
-
-            context = {'form': form}
-
             return HttpResponseRedirect(reverse('management:hotels'))
 
         else:
             messages.warning(request, "The form was not updated successfully.")
 
-    context = {'form': form, 'pk': pk}
+    context = {'form': form, 'pk': pk, 'form_comforts': form_comforts}
 
     return render(request, 'adminapp/edit_hotel.html', context)
+
+
+def ajax_get_rooms(request):
+    hotel = get_object_or_404(Hotel, id=request.GET['hotel'])
+    return JsonResponse(
+        {'rooms': [{'pk': room.pk, 'name': room.name} for room in Room.objects.filter(hotel=hotel, is_active=True)]})
 
 
 # page of hotel details
@@ -208,10 +257,28 @@ def rooms(request):
     rooms_ = []
 
     for hotel in hotels:
-        rooms_ += Room.objects.filter(hotel=hotel)
+        rooms_ += Room.objects.filter(hotel=hotel, is_active=True)
 
     content = {'rooms': rooms_}
     return render(request, 'adminapp/rooms.html', content)
+
+
+@login_required(login_url='/auth/login')
+def delete_room(request, id):
+    room = get_object_or_404(Room, id=id, hotel__user=request.user, is_active=True)
+    room.is_active = False
+    room.save()
+
+    return HttpResponseRedirect(reverse('management:rooms'))
+
+
+@login_required(login_url='/auth/login')
+def delete_hotel(request, id):
+    hotel = get_object_or_404(Hotel, id=id, user=request.user, is_active=True)
+    hotel.is_active = False
+    hotel.save()
+
+    return HttpResponseRedirect(reverse('management:hotels'))
 
 
 # function which creates hotel
@@ -226,7 +293,6 @@ def create_hotel(request):
         phone = request.POST['number']
 
         location = utils.get_address(location)
-
         Hotel.objects.create(user=request.user,
                              name=hotel_name,
                              description=description,
@@ -235,6 +301,28 @@ def create_hotel(request):
                              location=location,
                              phone_number=phone,
                              is_active=True)
+
+        new_hotel = Hotel.objects.get(name=hotel_name)
+        swimming_pool = request.POST['swimming_pool']
+        spa = request.POST['spa']
+        wifi = request.POST['wifi']
+        shuttle = request.POST['shuttle']
+        fitness = request.POST['fitness']
+        parking = request.POST['parking']
+        bar = request.POST['bar']
+        breakfast = request.POST['breakfast']
+        beach = request.POST['beach']
+
+        HotelComfort.objects.create(hotel=new_hotel,
+                                    swimming_pool=swimming_pool,
+                                    spa=spa,
+                                    wifi=wifi,
+                                    shuttle=shuttle,
+                                    fitness=fitness,
+                                    parking=parking,
+                                    bar=bar,
+                                    breakfast=breakfast,
+                                    beach=beach)
 
         return HttpResponseRedirect(reverse('management:main'))
 

@@ -58,6 +58,32 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
     display: block;
 }
 
+@media (min-width: 600px) {
+    ::-webkit-scrollbar {
+        -webkit-appearance: none;
+    }
+
+    ::-webkit-scrollbar:vertical {
+        width: 12px;
+    }
+
+    ::-webkit-scrollbar:horizontal {
+        height: 12px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, .5);
+        border-radius: 10px;
+        border: 2px solid #ffffff;
+    }
+
+    ::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background-color: #ffffff;
+    }
+}
+
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -639,6 +665,13 @@ pre code {
     width: 100%;
     padding-right: 0.75rem;
     padding-left: 0.75rem;
+}
+
+@media (max-width: 992px) {
+    .sb-sidenav {
+        background: aliceblue;
+    }
+    
 }
 
 .col {
@@ -4746,18 +4779,30 @@ input[type=button].btn-block {
     padding: 1.25rem;
 }
 
-.card-body .hotel:not(:first-child){
+.card-body .list-item:not(:first-child) {
     margin-top: 187px;
 }
 
 @media screen and (max-width: 900px) {
-    .hotel img {
-        width: 100%!important;
+    .list-item img {
+        width: 100% !important;
         margin-bottom: 10px;
     }
+
+
 }
 
-.hotel img {
+.item-description img {
+    width: 100% !important;
+    margin-bottom: 10px;
+}
+
+
+.btn .hover-white:hover {
+    color: white;
+}
+
+.list-item img {
     float: left;
     width: 250px;
     margin-right: 10px;
@@ -10762,7 +10807,7 @@ body {
 }
 
 .sb-sidenav a {
-    color:#3c4043;
+    color: #3c4043;
 }
 
 .sb-sidenav .sb-sidenav-menu {

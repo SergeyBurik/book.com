@@ -1,0 +1,26 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% load query_booking %}
+
+
+{% block content %}
+    <main>
+        <div class="container-fluid">
+            <div class="card mb-4" style="margin-top: 30px">
+                <div class="card-header"><i class="fas fa-table mr-1"></i>Templates</div>
+                <div class="card-body item-description">
+                    <p class="h3">
+                        You have successfully created web site for your hotel: {{ order.hotel.name }}.
+                    </p>
+                    <p class="h4">
+                        <strong>Pay: {{ order.template.price }}$</strong>
+                    </p>
+                    <p class="h5">
+                        Download project <a href="http://{{ path }}"> here</a>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,14 +1,11 @@
 import datetime
-
-from django.conf import settings
 from django.contrib import messages
-from django.core.mail import send_mail
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.template.loader import render_to_string
+
 from django.urls import reverse
-from mainapp.models import Hotel, Room, Bookings, RoomGallery, Comment
-from mainapp.utils import check_booking, insert_booking, get_coordinates
+from mainapp.models import Hotel, Room, Bookings, RoomGallery, Comment, HotelComfort
+from mainapp.utils import check_booking, insert_booking, get_coordinates, send_confirmation_mail
 
 
 def main_page(request):
@@ -18,12 +15,20 @@ def main_page(request):
 
 
 def bookings_main(request, hotel_id):
-    hotel = get_object_or_404(Hotel, pk=hotel_id)
+    hotel = get_object_or_404(Hotel, pk=hotel_id, is_active=True)
+    comforts = HotelComfort.objects.get(hotel=hotel_id)
     rooms = Room.objects.filter(hotel=hotel, is_active=True)
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
     images = RoomGallery.objects.filter(room__hotel=hotel, is_avatar=True)
     coordinates = get_coordinates(hotel.location)
-    comments = Comment.objects.order_by('-pub_date')[:5]
+    comments = Comment.objects.filter(hotel__id=hotel_id).order_by('-pub_date')[:5]
+
+    try:
+        rates = Comment.objects.filter(hotel__id=hotel_id)
+        rating = [rate.rate for rate in rates]
+        rating = sum(rating) / len(rating)
+    except ZeroDivisionError:
+        rating = 0
 
     content = {
         'hotel': hotel,
@@ -31,7 +36,9 @@ def bookings_main(request, hotel_id):
         'days': days,
         'coordinates': coordinates,
         'images': images,
-        'comments': comments
+        'comments': comments,
+        'rating': rating,
+        'comforts': comforts
     }
 
     return render(request, 'mainapp/booking_main.html', content)
@@ -39,7 +46,7 @@ def bookings_main(request, hotel_id):
 
 def book_room(request, hotel_id, room_id):
     user = request.user
-    hotel = get_object_or_404(Hotel, pk=hotel_id)
+    hotel = get_object_or_404(Hotel, pk=hotel_id, is_active=True)
     room = get_object_or_404(Room, hotel=hotel, pk=room_id, is_active=True)
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
     total = None
@@ -57,9 +64,9 @@ def book_room(request, hotel_id, room_id):
         print(check_in, check_out, client_name, client_surname, email, phone, time, comments, country, address)
 
         if check_booking(check_in, check_out, room_id, hotel_id):  # if there are not any reservations
-            insert_booking(hotel, check_in, check_out, room, f'{client_name} {client_surname}', email, phone, time,
+            insert_booking(hotel, check_in, check_out, room, '{} {}'.format(client_name, client_surname), email, phone, time,
                            comments, country, address)
-            # send_confirmation_mail(hotel_id, room_id, check_in, check_out, f'{client_name}:{client_surname}')
+            send_confirmation_mail(hotel_id, room_id, check_in, check_out, '{}:{}'.format(client_name, client_surname))
             # ":" is just separator
             return HttpResponseRedirect(reverse('order:pay',
                                                 kwargs={
@@ -89,43 +96,23 @@ def book_room(request, hotel_id, room_id):
 
 
 def total_sum(hotel_id, room_id, check_in, check_out):
-    booking = get_object_or_404(Bookings, hotel__pk=hotel_id, room__pk=room_id, date=check_in)
+    booking = get_object_or_404(Bookings, hotel__pk=hotel_id,
+                                hotel__is_active=True, room__pk=room_id,
+                                date=check_in)
 
     start = datetime.datetime.strptime(check_in, "%Y-%m-%d")
     end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
-    date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
+    date_list = [start + datetime.timedelta(days=x)
+                 for x in range(0, (end - start).days + 1)]
     total = sum([booking.room.price for x in range(len(date_list))])
     return total
 
 
-def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
-    print('send_confirmation_mail')
-    booking = get_object_or_404(Bookings, hotel__pk=hotel_id, room__pk=room_id, date=check_in)
-    start = datetime.datetime.strptime(check_in, "%Y-%m-%d")
-    end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
-    date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
-
-    total = sum([booking.room.price for x in range(len(date_list))])
-
-    data = {'booking': booking, 'nights': len(date_list), 'first_name': booking.client_name.split(':')[0],
-            'check_in': check_in, 'check_out': check_out, 'total': total, 'domain': settings.DOMAIN_NAME,
-            'coordinates': str(get_coordinates(booking.hotel.location))}
-    print(data)
-
-    html_m = render_to_string('mainapp/confirmation_letter.html', data)
-
-    return send_mail('Booking Confirmation', '', settings.EMAIL_HOST_USER,
-                     [booking.client_email], html_message=html_m, fail_silently=False)
-
-
 def add_comment(request, hotel_id):
-    try:
-        hotel = Hotel.objects.get(id=hotel_id)
+    hotel = get_object_or_404(Hotel, id=hotel_id)
+    hotel.comment_set.create(author=request.POST['name'],
+                             rate=request.POST['stars'],
+                             comment=request.POST['text'])
 
-    except Exception as err:
-        print(err)
-        Http404('Отель не найден!')
-
-    hotel.comment_set.create(author=request.POST['name'], comment=request.POST['text'])
-
-    return HttpResponseRedirect(reverse('main:bookings_main', args=(hotel.id,)))
+    return HttpResponseRedirect(reverse('main:bookings_main',
+                                        args=(hotel.id,)))

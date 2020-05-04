@@ -18,7 +18,7 @@ class PathAndRename(object):
 
     def __call__(self, instance, filename):
         ext = filename.split('.')[-1]
-        filename = f'{uuid4().hex}.{ext}'
+        filename = '{}.{}'.format(uuid4().hex, ext)
 
         return os.path.join(self.path, filename)
 
@@ -57,6 +57,38 @@ class Hotel(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class HotelComfort(models.Model):
+    class Meta:
+        verbose_name_plural = 'Комфорт'
+
+    YES_NO = [
+        ('Y', 'Yes'),
+        ('N', 'No'),
+    ]
+
+    BEACH_LINE = [
+        ('1L', 'First line'),
+        ('2L', 'Second line'),
+        ('3L', 'Third line'),
+        ('EL', 'Beach'),
+    ]
+
+    WIFI = [
+        ('FR', 'Free Wi-Fi'),
+        ('NF', 'Wi-Fi'),
+    ]
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default='')
+    swimming_pool = models.CharField(verbose_name='Swimming pool', max_length=2, choices=YES_NO, default='N')
+    spa = models.CharField(verbose_name='Spa and Wellness center', max_length=2, choices=YES_NO, default='N')
+    wifi = models.CharField(max_length=2, choices=WIFI, default='NF')
+    shuttle = models.CharField(verbose_name='Airport Shuttle', max_length=2, choices=YES_NO, default='N')
+    fitness = models.CharField(verbose_name='Fitness center', max_length=2, choices=YES_NO, default='N')
+    parking = models.CharField(verbose_name='Free Parking', max_length=2, choices=YES_NO, default='N')
+    bar = models.CharField(verbose_name='Bar', max_length=2, choices=YES_NO, default='N')
+    breakfast = models.CharField(verbose_name='Very good breakfast', max_length=2, choices=YES_NO, default='N')
+    beach = models.CharField(max_length=8, choices=BEACH_LINE, default=False)
 
 
 class RoomAgent(models.Model):
@@ -111,7 +143,7 @@ class Room(models.Model):
         return "{} ({})".format(self.name, self.hotel.name)
 
     def __unicode__(self):
-        return f'{self.name}'
+        return self.name
 
 
 class RoomGallery(models.Model):
@@ -127,7 +159,8 @@ class RoomGallery(models.Model):
     is_avatar = models.BooleanField(verbose_name='Главное изображение номера', default=False)
 
     def __str__(self):
-        return f'{self.room.name}'
+        return self.room.name
+
 
 # def make_avatar(args*):
 
@@ -146,7 +179,7 @@ class Bookings(models.Model):
     address = models.CharField(max_length=100)  # client's address of living
 
     def __str__(self):
-        return f'Room Booking {self.room.name} - {self.room.hotel.name}'
+        return 'Room Booking {} - {}'.format(self.room.name, self.room.hotel.name)
 
 
 class Comment(models.Model):
@@ -158,6 +191,7 @@ class Comment(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     author = models.CharField(verbose_name='Author', max_length=32)
     comment = models.CharField(verbose_name='comment', max_length=200)
+    rate = models.PositiveIntegerField()
     pub_date = models.DateField(verbose_name='создан', default=datetime.date.today)
 
     def __str__(self):

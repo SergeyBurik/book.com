@@ -1750,6 +1750,65 @@ header .navbar .cta-btn a:hover {
     color: gray !important;
 }
 
+#form-toggle {
+    display: none;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.rate {
+    /*float: left;*/
+    /*height: 46px;*/
+    /*padding: 0 10px;*/
+    display: inline-block;
+}
+
+.rate:not(:checked) > input {
+    /*position:absolute;*/
+    /*top:-9999px;*/
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    z-index: -9999;
+}
+
+.rate:not(:checked) > label {
+    float: right;
+    width: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 30px;
+    color: #ccc;
+}
+
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+
+.rate > input:checked ~ label {
+    color: #ffc700;
+}
+
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #deb217;
+}
+
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
+}
+
+/* Modified from: https://github.com/mukulkant/Star-rating-using-pure-css */
 
 /* column pic */
 .column {
@@ -1770,6 +1829,7 @@ header .navbar .cta-btn a:hover {
     /*transform: scale(1.1);*/
     transition: 0.5s;
 }
+
 
 .images {
     text-align: center;
@@ -1827,7 +1887,7 @@ header .navbar .cta-btn a:hover {
 
 .bott {
     font-size: 1.1em;
-    width:180px;
+    width: 180px;
     font: bold 14px arial;
     text-transform: uppercase;
     padding: 10px 15px;
@@ -1841,47 +1901,88 @@ header .navbar .cta-btn a:hover {
     border: none;
     border-radius: 3px;
     text-shadow: 0px -1px 0px #000;
-    box-shadow: 0px 1px 0px #666,0px 5px 0px #444,0px 6px 6px rgba(0, 0, 0, .6);
+    box-shadow: 0px 1px 0px #666, 0px 5px 0px #444, 0px 6px 6px rgba(0, 0, 0, .6);
     -webkit-transition: ease .15s all;
     -moz-transition: ease .15s all;
     -o-transition: ease .15s all;
     transition: ease .15s all;
     -webkit-animation: none;
-     -moz-animation: none;
-     -o-animation: none;
-      animation: none;
+    -moz-animation: none;
+    -o-animation: none;
+    animation: none;
 }
-.bott:hover, a.bott:focus{
+
+.bott:hover, a.bott:focus {
     -webkit-animation: linear 1.2s light infinite;
     -moz-animation: linear 1.2s light infinite;
     -o-animation: linear 1.2s light infinite;
     animation: linear 1.2s light infinite;
 }
 
-@-webkit-keyframes light{
-    0%   { color: #ddd; text-shadow: 0px -1px 0px #000; }
-    50%   { color: #fff; text-shadow: 0px -1px 0px #444, 0px 0px 5px #ffd, 0px 0px 8px #fff; }
-    100% { color: #ddd; text-shadow: 0px -1px 0px #000; }
+@-webkit-keyframes light {
+    0% {
+        color: #ddd;
+        text-shadow: 0px -1px 0px #000;
     }
-    @-moz-keyframes light{
-    0%   { color: #ddd; text-shadow: 0px -1px 0px #000; }
-    50%   { color: #fff; text-shadow: 0px -1px 0px #444, 0px 0px 5px #ffd, 0px 0px 8px #fff; }
-    100% { color: #ddd; text-shadow: 0px -1px 0px #000; }
+    50% {
+        color: #fff;
+        text-shadow: 0px -1px 0px #444, 0px 0px 5px #ffd, 0px 0px 8px #fff;
+    }
+    100% {
+        color: #ddd;
+        text-shadow: 0px -1px 0px #000;
+    }
 }
-@-o-keyframes light{
-    0%   { color: #ddd; text-shadow: 0px -1px 0px #000; }
-    50%   { color: #fff; text-shadow: 0px -1px 0px #444, 0px 0px 5px #ffd, 0px 0px 8px #fff; }
-    100% { color: #ddd; text-shadow: 0px -1px 0px #000; }
+
+@-moz-keyframes light {
+    0% {
+        color: #ddd;
+        text-shadow: 0px -1px 0px #000;
+    }
+    50% {
+        color: #fff;
+        text-shadow: 0px -1px 0px #444, 0px 0px 5px #ffd, 0px 0px 8px #fff;
+    }
+    100% {
+        color: #ddd;
+        text-shadow: 0px -1px 0px #000;
+    }
 }
-@keyframes light{
-    0%   { color: #ddd; text-shadow: 0px -1px 0px #000; }
-    50%   { color: #fff; text-shadow: 0px -1px 0px #444, 0px 0px 5px #ffd, 0px 0px 8px #fff; }
-    100% { color: #ddd; text-shadow: 0px -1px 0px #000; }
+
+@-o-keyframes light {
+    0% {
+        color: #ddd;
+        text-shadow: 0px -1px 0px #000;
+    }
+    50% {
+        color: #fff;
+        text-shadow: 0px -1px 0px #444, 0px 0px 5px #ffd, 0px 0px 8px #fff;
+    }
+    100% {
+        color: #ddd;
+        text-shadow: 0px -1px 0px #000;
+    }
 }
-.bott:active{
+
+@keyframes light {
+    0% {
+        color: #ddd;
+        text-shadow: 0px -1px 0px #000;
+    }
+    50% {
+        color: #fff;
+        text-shadow: 0px -1px 0px #444, 0px 0px 5px #ffd, 0px 0px 8px #fff;
+    }
+    100% {
+        color: #ddd;
+        text-shadow: 0px -1px 0px #000;
+    }
+}
+
+.bott:active {
     color: #fff;
-    text-shadow: 0px -1px 0px #444,0px 0px 5px #ffd,0px 0px 8px #fff;
-    box-shadow: 0px 1px 0px #666,0px 2px 0px #444,0px 2px 2px rgba(0, 0, 0, .9);
+    text-shadow: 0px -1px 0px #444, 0px 0px 5px #ffd, 0px 0px 8px #fff;
+    box-shadow: 0px 1px 0px #666, 0px 2px 0px #444, 0px 2px 2px rgba(0, 0, 0, .9);
     -webkit-transform: translateY(3px);
     -moz-transform: translateY(3px);
     -o-transform: translateY(3px);

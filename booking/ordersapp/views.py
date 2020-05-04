@@ -1,9 +1,6 @@
 from mainapp.models import Bookings
 import datetime
-# import stripe
 
-from django.conf import settings
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 
@@ -11,11 +8,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, DeleteView
 
-import stripe
-
 from ordersapp.models import Order
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def checkout(request, hotel_id, room_id, check_in, check_out):
@@ -27,46 +20,22 @@ def checkout(request, hotel_id, room_id, check_in, check_out):
     print(total)
     total = int(total) * 100
 
-    if request.method == 'POST':
-        token = request.POST.get('stripeToken', False)
-        if token:
-            try:
-                stripe.Charge.create(
-                    amount=total,
-                    currency='rub',
-                    description='Booking payment',
-                    source=token,
-                )
+    # trying to find order
 
-                # card = booking.room.hotel.user.credit_card
+    order = Order.objects.get(booking__hotel=booking.hotel, booking__room=booking.room, days=len(date_list),
+                              client_email=booking.client_email)
 
-                destination = stripe.Token.create(
-                    card={
-                        "number": "4242424242424242",
-                        "exp_month": 4,
-                        "exp_year": 2021,
-                        "cvc": "314",
-                    },
-                )
-
-                print(destination)
-                print(destination['id'])
-
-                stripe.Payout.create(amount=int(total * 0.95),
-                                     currency="rub",
-                                     # destination=' '.join([card[i:i + 4] for i in range(0, len(card), 4)]),
-                                     destination=destination['card']['id'],
-                                     source_type="card")
-
-                return HttpResponseRedirect(reverse('main:book_room',
-                                                    kwargs={
-                                                        'hotel_id': hotel_id,
-                                                        'room_id': room_id
-                                                    })
-                                            )
-            except Exception as e:
-                print(e)
-                messages.error(request, "Your card has been declined.")
+    if order.status == Order.PAID:
+        # if it is already paid
+        return HttpResponseRedirect(reverse('main:book_room',
+                                            kwargs={
+                                                'hotel_id': hotel_id,
+                                                'room_id': room_id
+                                            })
+                                    )
+    elif order.status == Order.FORMING:
+        if request.method == 'POST':
+            print('POST')
 
     return render(request, 'ordersapp/checkout.html', {'total': total / 100})
 
