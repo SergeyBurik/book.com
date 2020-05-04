@@ -1,0 +1,6 @@
+{
+    "hotel_id": 3,
+    "api_token": 25455828,
+    "host_domain_name": "http://localhost:8000",
+    "website_domain": "127.0.0.1:8001"
+}

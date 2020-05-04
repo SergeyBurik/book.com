@@ -48,7 +48,7 @@ def pack_project(request, id):
 
     # add conf.json
     data = {'hotel_id': order.hotel.id, 'api_token': site.token, 'host_domain_name': settings.DOMAIN_NAME,
-            'website_domain': site.url}
+            'website_domain': site.url if site.url else '127.0.0.1:8001'}
 
     with open(f'{prj_path}/data.json', 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
