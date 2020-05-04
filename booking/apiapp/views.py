@@ -14,7 +14,7 @@ def token_pass(func):
     def _decorator(request, *args, **kwargs):
         token = request.GET.get('token', '')
         site = get_object_or_404(WebSite, token=token)
-        if not token or not (site and site.is_active):
+        if not token or (not (site and site.is_active) and site.date_of_expiry < datetime.datetime.today()):
             return JsonResponse({"error": "Invalid API Token"}, safe=False)
         else:
             return func(request)

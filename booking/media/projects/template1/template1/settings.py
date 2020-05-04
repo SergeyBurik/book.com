@@ -130,7 +130,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 try:
-    CONF_FILE = json.load(open(f'{BASE_DIR}/conf.json/', 'r'))
+    CONF_FILE = json.load(open(f'{BASE_DIR}/data.json', 'r'))
 
     DOMAIN_NAME = CONF_FILE['website_domain']
     API_TOKEN = str(CONF_FILE['api_token'])
