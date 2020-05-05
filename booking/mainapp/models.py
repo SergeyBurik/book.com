@@ -59,6 +59,17 @@ class Hotel(models.Model):
         return self.name
 
 
+class Facility(models.Model):
+    icon = models.ImageField(default='', upload_to='hotels/icons/')
+    name = models.CharField(verbose_name='Название удобства', max_length=64,
+                            unique=True)
+
+
+class HotelFacility(models.Model):
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default='')
+    facility = models.ForeignKey(Facility, on_delete=models.CASCADE, default='')
+
+
 class HotelComfort(models.Model):
     class Meta:
         verbose_name_plural = 'Комфорт'
