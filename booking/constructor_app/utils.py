@@ -3,7 +3,7 @@
 
 import os
 import zipfile
-import os, shutil
+import shutil
 
 
 def get_all_file_paths(directory):

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from mainapp.models import Hotel, Room, RoomGallery, RoomAgent, HotelComfort
+from mainapp.models import Hotel, Room, RoomGallery, RoomAgent, Facility,\
+    HotelFacility
 
 
 @admin.register(Hotel)
@@ -7,13 +8,14 @@ class HotelAdmin(admin.ModelAdmin):
     search_fields = 'name',
 
 
-class HotelComfortInline(admin.TabularInline):
-    model = HotelComfort
+@admin.register(Facility)
+class FacilityAdmin(admin.ModelAdmin):
+    list_display = 'name',
 
 
-@admin.register(HotelComfort)
-class HotelComfortAdmin(admin.ModelAdmin):
-    list_display = 'hotel',
+@admin.register(HotelFacility)
+class HotelFacilityAdmin(admin.ModelAdmin):
+    list_display = 'facility',
 
 
 @admin.register(RoomAgent)

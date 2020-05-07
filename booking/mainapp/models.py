@@ -64,11 +64,33 @@ class Hotel(models.Model):
         items = self.hotelfacility.select_related()
         return len(items)
 
+    def get_facility(self):
+        arr = []
+        items = self.hotelfacility.select_related()
+        for i in range(len(items)):
+            arr.append(items[i].get_name())
+        return arr
+
+    def get_facility_icon(self):
+        arr = []
+        items = self.hotelfacility.select_related()
+        for i in range(len(items)):
+            arr.append(items[i].get_icon())
+        return arr
+
 
 class Facility(models.Model):
+    class Meta:
+        verbose_name = 'Facility'
+        verbose_name_plural = 'Facilities'
+
     icon = models.ImageField(default='', upload_to='hotels/icons/')
     name = models.CharField(verbose_name='Facility', max_length=64,
                             unique=True)
+
+    @staticmethod
+    def get_items():
+        return Facility.objects.all().order_by('name')
 
 
 class HotelFacility(models.Model):
@@ -80,37 +102,40 @@ class HotelFacility(models.Model):
     def get_icon(self):
         return self.facility.icon
 
+    def get_name(self):
+        return self.facility.name
 
-class HotelComfort(models.Model):
-    class Meta:
-        verbose_name_plural = 'Комфорт'
 
-    YES_NO = [
-        ('Y', 'Yes'),
-        ('N', 'No'),
-    ]
-
-    BEACH_LINE = [
-        ('1L', 'First line'),
-        ('2L', 'Second line'),
-        ('3L', 'Third line'),
-        ('EL', 'Beach'),
-    ]
-
-    WIFI = [
-        ('FR', 'Free Wi-Fi'),
-        ('NF', 'Wi-Fi'),
-    ]
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default='')
-    swimming_pool = models.CharField(verbose_name='Swimming pool', max_length=2, choices=YES_NO, default='N')
-    spa = models.CharField(verbose_name='Spa and Wellness center', max_length=2, choices=YES_NO, default='N')
-    wifi = models.CharField(max_length=2, choices=WIFI, default='NF')
-    shuttle = models.CharField(verbose_name='Airport Shuttle', max_length=2, choices=YES_NO, default='N')
-    fitness = models.CharField(verbose_name='Fitness center', max_length=2, choices=YES_NO, default='N')
-    parking = models.CharField(verbose_name='Free Parking', max_length=2, choices=YES_NO, default='N')
-    bar = models.CharField(verbose_name='Bar', max_length=2, choices=YES_NO, default='N')
-    breakfast = models.CharField(verbose_name='Very good breakfast', max_length=2, choices=YES_NO, default='N')
-    beach = models.CharField(max_length=8, choices=BEACH_LINE, default=False)
+# class HotelComfort(models.Model):
+#     class Meta:
+#         verbose_name_plural = 'Комфорт'
+#
+#     YES_NO = [
+#         ('Y', 'Yes'),
+#         ('N', 'No'),
+#     ]
+#
+#     BEACH_LINE = [
+#         ('1L', 'First line'),
+#         ('2L', 'Second line'),
+#         ('3L', 'Third line'),
+#         ('EL', 'Beach'),
+#     ]
+#
+#     WIFI = [
+#         ('FR', 'Free Wi-Fi'),
+#         ('NF', 'Wi-Fi'),
+#     ]
+#     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, default='')
+#     swimming_pool = models.CharField(verbose_name='Swimming pool', max_length=2, choices=YES_NO, default='N')
+#     spa = models.CharField(verbose_name='Spa and Wellness center', max_length=2, choices=YES_NO, default='N')
+#     wifi = models.CharField(max_length=2, choices=WIFI, default='NF')
+#     shuttle = models.CharField(verbose_name='Airport Shuttle', max_length=2, choices=YES_NO, default='N')
+#     fitness = models.CharField(verbose_name='Fitness center', max_length=2, choices=YES_NO, default='N')
+#     parking = models.CharField(verbose_name='Free Parking', max_length=2, choices=YES_NO, default='N')
+#     bar = models.CharField(verbose_name='Bar', max_length=2, choices=YES_NO, default='N')
+#     breakfast = models.CharField(verbose_name='Very good breakfast', max_length=2, choices=YES_NO, default='N')
+#     beach = models.CharField(max_length=8, choices=BEACH_LINE, default=False)
 
 
 class RoomAgent(models.Model):

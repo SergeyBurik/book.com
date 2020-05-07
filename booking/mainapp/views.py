@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
 from django.urls import reverse
-from mainapp.models import Hotel, Room, Bookings, RoomGallery, Comment, HotelComfort
+from mainapp.models import Hotel, Room, Bookings, RoomGallery, Comment
 from mainapp.utils import check_booking, insert_booking, get_coordinates, send_confirmation_mail
 
 
@@ -16,7 +16,6 @@ def main_page(request):
 
 def bookings_main(request, hotel_id):
     hotel = get_object_or_404(Hotel, pk=hotel_id, is_active=True)
-    comforts = HotelComfort.objects.get(hotel=hotel_id)
     rooms = Room.objects.filter(hotel=hotel, is_active=True)
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
     images = RoomGallery.objects.filter(room__hotel=hotel, is_avatar=True)
@@ -38,7 +37,6 @@ def bookings_main(request, hotel_id):
         'images': images,
         'comments': comments,
         'rating': rating,
-        'comforts': comforts
     }
 
     return render(request, 'mainapp/booking_main.html', content)

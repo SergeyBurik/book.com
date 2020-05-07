@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from mainapp.models import Hotel, Room, Facility
+from mainapp.models import Facility
 # from authapp.models import User
 
 import json
