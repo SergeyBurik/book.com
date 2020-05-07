@@ -223,15 +223,13 @@ def edit_hotel(request, pk):
         facility_icons.append(facilities[name].get_icon())
 
     form = HotelForm(request.POST or None, request.FILES or None, instance=hotel)
-    form_comforts = HotelFacilityForm(request.POST or None,
-                                      request.FILES or None,
-                                      instance=hotel)
+    form_facility = HotelFacilityForm(request.POST, instance=hotel)
 
     if request.method == 'POST':
-        if form.is_valid() and form_comforts.is_valid():
+        if form.is_valid() and form_facility.is_valid():
             obj = form.save(commit=False)
             obj.save()
-            obj2 = form_comforts.save(commit=False)
+            obj2 = form_facility.save(commit=False)
             obj2.save()
 
             messages.success(request, "You successfully updated the post")
@@ -243,7 +241,7 @@ def edit_hotel(request, pk):
     context = {
         'form': form,
         'pk': pk,
-        'form_comforts': form_comforts,
+        'form_comforts': form_facility,
         'facility_names': facility_names,
         'facility_icons': facility_icons,
     }
