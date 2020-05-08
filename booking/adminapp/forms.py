@@ -31,32 +31,83 @@ class NameModelChoiceField(forms.ModelChoiceField):
         return "%s"%obj.name
 
 
-class HotelFacilityForm(forms.Form):
+class HotelFacilityForm(forms.ModelForm):
     CHOICES = (
-        ('y', u"yes"),
-        ('n', u"no"),
+        ('y', "yes"),
+        ('n', "no"),
     )
-    hotel = NameModelChoiceField(label=u'Hotel', queryset=Hotel.objects.order_by('-name'))  # , initial=Hotel.objects.get(id=1)
-    bar = forms.ChoiceField(label=u'<fh', choices=CHOICES)
-    pool = forms.ChoiceField(label=u'<fh', choices=CHOICES)
-    wifi = forms.ChoiceField(label=u'<fh', choices=CHOICES)
-    parking = forms.ChoiceField(label=u'<fh', choices=CHOICES)
-    facil = NameModelChoiceField(label=u'Удобства',
-                                 queryset=Facility.objects.order_by('-name'), initial=Facility.objects.all())  # get(id=1)
+    hotel = NameModelChoiceField(label=u'Hotel', queryset=Hotel.objects.order_by('-name'), initial=Hotel.objects.get(id=1))  #
+    bar = forms.ChoiceField(label='Bar', choices=CHOICES)
+    pool = forms.ChoiceField(label='Swimming pool', choices=CHOICES)
+    wifi = forms.ChoiceField(label='Free Wi-Fi', choices=CHOICES)
+    parking = forms.ChoiceField(label='Free Parking', choices=CHOICES)
 
+    class Meta:
+        model = HotelFacility
+        # fields = '__all__'
+        exclude = ()
+            # ('hotel', 'bar', 'pool', 'credit_card', 'phone_number', 'country',
+            #       'company_name', 'is_sending')
 
-# class HotelFacilityForm(forms.ModelForm):
-#
-#     class Meta:
-#         model = HotelFacility
-#         fields = '__all__'
-#         # exclude = ()
-#
-#     def __init__(self, **kwargs):
-#         super().__init__(**kwargs)
-#         # self.fields['facility'].queryset = HotelFacility.get_items().select_related()
-#         for field_name, field in self.fields.items():
-#             field.widget.attrs['class'] = 'form-control'
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if field_name:
+                self.fields[field_name].label = ''
+                self.fields[field_name].widget.attrs.update(
+                    {'class': 'registration-form-input'})
+
+        self.fields['hotel'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'Enter hotel name'
+
+            }
+        )
+        self.fields['bar'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'Bar'
+            }
+        )
+
+        self.fields['pool'].widget.attrs.update(
+            {
+                'type': 'text',
+                'placeholder': 'Card Number'
+            }
+        )
+
+        self.fields['wifi'].widget.attrs.update(
+            {
+                'type': 'checkbox',
+                'placeholder': 'Wifi'
+            }
+        )
+
+        self.fields['parking'].widget.attrs.update(
+            {
+                'type': 'checkbox',
+                'placeholder': 'parking'
+            }
+        )
+
+        # self.fields['is_sending'].widget.attrs.update(
+        #     {
+        #         'type': 'checkbox',
+        #         'class': 'sending_checkbox'
+        #     }
+        # )
+
+    def save(self, commit=True):
+        # Сохранение пароля в хешированном формате.
+        hotel = super().save(commit=False)
+        if commit:
+            hotel.save()
+
+        print(hotel)
+
+        return hotel
 
 
 class RoomForm(forms.ModelForm):

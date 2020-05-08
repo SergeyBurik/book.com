@@ -223,9 +223,15 @@ def edit_hotel(request, pk):
         facility_icons.append(facilities[name].get_icon())
 
     form = HotelForm(request.POST or None, request.FILES or None, instance=hotel)
-    form_facility = HotelFacilityForm(request.POST, instance=hotel)
+    form_facility = HotelFacilityForm(request.POST or None, request.FILES or None, instance=hotel)  #
 
     if request.method == 'POST':
+        hotel = request.POST['hotel']
+        bar = request.POST['bar']
+        pool = request.POST['pool']
+        wifi = request.POST['wifi']
+        parking = request.POST['parking']
+
         if form.is_valid() and form_facility.is_valid():
             obj = form.save(commit=False)
             obj.save()
@@ -237,6 +243,12 @@ def edit_hotel(request, pk):
 
         else:
             messages.warning(request, "The form was not updated successfully.")
+
+        HotelFacility.objects.create(hotel=hotel,
+                                     bar=bar,
+                                     pool=pool,
+                                     wifi=wifi,
+                                     parking=parking)
 
     context = {
         'form': form,
