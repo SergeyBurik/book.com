@@ -36,7 +36,7 @@ def bookings_main(request, hotel_id):
         'coordinates': coordinates,
         'images': images,
         'comments': comments,
-        'rating': rating
+        'rating': rating,
     }
 
     return render(request, 'mainapp/booking_main.html', content)

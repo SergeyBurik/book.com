@@ -48,15 +48,76 @@ class Hotel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     name = models.CharField(verbose_name='Название отеля', max_length=64,
                             unique=True)
-    phone_number = models.CharField(verbose_name='Номер телефона', default='', max_length=20)
-    location = models.CharField(verbose_name='Адрес отеля', default='', max_length=200)
+    phone_number = models.CharField(verbose_name='Номер телефона', default='',
+                                    max_length=20)
+    location = models.CharField(verbose_name='Адрес отеля', default='',
+                                max_length=200)
     description = models.TextField(verbose_name='Описание отеля', blank=True)
     stars = models.CharField(max_length=2, choices=STARS_CHOICES, default=ONE)
-    banner = models.ImageField(default='', upload_to='hotels/banners/')  # hotel's image
+    banner = models.ImageField(default='', upload_to='hotels/banners/')
     is_active = models.BooleanField(verbose_name='Активен', default=True)
 
     def __str__(self):
         return self.name
+
+    def get_count_facility(self):
+        items = self.hotelfacility.select_related()
+        return len(items)
+
+    def get_facility(self):
+        arr = []
+        items = self.hotelfacility.select_related()
+        for i in range(len(items)):
+            arr.append(items[i].get_name())
+        return arr
+
+    def get_facility_icon(self):
+        arr = []
+        items = self.hotelfacility.select_related()
+        for i in range(len(items)):
+            arr.append(items[i].get_icon())
+        return arr
+
+
+class Facility(models.Model):
+    class Meta:
+        verbose_name = 'Facility'
+        verbose_name_plural = 'Facilities'
+
+    icon = models.ImageField(default='', upload_to='hotels/icons/')
+    name = models.CharField(verbose_name='Facility', max_length=64,
+                            unique=True)
+
+    @staticmethod
+    def get_items():
+        return Facility.objects.all().order_by('name')
+
+    def __str__(self):
+        return self.name
+
+
+class HotelFacility(models.Model):
+    class Meta:
+        verbose_name = ' Hotel Facility'
+        verbose_name_plural = 'Hotel Facilities'
+
+    hotel = models.ForeignKey(Hotel, related_name="facility",
+                              on_delete=models.CASCADE)
+    facility = models.ForeignKey(Facility, verbose_name='Facility name',
+                                 on_delete=models.CASCADE)
+
+    def get_icon(self):
+        return self.facility.icon
+
+    def get_name(self):
+        return self.facility.name
+
+    @staticmethod
+    def get_items():
+        return HotelFacility.objects.all().order_by('facility')
+
+    def __str__(self):
+        return self.facility.name
 
 
 class RoomAgent(models.Model):

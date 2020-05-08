@@ -68,6 +68,7 @@ def get_rooms(request):
 
     return JsonResponse({"error": "You should provide hotel id"})
 
+
 @csrf_exempt
 @token_pass
 def add_rating(request):

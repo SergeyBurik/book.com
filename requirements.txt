@@ -5,4 +5,5 @@ uuid
 django-robokassa-payments
 geopy
 stripe
+python-dateutil
 
