@@ -36,7 +36,25 @@
                     </select>
 
                     <!--COMFORTS-->
+                    <label for="image">Hotel's Facility:</label>
+                    <div id="image_inputs">
+                        <div class="field_row" v-bind:id="num" v-for="num in fields_count">
+                            <select name="facility" required id="facility" v-bind:name="num">
+                                <option value="1">first</option>
+                                <option value="2">second</option>
+                                <option value="3">3dw</option>
+                                <option value="4">4wfwtw</option>
+                                <option value="5">5*</option>
+                            </select>
+<!--                            <input type="file"  required id="image" v-bind:name="num">-->
+                            <a href="#" v-bind:id="num" v-on:click="delete_field"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
+                    <a href="#" v-on:click="addImageForm">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </a>
 
+                    <input type="hidden" id="image_count" name="image_count">
                     <!--COMFORTS END-->
 
 

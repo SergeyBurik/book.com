@@ -305,6 +305,8 @@ def create_hotel(request):
         banner = request.FILES['banner']
         location = request.POST['location']
         phone = request.POST['number']
+        facilities = request.POST.get('facility_count', 0)
+        print(facilities)
 
         location = utils.get_address(location)
         Hotel.objects.create(user=request.user,
@@ -315,6 +317,13 @@ def create_hotel(request):
                              location=location,
                              phone_number=phone,
                              is_active=True)
+
+        hotel = Hotel.objects.get(name=hotel_name)
+
+        for facility in range(1, int(facilities) + 1):
+            facility_file = request.POST.get(facility)
+            if facility_file:
+                HotelFacility.objects.create(hotel=hotel, facility=facility_file)
 
         return HttpResponseRedirect(reverse('management:main'))
 

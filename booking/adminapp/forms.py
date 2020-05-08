@@ -36,19 +36,13 @@ class HotelFacilityForm(forms.Form):
         ('y', u"yes"),
         ('n', u"no"),
     )
-    hotel = NameModelChoiceField(label=u'Hotel',
-                                       queryset=Hotel.objects.order_by(
-                                           '-name'),
-                                       initial=Hotel.objects.get(id=1))
+    hotel = NameModelChoiceField(label=u'Hotel', queryset=Hotel.objects.order_by('-name'))  # , initial=Hotel.objects.get(id=1)
     bar = forms.ChoiceField(label=u'<fh', choices=CHOICES)
     pool = forms.ChoiceField(label=u'<fh', choices=CHOICES)
     wifi = forms.ChoiceField(label=u'<fh', choices=CHOICES)
     parking = forms.ChoiceField(label=u'<fh', choices=CHOICES)
     facil = NameModelChoiceField(label=u'Удобства',
-                                 queryset=Facility.objects.order_by('-name'),
-                                 initial=Facility.objects.get(id=1))
-
-
+                                 queryset=Facility.objects.order_by('-name'), initial=Facility.objects.all())  # get(id=1)
 
 
 # class HotelFacilityForm(forms.ModelForm):
