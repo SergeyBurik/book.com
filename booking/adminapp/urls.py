@@ -17,4 +17,5 @@ urlpatterns = [
     path('ajax/check_address/', adminapp.ajax_check_address, name="ajax_check_address"),
     path('ajax/delete_image/', adminapp.ajax_delete_image, name="ajax_delete_image"),
     path('ajax/get_rooms/', adminapp.ajax_get_rooms, name="ajax_get_rooms"),
+
 ]

@@ -1,0 +1,23 @@
+[
+    {
+        "icon": "bar",
+        "name": "Bar"
+    },
+    {
+        "icon": "breakfast",
+        "name": "Tasty Breakfast"
+
+    },
+    {
+        "icon": "fitness",
+        "name": "Fitness centre"
+    },
+    {
+        "icon": "parking",
+        "name": "Free parking"
+    },
+    {
+        "icon": "pool",
+        "name": "Swimming pool"
+    }
+]
