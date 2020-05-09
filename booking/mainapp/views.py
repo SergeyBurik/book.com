@@ -64,23 +64,23 @@ def book_room(request, hotel_id, room_id):
         if check_booking(check_in, check_out, room_id, hotel_id):  # if there are not any reservations
             insert_booking(hotel, check_in, check_out, room, '{} {}'.format(client_name, client_surname), email, phone, time,
                            comments, country, address)
-            send_confirmation_mail(hotel_id, room_id, check_in, check_out, '{}:{}'.format(client_name, client_surname))
+            send_confirmation_mail(hotel_id, room_id, check_in, check_out, f'{client_name}:{client_surname}')
             # ":" is just separator
-            return HttpResponseRedirect(reverse('order:pay',
-                                                kwargs={
-                                                    'hotel_id': hotel_id,
-                                                    'room_id': room_id,
-                                                    'check_in': check_in,
-                                                    'check_out': check_out
-                                                }))
+            messages.success(request, f"You successfully booked room from {check_in} to {check_out}")
+            return HttpResponseRedirect(reverse('main:bookings_main', kwargs={"hotel_id":room.hotel.id}))
+            # return HttpResponseRedirect(reverse('order:pay',
+            #                                     kwargs={
+            #                                         'hotel_id': hotel_id,
+            #                                         'room_id': room_id,
+            #                                         'check_in': check_in,
+            #                                         'check_out': check_out
+            #                                     }))
         else:
             messages.error(request, 'This room is not available at this period')
 
     images = RoomGallery.objects.filter(room__hotel=hotel, room=room)
     coordinates = get_coordinates(room.hotel.location)
 
-    print(room.hotel.location)
-    print(coordinates)
     content = {
         'user': user,
         'hotel': hotel,
@@ -102,7 +102,7 @@ def total_sum(hotel_id, room_id, check_in, check_out):
     end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
     date_list = [start + datetime.timedelta(days=x)
                  for x in range(0, (end - start).days + 1)]
-    total = sum([booking.room.price for x in range(len(date_list))])
+    total = sum([booking.room.price for x in range(len(date_list)-1)])
     return total
 
 

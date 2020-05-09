@@ -33,7 +33,7 @@ def join(request):
     content = {'register_form': register_form,
                'countries': countries,
                }
-
+#15 220
     return render(request, 'authapp/sign_up.html', content)
 
 

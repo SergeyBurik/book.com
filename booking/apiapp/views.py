@@ -60,7 +60,7 @@ def get_rooms(request):
                     "infants": room.infants,
                     "is_active": room.is_active,
                     "images": [
-                        {"path": image.image.url} for image in images
+                        {"url": image.image.url} for image in images
                     ]
                 })
 
@@ -149,7 +149,7 @@ def get_room(request):
                 "infants": room.infants,
                 "is_active": room.is_active,
                 "images": [
-                    {"path": image.image.url} for image in images
+                    {"url": image.image.url} for image in images
                 ]
             }
 
@@ -157,16 +157,16 @@ def get_room(request):
 
     return JsonResponse({"error": "You should provide room id"})
 
-
+@csrf_exempt
 @token_pass
 def create_booking(request):
     try:
-        data = json.loads(request.POST['data'])
+        data = request.POST.get('data', {})
         room = Room.objects.get(pk=data['room'])
 
         start = datetime.datetime.strptime(data['check_in'], "%Y-%m-%d")
         end = datetime.datetime.strptime(data['check_out'], "%Y-%m-%d")
-        days = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
+        days = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days)]
 
         for day in days:
             Bookings.objects.create(hotel=room.hotel, date=day, room=room,
@@ -262,7 +262,7 @@ def filter_rooms(request):
                     "infants": room.infants,
                     "is_active": room.is_active,
                     "images": [
-                        {"path": image.image.url} for image in RoomGallery.objects.filter(room=room)
+                        {"url": image.image.url} for image in RoomGallery.objects.filter(room=room)
                     ]
                 } for room in res]
 

@@ -5,12 +5,14 @@ from django.conf import settings
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from mainapp import utils
+import datetime
 
 
 def main(request):
     data = utils.decode_response(
         requests.get(
             f'http://{settings.HOST}/api/getHotel?hotel={settings.HOTEL_ID}&token={settings.API_TOKEN}').content)
+
     images = utils.decode_response(
         requests.get(
             f'http://{settings.HOST}/api/getImages?hotel={settings.HOTEL_ID}&token={settings.API_TOKEN}').content)
@@ -27,8 +29,9 @@ def main(request):
 
 def search(request):
     adults = request.GET.get('adults', 0)
-    check_in = request.GET.get('check_in', '2020-05-02')
-    check_out = request.GET.get('check_out', '2020-05-02')
+    check_in = request.GET.get('check_in', datetime.datetime.today().strftime('%Y-%m-%d'))
+    tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+    check_out = request.GET.get('check_out', tomorrow.strftime('%Y-%m-%d'))
 
     data = {'adults': adults, "check_in": check_in, 'check_out': check_out}
     rooms = utils.decode_response(
@@ -39,11 +42,20 @@ def search(request):
         requests.get(
             f'http://{settings.HOST}/api/getHotel?hotel={settings.HOTEL_ID}&token={settings.API_TOKEN}').content)
 
-    content = {'rooms': rooms, 'data': data, 'host': settings.HOST}
+    content = {'rooms': rooms, 'adults': adults, 'check_in': check_in, 'check_out': check_out, 'data': data,
+               'host': settings.HOST}
     return render(request, 'mainapp/search.html', content)
 
 
 def room_detail(request, id):
+    adults = request.GET.get('adults', 1)
+    check_in = request.GET.get('check_in', None)
+    check_out = request.GET.get('check_out', None)
+
+    today = datetime.datetime.today().strftime('%Y-%m-%d')
+    tomorrow = (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+
+
     data = utils.decode_response(
         requests.get(
             f'http://{settings.HOST}/api/getHotel?hotel={settings.HOTEL_ID}&token={settings.API_TOKEN}').content)
@@ -63,9 +75,16 @@ def room_detail(request, id):
                                 'rate': request.POST['stars']})
 
         elif request.POST['form-type'] == 'book-room':
+            requests.post(f'http://{settings.HOST}/api/createBooking/?token={settings.API_TOKEN}',
+                          data={"room": room['id'],
+                                'check_in': check_in,
+                                'check_out': check_out,
+                                })
+        elif request.POST['form-type'] == 'check-availability':
             pass
 
         return HttpResponseRedirect(reverse('main:room', kwargs={'id': id}))
-
-    content = {'room': room, 'data': data, 'host': settings.HOST, 'reviews': reviews[:4], 'id': id}
+    content = {'room': room, 'data': data, 'host': settings.HOST, 'adults': adults, 'check_in': check_in,
+               'check_out': check_out, 'today':today, 'tomorrow': tomorrow,
+               'reviews': reviews[:3], 'id': id}
     return render(request, 'mainapp/room-detail.html', content)

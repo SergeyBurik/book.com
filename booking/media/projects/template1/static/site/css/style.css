@@ -39,6 +39,12 @@
     display: inline-block;
 }
 
+@media (max-width: 990px) {
+	.review-add{
+		display: none;
+	}
+
+}
 .rate:not(:checked) > input {
     /*position:absolute;*/
     /*top:-9999px;*/

@@ -38,7 +38,7 @@ def send_confirmation_mail(hotel_id, room_id, check_in, check_out, client_name):
 
     html_m = render_to_string('mainapp/confirmation_letter.html', data)
 
-    return send_mail('Booking Confirmation', data, settings.EMAIL_HOST_USER,
+    return send_mail('Booking Confirmation', '', settings.EMAIL_HOST_USER,
                      [booking.client_email], html_message=html_m, fail_silently=False)
 
 
@@ -93,7 +93,7 @@ def insert_booking(hotel, check_in, check_out, room, client_name, client_email, 
     start = datetime.datetime.strptime(check_in, "%Y-%m-%d")
     end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
     # dates list
-    date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
+    date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days)]
     days_quantity = len(date_list)
     total_sum = room.price * days_quantity
     # total_ = sum([booking.room.price for x in range(len(date_list))])
