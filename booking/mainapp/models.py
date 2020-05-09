@@ -84,7 +84,9 @@ class Facility(models.Model):
         verbose_name = 'Facility'
         verbose_name_plural = 'Facilities'
 
-    icon = models.ImageField(default='', upload_to='hotels/icons/')
+    # icon = models.ImageField(default='', upload_to='hotels/icons/')
+    icon = models.ImageField(upload_to=path_and_rename,
+                              verbose_name='Facility icon')
     name = models.CharField(verbose_name='Facility', max_length=64,
                             unique=True)
 

@@ -1,0 +1,22 @@
+[
+    {
+        "hotel_id": "1",
+        "facility_id": "1"
+    },
+    {
+        "hotel_id": "1",
+        "facility_id": "2"
+    },
+    {
+        "hotel_id": "1",
+        "facility_id": "3"
+    },
+    {
+        "hotel_id": "1",
+        "facility_id": "4"
+    },
+    {
+        "hotel_id": "1",
+        "facility_id": "5"
+    }
+]

@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
 from django.urls import reverse
-from mainapp.models import Hotel, Room, Bookings, RoomGallery, Comment
+from mainapp.models import Hotel, Room, Bookings, RoomGallery, Comment, HotelFacility
 from mainapp.utils import check_booking, insert_booking, get_coordinates, send_confirmation_mail
 
 
@@ -21,6 +21,13 @@ def bookings_main(request, hotel_id):
     images = RoomGallery.objects.filter(room__hotel=hotel, is_avatar=True)
     coordinates = get_coordinates(hotel.location)
     comments = Comment.objects.filter(hotel__id=hotel_id).order_by('-pub_date')[:5]
+    facilities = HotelFacility.objects.filter(hotel__id=hotel.id)
+    facility_names = []
+    facility_icons = []
+    for name in range(len(facilities)):
+        facility_names.append(facilities[name].get_name())
+        facility_icons.append(facilities[name].get_icon())
+    facility_dict = dict(zip(facility_names, facility_icons))
 
     try:
         rates = Comment.objects.filter(hotel__id=hotel_id)
@@ -37,6 +44,8 @@ def bookings_main(request, hotel_id):
         'images': images,
         'comments': comments,
         'rating': rating,
+        'facilities': facilities,
+        'facility_dict': facility_dict,
     }
 
     return render(request, 'mainapp/booking_main.html', content)
@@ -64,7 +73,8 @@ def book_room(request, hotel_id, room_id):
         if check_booking(check_in, check_out, room_id, hotel_id):  # if there are not any reservations
             insert_booking(hotel, check_in, check_out, room, '{} {}'.format(client_name, client_surname), email, phone, time,
                            comments, country, address)
-            send_confirmation_mail(hotel_id, room_id, check_in, check_out, '{}:{}'.format(client_name, client_surname))
+            # send_confirmation_mail(hotel_id, room_id, check_in, check_out, '{}:{}'.format(client_name, client_surname))
+
             # ":" is just separator
             return HttpResponseRedirect(reverse('order:pay',
                                                 kwargs={
