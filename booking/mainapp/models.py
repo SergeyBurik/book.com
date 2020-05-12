@@ -203,7 +203,7 @@ class Bookings(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)  # room which we are trying to book
     client_name = models.CharField(max_length=100)
     client_email = models.CharField(max_length=100)  # client's email
-    phone_number = models.CharField(max_length=20, verbose_name="Client's phone number")
+    phone_number = models.CharField(max_length=20,  verbose_name="Client's phone number")
     time = models.CharField(max_length=50, choices=arrival_time,
                             default='12:00')  # approximate time of check in
     comments = models.CharField(max_length=500)  # client's requests

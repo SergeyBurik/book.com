@@ -10,9 +10,10 @@ from mainapp.variables import at_time
 
 
 def main_page(request):
+    title = 'Home'
     user = request.user
 
-    return render(request, 'mainapp/index.html', {'user': user})
+    return render(request, 'mainapp/index.html', {'user': user, 'title': title})
 
 
 def bookings_main(request, hotel_id):
