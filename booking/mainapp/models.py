@@ -8,6 +8,7 @@ from django.utils.deconstruct import deconstructible
 
 from authapp.models import User
 from authapp.variables import country_dict
+from mainapp.variables import arrival_time
 
 
 @deconstructible
@@ -84,7 +85,9 @@ class Facility(models.Model):
         verbose_name = 'Facility'
         verbose_name_plural = 'Facilities'
 
-    icon = models.ImageField(default='', upload_to='hotels/icons/')
+    # icon = models.ImageField(default='', upload_to='hotels/icons/')
+    icon = models.ImageField(upload_to=path_and_rename,
+                             verbose_name='Facility icon')
     name = models.CharField(verbose_name='Facility', max_length=64,
                             unique=True)
 
@@ -200,8 +203,9 @@ class Bookings(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)  # room which we are trying to book
     client_name = models.CharField(max_length=100)
     client_email = models.CharField(max_length=100)  # client's email
-    phone_number = models.CharField(max_length=20, verbose_name="Client's phone number")
-    time = models.TimeField()  # approximate time of check in
+    phone_number = models.CharField(max_length=20,  verbose_name="Client's phone number")
+    time = models.CharField(max_length=50, choices=arrival_time,
+                            default='12:00')  # approximate time of check in
     comments = models.CharField(max_length=500)  # client's requests
     country = models.CharField(max_length=50, choices=country_dict,
                                default='Russia')

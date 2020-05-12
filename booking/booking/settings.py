@@ -27,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')_11wg%dx1xri492p$vle(fw*qcila1%$42rgy8owo^z%dm6_i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'authapp.apps.AuthappConfig',
     'adminapp.apps.AdminappConfig',
     'ordersapp.apps.OrdersappConfig',
+    'apiapp',
     'constructor_app.apps.ConstructorAppConfig',
     'django.contrib.sites',  # added for allauth
     'allauth',

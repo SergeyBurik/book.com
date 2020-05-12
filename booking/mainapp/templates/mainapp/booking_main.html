@@ -71,9 +71,9 @@
                 <h2>Description <span class="room_description_location"
                                       style="font-size: 0.5em">Rating - {{ rating }}</span></h2>
                 <h6 style="color: black">{{ hotel.description }}</h6><BR>
-                {% if comforts %}
-                    <h6 style="color: black">{{ comforts }}</h6>
-                 {% endif %}
+                {% for key, value in facility_dict.items %}
+                    <h6><img src="{{ value.url }}" alt="{{ key }}"> - {{ key }}</h6>
+                 {% endfor %}
             </div>
 
             <div id="map">
