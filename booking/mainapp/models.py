@@ -8,6 +8,7 @@ from django.utils.deconstruct import deconstructible
 
 from authapp.models import User
 from authapp.variables import country_dict
+from mainapp.variables import arrival_time
 
 
 @deconstructible
@@ -203,7 +204,8 @@ class Bookings(models.Model):
     client_name = models.CharField(max_length=100)
     client_email = models.CharField(max_length=100)  # client's email
     phone_number = models.CharField(max_length=20, verbose_name="Client's phone number")
-    time = models.TimeField()  # approximate time of check in
+    time = models.CharField(max_length=50, choices=arrival_time,
+                            default='12:00')  # approximate time of check in
     comments = models.CharField(max_length=500)  # client's requests
     country = models.CharField(max_length=50, choices=country_dict,
                                default='Russia')

@@ -6,6 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from mainapp.models import Hotel, Room, Bookings, RoomGallery, Comment, HotelFacility
 from mainapp.utils import check_booking, insert_booking, get_coordinates, send_confirmation_mail
+from mainapp.variables import at_time
 
 
 def main_page(request):
@@ -56,6 +57,7 @@ def book_room(request, hotel_id, room_id):
     hotel = get_object_or_404(Hotel, pk=hotel_id, is_active=True)
     room = get_object_or_404(Room, hotel=hotel, pk=room_id, is_active=True)
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
+    time = at_time
     total = None
     if request.method == 'POST':
         check_in = request.POST.get('start', None)
@@ -74,7 +76,6 @@ def book_room(request, hotel_id, room_id):
             insert_booking(hotel, check_in, check_out, room, '{} {}'.format(client_name, client_surname), email, phone, time,
                            comments, country, address)
             # send_confirmation_mail(hotel_id, room_id, check_in, check_out, '{}:{}'.format(client_name, client_surname))
-
             # ":" is just separator
             return HttpResponseRedirect(reverse('order:pay',
                                                 kwargs={
@@ -88,7 +89,6 @@ def book_room(request, hotel_id, room_id):
 
     images = RoomGallery.objects.filter(room__hotel=hotel, room=room)
     coordinates = get_coordinates(room.hotel.location)
-
     print(room.hotel.location)
     print(coordinates)
     content = {
@@ -98,6 +98,7 @@ def book_room(request, hotel_id, room_id):
         'days': days,
         'coordinates': coordinates,
         'summ': total,
+        'time': time,
         'images': images
     }
     return render(request, 'mainapp/book_room.html', content)
