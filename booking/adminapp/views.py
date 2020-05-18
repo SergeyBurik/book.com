@@ -221,9 +221,10 @@ def edit_hotel(request, pk):
     for name in range(len(facilities)):
         facility_names.append(facilities[name].get_name())
         facility_icons.append(facilities[name].get_icon())
+    ficility_dict = dict(zip(facility_names, facility_icons))
 
     form = HotelForm(request.POST or None, request.FILES or None, instance=hotel)
-    form_facility = HotelFacilityForm(request.POST, instance=hotel)
+    form_facility = HotelFacilityForm(request.POST or None, request.FILES or None)
 
     if request.method == 'POST':
         if form.is_valid() and form_facility.is_valid():
@@ -242,8 +243,7 @@ def edit_hotel(request, pk):
         'form': form,
         'pk': pk,
         'form_comforts': form_facility,
-        'facility_names': facility_names,
-        'facility_icons': facility_icons,
+        'ficility_dict': ficility_dict,
     }
 
     return render(request, 'adminapp/edit_hotel.html', context)
