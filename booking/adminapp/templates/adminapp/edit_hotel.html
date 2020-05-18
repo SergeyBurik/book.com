@@ -23,6 +23,7 @@
                   enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
+                {{ form_comforts.as_p }}
                 <input type="submit" value="Edit Hotel"/>
             </form>
         </div>

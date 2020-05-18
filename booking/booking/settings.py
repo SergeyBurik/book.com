@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import json
 
 # from configparser import ConfigParser
 # local_config_path = os.path.join(BASE_DIR, 'conf', 'local.conf')
@@ -28,9 +27,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')_11wg%dx1xri492p$vle(fw*qcila1%$42rgy8owo^z%dm6_i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -45,14 +44,12 @@ INSTALLED_APPS = [
     'authapp.apps.AuthappConfig',
     'adminapp.apps.AdminappConfig',
     'ordersapp.apps.OrdersappConfig',
-    'robokassa',
+    'apiapp',
     'constructor_app.apps.ConstructorAppConfig',
-
     'django.contrib.sites',  # added for allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'stripe',
 ]
 
 # Changes the built-in user model to ours
@@ -151,34 +148,19 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'test@gmail.com'
-# EMAIL_HOST_PASSWORD = 'wefwef'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'django.test04@gmail.com'
+EMAIL_HOST_PASSWORD = 'book1234B'
 
-DOMAIN_NAME = 'http://localhost:8000'
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = '25'
-EMAIL_USE_SSL = False
+DOMAIN_NAME = '127.0.0.1:8000'
+
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = '25'
+# EMAIL_USE_SSL = False
 # вариант python -m smtpd -n -c DebuggingServer localhost:25
-EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
-
-# ROBOKASSA
-with open('booking/robokassa.json', 'r') as f:
-    RB = json.load(f)
-
-ROBOKASSA_LOGIN = RB['ROBOKASSA_LOGIN']
-ROBOKASSA_PASSWORD1 = RB['ROBOKASSA_PASSWORD1']
-ROBOKASSA_PASSWORD2 = RB['ROBOKASSA_PASSWORD2']
-ROBOKASSA_TEST_MODE = True
-
-if DEBUG:
-    # test keys
-    STRIPE_PUBLISHABLE_KEY = 'pk_test_eBUgsA8a4AsiqmopC75IfVU500JEFE9jfc'
-    STRIPE_SECRET_KEY = 'sk_test_QnsOOx47VDcluiyegQvFt4ge00GJ7OOmU1'
-else:
-    # live keys
-    STRIPE_PUBLISHABLE_KEY = 'YOUR STRIPE LIVE PUB KEY'
-    STRIPE_SECRET_KEY = 'YOUR STRIPE LIVE SECRET KEY'
+# EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None

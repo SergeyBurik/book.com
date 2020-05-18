@@ -5,9 +5,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from mainapp.models import Hotel, Room, RoomGallery
+# from django.views.generic import ListView, CreateView, DetailView, UpdateView, \
+#     DeleteView
+
+from mainapp.models import Hotel, Room, RoomGallery, HotelFacility
 from geopy.geocoders import Nominatim
-from adminapp.forms import HotelForm, RoomForm
+from adminapp.forms import HotelForm, RoomForm, HotelFacilityForm
 from adminapp import utils
 from mainapp.utils import check_booking, insert_booking, send_confirmation_mail
 from ordersapp.models import Order
@@ -212,25 +215,36 @@ def ajax_delete_image(request):
 def edit_hotel(request, pk):
     # if there is such hotel
     hotel = get_object_or_404(Hotel, pk=pk, user=request.user, is_active=True)
+    facilities = HotelFacility.objects.all().filter(hotel_id=pk)
+    facility_names = []
+    facility_icons = []
+    for name in range(len(facilities)):
+        facility_names.append(facilities[name].get_name())
+        facility_icons.append(facilities[name].get_icon())
+    ficility_dict = dict(zip(facility_names, facility_icons))
 
     form = HotelForm(request.POST or None, request.FILES or None, instance=hotel)
+    form_facility = HotelFacilityForm(request.POST or None, request.FILES or None)
 
     if request.method == 'POST':
-        if form.is_valid():
+        if form.is_valid() and form_facility.is_valid():
             obj = form.save(commit=False)
-
             obj.save()
+            obj2 = form_facility.save(commit=False)
+            obj2.save()
 
             messages.success(request, "You successfully updated the post")
-
-            context = {'form': form}
-
             return HttpResponseRedirect(reverse('management:hotels'))
 
         else:
             messages.warning(request, "The form was not updated successfully.")
 
-    context = {'form': form, 'pk': pk}
+    context = {
+        'form': form,
+        'pk': pk,
+        'form_comforts': form_facility,
+        'ficility_dict': ficility_dict,
+    }
 
     return render(request, 'adminapp/edit_hotel.html', context)
 
@@ -271,6 +285,7 @@ def delete_room(request, id):
 
     return HttpResponseRedirect(reverse('management:rooms'))
 
+
 @login_required(login_url='/auth/login')
 def delete_hotel(request, id):
     hotel = get_object_or_404(Hotel, id=id, user=request.user, is_active=True)
@@ -278,6 +293,7 @@ def delete_hotel(request, id):
     hotel.save()
 
     return HttpResponseRedirect(reverse('management:hotels'))
+
 
 # function which creates hotel
 @login_required(login_url='/auth/login/')
@@ -289,9 +305,10 @@ def create_hotel(request):
         banner = request.FILES['banner']
         location = request.POST['location']
         phone = request.POST['number']
+        facilities = request.POST.get('facility_count', 0)
+        print(facilities)
 
         location = utils.get_address(location)
-
         Hotel.objects.create(user=request.user,
                              name=hotel_name,
                              description=description,
@@ -301,6 +318,103 @@ def create_hotel(request):
                              phone_number=phone,
                              is_active=True)
 
+        hotel = Hotel.objects.get(name=hotel_name)
+
+        for facility in range(1, int(facilities) + 1):
+            facility_file = request.POST.get(facility)
+            if facility_file:
+                HotelFacility.objects.create(hotel=hotel, facility=facility_file)
+
         return HttpResponseRedirect(reverse('management:main'))
 
     return render(request, 'adminapp/create_hotel.html')
+
+
+"""
+---------------Возможный вариант отображения отелей:---------------------------
+
+class HotelList(ListView):
+    model = Hotel
+
+    def get_queryset(self):
+        return Hotel.objects.filter(user=self.request.user)
+
+
+class HotelItemsCrete(CreateView):
+    model = Hotel
+    fields = []
+    success_url = reverse_lazy('adminapp:main')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        hotel_form_set = inlineformset_factory(Hotel, HotelFacility,
+                                               form=HotelFacilityForm, extra=1)
+
+        if self.request.POST:
+            formset = hotel_form_set(self.request.POST, self.request.FILES)
+        else:
+            formset = hotel_form_set()
+        data['hotelfacility'] = formset
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        hotelfacility = context['hotelfacility']
+
+        with transaction.atomic():
+            form.instance.user = self.request.user
+            self.object = form.save()
+            if hotelfacility.is_valid():
+                hotelfacility.instance = self.object
+                hotelfacility.save()
+
+        return super().form_valid(form)
+
+
+class HotelRead(DetailView):
+    model = Order
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'оттель/просмотр'
+        return context
+
+
+class HotelItemsUpdate(UpdateView):
+    model = Hotel
+    fields = []
+    success_url = reverse_lazy('adminapp:main')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        hotel_form_set = inlineformset_factory(Hotel, HotelFacility,
+                                               form=HotelFacilityForm, extra=1)
+
+        if self.request.POST:
+            data['hotelfacility'] = hotel_form_set(self.request.POST, self.request.FILES, instance=self.object)
+        else:
+            formset = hotel_form_set(instance=self.object)
+            for form in formset.forms:
+                if form.instance.pk:
+                    form.initial['facility'] = form.instance.facility.name
+            data['hotelfacility'] = formset
+
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        hotelfacility = context['hotelfacility']
+
+        with transaction.atomic():
+            self.object = form.save()
+            if hotelfacility.is_valid():
+                hotelfacility.instance = self.object
+                hotelfacility.save()
+
+        return super().form_valid(form)
+
+
+class HotelDelete(DeleteView):
+    model = Hotel
+    success_url = reverse_lazy('adminapp:main')
+"""

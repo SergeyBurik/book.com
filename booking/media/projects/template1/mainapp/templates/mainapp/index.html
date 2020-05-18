@@ -1,0 +1,219 @@
+{% load static %}
+{% load random_image %}
+{% load range %}
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Sona Template">
+    <meta name="keywords" content="Sona, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{data.name}}</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cabin:400,500,600,700&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="{% static 'site/css/bootstrap.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'site/css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'site/css/elegant-icons.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'site/css/flaticon.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'site/css/owl.carousel.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'site/css/nice-select.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'site/css/jquery-ui.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'site/css/magnific-popup.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'site/css/slicknav.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'site/css/style.css' %}" type="text/css">
+</head>
+
+<body>
+<!-- Page Preloder -->
+<div id="preloder">
+    <div class="loader"></div>
+</div>
+
+{% include 'mainapp/includes/nav-header.html' %}
+
+<!-- Hero Section Begin -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="hero-text">
+                    <h1>{{data.name}}</h1>
+                    <p></p>
+                    <a href="#" class="primary-btn">Discover Now</a>
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
+                <div class="booking-form">
+                    <h3>Booking Your Hotel</h3>
+                    <form action="{% url 'main:search' %}" method="get">
+                        <div class="check-date">
+                            <label for="date-in">Check In:</label>
+                            <input type="text" name="check_in" class="date-input" id="date-in">
+                            <i class="icon_calendar"></i>
+                        </div>
+                        <div class="check-date">
+                            <label for="date-out">Check Out:</label>
+                            <input type="text" name="check_out" class="date-input" id="date-out">
+                            <i class="icon_calendar"></i>
+                        </div>
+                        <div class="select-option">
+                            <label for="guest">Guests:</label>
+                            <select name="adults" id="guest">
+                                <option value="1">1 Adults</option>
+                                <option value="2">2 Adults</option>
+                                <option value="3">3 Adults</option>
+                            </select>
+                        </div>
+                        <button type="submit">Check Availability</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-slider owl-carousel">
+        <div class="hs-item set-bg" data-setbg="http://{{host}}{{ images|random_image }}"></div>
+        <div class="hs-item set-bg" data-setbg="http://{{host}}{{ images|random_image }}"></div>
+        <div class="hs-item set-bg" data-setbg="http://{{host}}{{ images|random_image }}"></div>
+    </div>
+</section>
+<!-- Hero Section End -->
+
+<!-- About Us Section Begin -->
+<section class="aboutus-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="about-text">
+                    <div class="section-title">
+                        <span>About Us</span>
+                        <h2>{{ data.name }}</h2>
+                    </div>
+                    <p class="f-para">{{ data.description|truncatewords:50 }}</p>
+                    <a href="#rooms" class="primary-btn about-btn">Read More</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-pic">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <img src="http://{{host}}{{ images|random_image }}" alt="">
+                        </div>
+                        <div class="col-sm-6">
+                            <img src="http://{{host}}{{ images|random_image }}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- About Us Section End -->
+
+<!-- Services Section End -->
+
+
+<!-- Home Room Section Begin -->
+<section class="hp-room-section" id="rooms">
+    <div class="container-fluid">
+        <div class="hp-room-items">
+            <div class="row">
+                {% for room in rooms %}
+                <div class="col-lg-3 col-md-6">
+                    <div class="hp-room-item set-bg" data-setbg="http://{{host}}{{room.images.0.url}}">
+                        <div class="hr-text">
+                            <h3>{{ room.name }}</h3>
+                            <h2>{{ room.price }}<span>/Pernight</span></h2>
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td class="r-o">Adults:</td>
+                                    <td>{{ room.adult }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="r-o">Children:</td>
+                                    <td>{{ room.kids }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="r-o">Infants:</td>
+                                    <td>{{ room.infants }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <a href="#" class="primary-btn">More Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Home Room Section End -->
+
+<!-- Testimonial Section Begin -->
+<section class="testimonial-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <span>Testimonials</span>
+                    <h2>What Customers Say?</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="testimonial-slider owl-carousel">
+                    {% for rating in ratings %}
+                        <div class="ts-item">
+                            <p>{{rating.text}}</p>
+                            <div class="ti-author">
+                                <h5>{{rating.author}}</h5>
+                                <div class="rating">
+                                    {% for star in rating.rate|range %}
+                                        <i class="icon_star"></i>
+                                    {% endfor %}
+                                    <!--<i class="icon_star-_alt"></i>-->
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Testimonial Section End -->
+
+<!-- Search model Begin -->
+<div class="search-model">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="search-close-switch"><i class="icon_close"></i></div>
+        <form class="search-model-form">
+            <input type="text" id="search-input" placeholder="Search here.....">
+        </form>
+    </div>
+</div>
+<!-- Search model end -->
+{% include 'mainapp/includes/footer.html' %}
+
+<!-- Js Plugins -->
+<script src="{% static 'site/js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'site/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'site/js/jquery.magnific-popup.min.js' %}"></script>
+<script src="{% static 'site/js/jquery.nice-select.min.js' %}"></script>
+<script src="{% static 'site/js/jquery-ui.min.js' %}"></script>
+<script src="{% static 'site/js/jquery.slicknav.js' %}"></script>
+<script src="{% static 'site/js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'site/js/main.js' %}"></script>
+</body>
+
+</html>

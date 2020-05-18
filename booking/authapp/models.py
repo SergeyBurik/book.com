@@ -63,7 +63,7 @@ class PathAndRename(object):
 
     def __call__(self, instance, filename):
         ext = filename.split('.')[-1]
-        filename = f'{uuid4().hex}.{ext}'
+        filename = '{}.{}'.format(uuid4().hex, ext)
 
         return os.path.join(self.path, filename)
 

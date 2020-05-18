@@ -8,6 +8,7 @@ from django.utils.deconstruct import deconstructible
 
 from authapp.models import User
 from authapp.variables import country_dict
+from mainapp.variables import arrival_time
 
 
 @deconstructible
@@ -18,7 +19,7 @@ class PathAndRename(object):
 
     def __call__(self, instance, filename):
         ext = filename.split('.')[-1]
-        filename = f'{uuid4().hex}.{ext}'
+        filename = '{}.{}'.format(uuid4().hex, ext)
 
         return os.path.join(self.path, filename)
 
@@ -48,15 +49,78 @@ class Hotel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     name = models.CharField(verbose_name='Название отеля', max_length=64,
                             unique=True)
-    phone_number = models.CharField(verbose_name='Номер телефона', default='', max_length=20)
-    location = models.CharField(verbose_name='Адрес отеля', default='', max_length=200)
+    phone_number = models.CharField(verbose_name='Номер телефона', default='',
+                                    max_length=20)
+    location = models.CharField(verbose_name='Адрес отеля', default='',
+                                max_length=200)
     description = models.TextField(verbose_name='Описание отеля', blank=True)
     stars = models.CharField(max_length=2, choices=STARS_CHOICES, default=ONE)
-    banner = models.ImageField(default='', upload_to='hotels/banners/')  # hotel's image
+    banner = models.ImageField(default='', upload_to='hotels/banners/')
     is_active = models.BooleanField(verbose_name='Активен', default=True)
 
     def __str__(self):
         return self.name
+
+    def get_count_facility(self):
+        items = self.hotelfacility.select_related()
+        return len(items)
+
+    def get_facility(self):
+        arr = []
+        items = self.hotelfacility.select_related()
+        for i in range(len(items)):
+            arr.append(items[i].get_name())
+        return arr
+
+    def get_facility_icon(self):
+        arr = []
+        items = self.hotelfacility.select_related()
+        for i in range(len(items)):
+            arr.append(items[i].get_icon())
+        return arr
+
+
+class Facility(models.Model):
+    class Meta:
+        verbose_name = 'Facility'
+        verbose_name_plural = 'Facilities'
+
+    # icon = models.ImageField(default='', upload_to='hotels/icons/')
+    icon = models.ImageField(upload_to=path_and_rename,
+                             verbose_name='Facility icon')
+    name = models.CharField(verbose_name='Facility', max_length=64,
+                            unique=True)
+
+    @staticmethod
+    def get_items():
+        return Facility.objects.all().order_by('name')
+
+    def __str__(self):
+        return self.name
+
+
+class HotelFacility(models.Model):
+    class Meta:
+        verbose_name = ' Hotel Facility'
+        verbose_name_plural = 'Hotel Facilities'
+
+    hotel = models.ForeignKey(Hotel, related_name="facility",
+                              on_delete=models.CASCADE)
+    facility = models.ForeignKey(Facility, verbose_name='Facility name',
+                                 on_delete=models.CASCADE)
+
+    def get_icon(self):
+        return self.facility.icon
+
+    def get_name(self):
+        return self.facility.name
+
+    @staticmethod
+    def get_items():
+        return HotelFacility.objects.all().order_by('facility')
+
+    def __str__(self):
+        return self.facility.name
 
 
 class RoomAgent(models.Model):
@@ -111,7 +175,7 @@ class Room(models.Model):
         return "{} ({})".format(self.name, self.hotel.name)
 
     def __unicode__(self):
-        return f'{self.name}'
+        return self.name
 
 
 class RoomGallery(models.Model):
@@ -127,7 +191,7 @@ class RoomGallery(models.Model):
     is_avatar = models.BooleanField(verbose_name='Главное изображение номера', default=False)
 
     def __str__(self):
-        return f'{self.room.name}'
+        return self.room.name
 
 
 # def make_avatar(args*):
@@ -139,15 +203,16 @@ class Bookings(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)  # room which we are trying to book
     client_name = models.CharField(max_length=100)
     client_email = models.CharField(max_length=100)  # client's email
-    phone_number = models.CharField(max_length=20, verbose_name="Client's phone number")
-    time = models.TimeField()  # approximate time of check in
+    phone_number = models.CharField(max_length=20,  verbose_name="Client's phone number")
+    time = models.CharField(max_length=50, choices=arrival_time,
+                            default='12:00')  # approximate time of check in
     comments = models.CharField(max_length=500)  # client's requests
     country = models.CharField(max_length=50, choices=country_dict,
                                default='Russia')
     address = models.CharField(max_length=100)  # client's address of living
 
     def __str__(self):
-        return f'Room Booking {self.room.name} - {self.room.hotel.name}'
+        return 'Room Booking {} - {}'.format(self.room.name, self.room.hotel.name)
 
 
 class Comment(models.Model):

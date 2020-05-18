@@ -1,8 +1,11 @@
 import datetime
 
+from django.contrib import messages
 from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.loader import render_to_string
+from django.urls import reverse
 from geopy.geocoders import Nominatim
 from mainapp.models import Bookings, Room, Hotel
 from django.conf import settings
@@ -93,7 +96,7 @@ def insert_booking(hotel, check_in, check_out, room, client_name, client_email, 
     start = datetime.datetime.strptime(check_in, "%Y-%m-%d")
     end = datetime.datetime.strptime(check_out, "%Y-%m-%d")
     # dates list
-    date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
+    date_list = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days)]
     days_quantity = len(date_list)
     total_sum = room.price * days_quantity
     # total_ = sum([booking.room.price for x in range(len(date_list))])
@@ -118,3 +121,30 @@ def create_order(name, email, quantity, total, booking):
                          days=quantity,
                          booking=booking,
                          total_sum=total)
+
+def create_room_booking(request, room_id, hotel_id):
+    hotel = Hotel.objects.get(id=hotel_id)
+    room = Room.objects.get(id=room_id)
+    print(request)
+    print(request.POST)
+    if request.method == 'POST':
+        check_in = request.POST.get('check_in', None)
+        check_out = request.POST.get('check_out', None)
+        client_name = request.POST.get('client_name', None)
+        client_surname = request.POST.get('client_surname', None)
+        email = request.POST.get('email', None)
+        phone = request.POST.get('phone', None)
+        time = request.POST.get('time', None)
+        comments = request.POST.get('comments', None)
+        country = request.POST.get('country', None)
+        address = request.POST.get('address', None)
+        print(check_in, check_out, client_name, client_surname, email, phone, time, comments, country, address)
+
+        if check_booking(check_in, check_out, room_id, hotel_id):  # if there are not any reservations
+            insert_booking(hotel, check_in, check_out, room, '{} {}'.format(client_name, client_surname), email, phone, time,
+                           comments, country, address)
+            send_confirmation_mail(hotel_id, room_id, check_in, check_out, f'{client_name}:{client_surname}')
+            # ":" is just separator
+            messages.success(request, f"You successfully booked room from {check_in} to {check_out}")
+        else:
+            messages.error(request, 'This room is not available at this period')

@@ -1,9 +1,6 @@
 from mainapp.models import Bookings
 import datetime
-# import stripe
 
-from django.conf import settings
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 
@@ -11,11 +8,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, DeleteView
 
-import stripe
-
 from ordersapp.models import Order
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 def checkout(request, hotel_id, room_id, check_in, check_out):
@@ -42,29 +35,7 @@ def checkout(request, hotel_id, room_id, check_in, check_out):
                                     )
     elif order.status == Order.FORMING:
         if request.method == 'POST':
-            token = request.POST.get('stripeToken', False)
-            print(token)
-            if token:
-                try:
-                    stripe.Charge.create(
-                        amount=total,
-                        currency='rub',
-                        description='Booking payment',
-                        source=token,
-                    )
-
-                    order.status = Order.PAID
-                    order.save()
-
-                    return HttpResponseRedirect(reverse('main:book_room',
-                                                        kwargs={
-                                                            'hotel_id': hotel_id,
-                                                            'room_id': room_id
-                                                        })
-                                                )
-                except Exception as e:
-                    print(e)
-                    messages.error(request, "Your card has been declined.")
+            print('POST')
 
     return render(request, 'ordersapp/checkout.html', {'total': total / 100})
 

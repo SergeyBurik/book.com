@@ -142,12 +142,12 @@
                     <div id="range" style="width: 100%; text-align: center">
                         <div class="form-group col-md-5" style="display: inline-block">
                             <label for="arrivalDate">Check In Date</label>
-                            <input type="text" required name="start" id="arrivalDate" class="form-control"
+                            <input type="text" required name="check_in" id="arrivalDate" class="form-control"
                                    placeholder="Check In Date">
                         </div>
                         <div class="form-group col-md-6" style="display: inline-block">
                             <label for="checkOutDate">Check Out Date</label>
-                            <input type="text" required name="end" id="checkOutDate" class="form-control"
+                            <input type="text" required name="check_out" id="checkOutDate" class="form-control"
                                    placeholder="Check Out Date">
                         </div>
                     </div>
@@ -179,8 +179,14 @@
                 <div class="form-group">
                     <label for="email">Arrival Time</label>
                     <div class='input-group date' id='time'>
-                        <input type='text' class="form-control" name="time">
-                        <span class="input-group-addon">
+                        <!--<input type='text' class="form-control" name="time">-->
+                        <p><select name="time">
+                            <option>Выберите время</option>
+                            {% for i in time %}
+                                <option>{{ i }}</option>
+                            {% endfor %}
+                        </select></p>
+                        <!--<span class="input-group-addon">-->
                         <span class="glyphicon glyphicon-time"></span>
                     </span>
                     </div>
