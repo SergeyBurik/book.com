@@ -185,17 +185,18 @@
                 <div class="room-booking">
                     <h3>Your Reservation</h3>
                     <form action="#" id="book-room-form">
+                        {% csrf_token %}
                         <input type="hidden" name="form-type"
                                value="{% if adults and check_in and check_out %}book-room{% else %}check_availability{% endif %}">
                         <div class="check-date">
                             <label for="date-in">Check In:</label>
-                            <input type="text" class="date-input"
+                            <input type="text" name="check_in" class="date-input"
                                    value="{% if check_in %}{{check_in}}{% else %}{{today}}{% endif %}" id="date-in">
                             <i class="icon_calendar"></i>
                         </div>
                         <div class="check-date">
                             <label for="date-out">Check Out:</label>
-                            <input type="text" class="date-input"
+                            <input type="text" name="check_out" class="date-input"
                                    value="{% if check_out %}{{check_out}}{% else %}{{tomorrow}}{% endif %}"
                                    id="date-out">
                             <i class="icon_calendar"></i>
@@ -209,49 +210,90 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        {% if adults and check_in and check_out %}
-                        <button type="button">
-                            <a class="popup-with-form" href="#test-form">Book Room</a>
+                        {% if adults and check_in and check_out and available %}
+                        <button type="button" id="book-btn">
+                            <a class="popup-with-form" href="#book-form" style="color: #dfa974;">Book Room</a>
                         </button>
-                        {% else %}
-                        <button type="submit">Check Availability</button>
+                        {% elif not available %}
+                        <button type="button" id="check_availability" data-room="{{room.id}}">
+                            Check Availability
+                        </button>
                         {% endif %}
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
+<div id="book-form" class="mfp-hide white-popup-block">
+    <form action="{% url 'main:room' room.id %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="form-type" value="book-room">
+        <input type="hidden" id="hidden_check_in" value="{{check_in}}" name="check_in">
+        <input type="hidden" id="hidden_check_out" value="{{check_out}}" name="check_out">
+        <h3>Room Booking</h3>
+        <div class="form-group">
+            <label for="fn">First name</label>
+            <input type="text" name="client_name" class="form-control" id="fn"
+                   aria-describedby="emailHelp"
+                   placeholder="First name">
+        </div>
+        <div class="form-group">
+            <label for="fn1">Last name</label>
+            <input type="text" name="last_name" class="form-control" id="fn1"
+                   aria-describedby="emailHelp"
+                   placeholder="Last name">
+        </div>
+        <div class="form-group">
+            <label for="fn12">Email</label>
+            <input type="email" name="email" class="form-control" id="fn12"
+                   aria-describedby="emailHelp"
+                   placeholder="Email">
+        </div>
+        <div class="form-group">
+            <label for="fn122">Phone number</label>
+            <input type="text" name="phone_number" class="form-control" id="fn122"
+                   aria-describedby="emailHelp"
+                   placeholder="Phone number">
+        </div>
+        <div class="form-group">
+            <label for="fn14">Time of arrival</label>
+            <input type="text" name="time" class="form-control" id="fn14"
+                   aria-describedby="emailHelp"
+                   placeholder="Time of arrival">
+        </div>
+        <div class="form-group">
+            <label for="fn15">Comments</label>
+            <textarea type="text" name="comments" class="form-control" id="fn15"
+                      aria-describedby="emailHelp"
+                      placeholder="Comments"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="fn16">Your country</label>
+            <input type="text" name="country" class="form-control" id="fn16"
+                   aria-describedby="emailHelp"
+                   placeholder="Your country">
+        </div>
+        <div class="form-group">
+            <label for="fn17">Your address</label>
+            <input type="text" name="address" class="form-control" id="fn17"
+                   aria-describedby="emailHelp"
+                   placeholder="Your address">
+        </div>
+        <button type="submit" onclick="document.getElementById('book-room-form').submit()" class="btn btn-primary">
+            Submit
+        </button>
+    </form>
+</div>
 
-<form id="test-form" class="mfp-hide white-popup-block">
-	<h1>Form</h1>
-	<fieldset style="border:0;">
-		<p>Lightbox has an option to automatically focus on the first input. It's strongly recommended to use <code>inline</code> popup type for lightboxes with form instead of <code>ajax</code> (to keep entered data if the user accidentally refreshed the page).</p>
-		<ol>
-			<li>
-				<label for="name">Name</label>
-				<input id="name" name="name" type="text" placeholder="Name" required="">
-			</li>
-			<li>
-				<label for="email">Email</label>
-				<input id="email" name="email" type="email" placeholder="example@domain.com" required="">
-			</li>
-			<li>
-				<label for="phone">Phone</label>
-				<input id="phone" name="phone" type="tel" placeholder="Eg. +447500000000" required="">
-			</li>
-			<li>
-				<label for="textarea">Textarea</label><br>
-				<textarea id="textarea">Try to resize me to see how popup CSS-based resizing works.</textarea>
-			</li>
-		</ol>
-	</fieldset>
-</form>
+
 <!-- Room Details Section End -->
 
 {% include 'mainapp/includes/footer.html' %}
 
 <!-- Js Plugins -->
+
 <script src="{% static 'site/js/jquery-3.3.1.min.js' %}"></script>
 <script src="{% static 'site/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'site/js/jquery.magnific-popup.min.js' %}"></script>
@@ -261,13 +303,36 @@
 <script src="{% static 'site/js/owl.carousel.min.js' %}"></script>
 <script src="{% static 'site/js/main.js' %}"></script>
 <script>
+    $('#check_availability').click(function () {
+        $.ajax({
+            url: '/ajax/check_availability/',
+            data: {
+                'room': $(this).data('room'),
+                'check_in': $('#date-in').val(),
+                'check_out': $('#date-out').val(),
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+                    $('#check_availability').html('<a class="popup-with-form" href="#book-form" style="color: #dfa974;">Book Room</a>');
+                    $('#hidden_check_in').val($('#date-in').val());
+                    $('#hidden_check_out').val($('#date-out').val());
+                    book_form_popup()
+                } else {
+                    $('#check_availability').html(data.message)
+                }
+            }
+        })
+    });
+</script>
+<script>
     $('input:radio').change(
         function () {
             $("#stars").val(this.value)
         });
     document.getElementsByClassName('item')[0].classList += ' active';
 
-    $(document).ready(function () {
+    let book_form_popup = function () {
         $('.popup-with-form').magnificPopup({
             type: 'inline',
             preloader: false,
@@ -285,7 +350,9 @@
                 }
             }
         });
-    });
+    };
+
+    $(document).ready(book_form_popup())
 </script>
 </body>
 
