@@ -1,6 +1,6 @@
 from django import forms
 
-from mainapp.models import Hotel, Room, HotelFacility, Facility
+from mainapp.models import Hotel, Room, Facility
 
 
 class HotelForm(forms.ModelForm):
@@ -28,7 +28,7 @@ class FacilityForm(forms.ModelForm):
 
 class NameModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
-        return "%s"%obj.name
+        return "%s" % obj.name
 
 
 class HotelFacilityForm(forms.Form):

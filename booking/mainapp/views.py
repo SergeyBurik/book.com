@@ -2,16 +2,18 @@ import datetime
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-
+from mainapp.models import Hotel, Room, Bookings, RoomGallery, Comment, HotelFacility
+from mainapp.utils import check_booking, insert_booking, get_coordinates, send_confirmation_mail
+from mainapp.variables import at_time
 from django.urls import reverse
 from mainapp.models import Hotel, Room, Bookings, RoomGallery, Comment
 from mainapp.utils import check_booking, insert_booking, get_coordinates, send_confirmation_mail, create_room_booking
 
-
 def main_page(request):
+    title = 'Home'
     user = request.user
 
-    return render(request, 'mainapp/index.html', {'user': user})
+    return render(request, 'mainapp/index.html', {'user': user, 'title': title})
 
 
 def bookings_main(request, hotel_id):
@@ -21,6 +23,13 @@ def bookings_main(request, hotel_id):
     images = RoomGallery.objects.filter(room__hotel=hotel, is_avatar=True)
     coordinates = get_coordinates(hotel.location)
     comments = Comment.objects.filter(hotel__id=hotel_id).order_by('-pub_date')[:5]
+    facilities = HotelFacility.objects.filter(hotel__id=hotel.id)
+    facility_names = []
+    facility_icons = []
+    for name in range(len(facilities)):
+        facility_names.append(facilities[name].get_name())
+        facility_icons.append(facilities[name].get_icon())
+    facility_dict = dict(zip(facility_names, facility_icons))
 
     try:
         rates = Comment.objects.filter(hotel__id=hotel_id)
@@ -37,6 +46,8 @@ def bookings_main(request, hotel_id):
         'images': images,
         'comments': comments,
         'rating': rating,
+        'facilities': facilities,
+        'facility_dict': facility_dict,
     }
 
     return render(request, 'mainapp/booking_main.html', content)
@@ -47,6 +58,7 @@ def book_room(request, hotel_id, room_id):
     hotel = get_object_or_404(Hotel, pk=hotel_id, is_active=True)
     room = get_object_or_404(Room, hotel=hotel, pk=room_id, is_active=True)
     days = [datetime.date.today() + datetime.timedelta(days=dayR) for dayR in range(14)]
+    time = at_time
     total = None
 
     if request.method == 'POST':
@@ -62,6 +74,7 @@ def book_room(request, hotel_id, room_id):
         'days': days,
         'coordinates': coordinates,
         'summ': total,
+        'time': time,
         'images': images
     }
     return render(request, 'mainapp/book_room.html', content)

@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from mainapp.models import Facility
+from mainapp.models import Facility, HotelFacility
 # from authapp.models import User
 
 import json
@@ -21,6 +21,12 @@ class Command(BaseCommand):
         for facility in facilities:
             new_facility = Facility(**facility)
             new_facility.save()
+
+        hotel_facilities = load_from_json('hotelfacility')
+        HotelFacility.objects.all().delete()
+        for facility in hotel_facilities:
+            new_f = HotelFacility(**facility)
+            new_f.save()
 
         # hotels = load_from_json('hotels')
         # Hotel.objects.all().delete()

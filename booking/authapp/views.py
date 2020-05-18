@@ -15,6 +15,7 @@ from authapp.variables import country_dict
 
 
 def join(request):
+    title = 'Register'
     countries = country_dict
     if request.method == 'POST':
         register_form = UserRegisterForm(request.POST, request.FILES)
@@ -32,6 +33,7 @@ def join(request):
 
     content = {'register_form': register_form,
                'countries': countries,
+               'title': title,
                }
 
     return render(request, 'authapp/sign_up.html', content)

@@ -179,8 +179,14 @@
                 <div class="form-group">
                     <label for="email">Arrival Time</label>
                     <div class='input-group date' id='time'>
-                        <input type='text' class="form-control" name="time">
-                        <span class="input-group-addon">
+                        <!--<input type='text' class="form-control" name="time">-->
+                        <p><select name="time">
+                            <option>Выберите время</option>
+                            {% for i in time %}
+                                <option>{{ i }}</option>
+                            {% endfor %}
+                        </select></p>
+                        <!--<span class="input-group-addon">-->
                         <span class="glyphicon glyphicon-time"></span>
                     </span>
                     </div>
