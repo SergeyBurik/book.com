@@ -63,11 +63,6 @@ def login(request):
     return render(request, 'authapp/sign_in.html', content)
 
 
-def logout(request):
-    auth.logout(request)
-    return HttpResponseRedirect(reverse('main:main'))
-
-
 def send_verify_mail(user):
     activation_key = UserActivation.objects.get(user=user).activation_key
     verify_link = reverse('auth:verify', args=[user.email, activation_key])
@@ -79,8 +74,7 @@ def send_verify_mail(user):
                               {'username': user.name,
                                'link': settings.DOMAIN_NAME + verify_link}
                               )
-    # return HttpResponseRedirect(reverse('auth:verify',
-    #                                     args=[user.email, activation_key]))
+
     return send_mail(title, '', settings.EMAIL_HOST_USER,
                      [user.email], html_message=html_m, fail_silently=False)
 
@@ -104,3 +98,8 @@ def verify(request, email, activation_key):
     except Exception as e:
         print(f'error activation user : {e.args}')
         return HttpResponseRedirect(reverse('main:main'))
+
+
+def logout(request):
+    auth.logout(request)
+    return HttpResponseRedirect(reverse('main:main'))

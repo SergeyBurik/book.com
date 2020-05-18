@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from mainapp.models import Room, Hotel, Bookings, RoomGallery, Comment
+from mainapp import utils
 
 from constructor_app.models import WebSite
 
@@ -60,7 +61,7 @@ def get_rooms(request):
                     "infants": room.infants,
                     "is_active": room.is_active,
                     "images": [
-                        {"path": image.image.url} for image in images
+                        {"url": image.image.url} for image in images
                     ]
                 })
 
@@ -150,7 +151,7 @@ def get_room(request):
                 "infants": room.infants,
                 "is_active": room.is_active,
                 "images": [
-                    {"path": image.image.url} for image in images
+                    {"url": image.image.url} for image in images
                 ]
             }
 
@@ -158,28 +159,14 @@ def get_room(request):
 
     return JsonResponse({"error": "You should provide room id"})
 
-
+@csrf_exempt
 @token_pass
 def create_booking(request):
     try:
-        data = json.loads(request.POST['data'])
-        room = Room.objects.get(pk=data['room'])
+        room = Room.objects.get(pk=request.POST['room'])
+        success = utils.create_room_booking(request, room.id, room.hotel.id)
 
-        start = datetime.datetime.strptime(data['check_in'], "%Y-%m-%d")
-        end = datetime.datetime.strptime(data['check_out'], "%Y-%m-%d")
-        days = [start + datetime.timedelta(days=x) for x in range(0, (end - start).days + 1)]
-
-        for day in days:
-            Bookings.objects.create(hotel=room.hotel, date=day, room=room,
-                                    client_name=request.POST['client_name'],
-                                    client_email=request.POST['client_email'],
-                                    phone_number=request.POST['phone_number'],
-                                    time=datetime.datetime.strptime(request.POST['time'], '%H:%M'),
-                                    comments=request.POST['comments'],
-                                    country=request.POST['country'],
-                                    address=request.POST['address'], )
-
-        return JsonResponse({"response": 200})
+        return JsonResponse({"response": 200 if success else 500})
 
     except json.decoder.JSONDecodeError:
         return JsonResponse({"error": "You should provide valid data"})
@@ -230,7 +217,7 @@ def filter_rooms(request):
                 start = datetime.datetime.strptime(data['check_in'], "%Y-%m-%d")
                 end = datetime.datetime.strptime(data['check_out'], "%Y-%m-%d")
                 date_list = [start + datetime.timedelta(days=x) for x in
-                             range(0, (end - start).days + 1)]  # list of dates
+                             range(0, (end - start).days)]  # list of dates
                 hotel = get_object_or_404(Hotel, pk=hotel_id, is_active=True)
 
                 for room in rooms:
@@ -263,7 +250,7 @@ def filter_rooms(request):
                     "infants": room.infants,
                     "is_active": room.is_active,
                     "images": [
-                        {"path": image.image.url} for image in RoomGallery.objects.filter(room=room)
+                        {"url": image.image.url} for image in RoomGallery.objects.filter(room=room)
                     ]
                 } for room in res]
 
