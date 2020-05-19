@@ -62,7 +62,7 @@
                 {% for room in rooms %}
                     <div class="col-lg-4 col-md-6">
                         <div class="room-item">
-                            <img src="http://{{host}}{{room.images.0.path}}" alt="">
+                            <img src="http://{{host}}{{room.images.0.url}}" alt="">
                             <div class="ri-text">
                                 <h4>{{ room.name }}</h4>
                                 <h3>{{ room.price }}<span>/Pernight</span></h3>
@@ -82,7 +82,8 @@
                                 </tr>
                                 </tbody>
                             </table>
-                                <a href="{% url 'main:room' room.id %}" class="primary-btn">Book</a>
+                                <a href="{% url 'main:room' room.id %}?adults={{adults}}&check_in={{check_in}}&check_out={{check_out}}&search=True"
+                                   class="primary-btn">Book</a>
                             </div>
                         </div>
                     </div>
